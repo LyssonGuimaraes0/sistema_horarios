@@ -1,0 +1,99 @@
+/* Menu Lateral (Sidebar) */
+.sidebar {
+    background-color: whitesmoke;
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid var(--border-color);
+    padding: 1rem 0;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+/*Menu encolhido*/
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/* Cabeçalho do Menu Lateral*/
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    margin-bottom: 2rem;
+    cursor: pointer;
+}
+
+.sidebar.collapsed .sidebar-header {
+     justify-content: center;
+     padding: 0;
+}
+
+/*Configurações dos Icones*/
+
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/*Textos do items do menu*/
+
+.sidebar-header .logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .logo-text {
+    display: none;
+}
+
+.sidebar-menu {
+    list-style-type: none;
+}
+
+/*Configurações dos botões do menu*/
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.25rem;
+    text-decoration: none;
+    color: var(--light-text);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-menu li a {
+    justify-content: center;
+}
+
+.sidebar-menu li a:hover, .sidebar-menu li a.active {
+    background-color: var(--light-grey);
+    color: var(--primary-blue);
+}
+
+.sidebar-menu li a i {
+    font-size: 1.2rem;
+    width: 25px;
+    text-align: center;
+}
+
+.sidebar-menu li a .menu-text {
+    margin-left: 15px;
+}
+
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+
+.sidebar.collapsed + .main-content {
+    margin-left: 70px; /* Largura do menu recolhido */
+}
+

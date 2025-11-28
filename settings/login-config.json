@@ -1,0 +1,16 @@
+{
+        "admin": {
+            "usuario": "admin",
+            "password": "admin",
+            "funcao" : "administrador"
+        },
+        "user": {
+            "usuario": "alysson",
+            "password": "123",
+            "funcao" : "usuario",
+            "setor" : "COINF"
+
+        }
+    
+    
+}

@@ -1,1 +1,45 @@
-@import url("../css/home-page.css");
+@import url("../css/home.css");
+@import url("../css/navegacao.css");
+@import url("../css/login.css");
+
+:root {
+
+    --primary-color: #1a73e8;
+    --dark-text: #333;
+    --light-text: #666;
+    --white-text: #fff;
+    --border-color: #e0e0e0;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: white;
+    color: var(--dark-text);
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+h2{
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--white-text);
+    
+}
+
+/*Container Principal que vai organizar a estrutura do site"*/
+
+.section-container{
+    width: 1350px;
+    margin: 0 auto;
+}

@@ -1,0 +1,58 @@
+/*Container da Página de Login*/
+.container-login{
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15%;
+    box-shadow: var(--shadow);
+}
+/*Formulario para login*/
+.login-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/*Inputs de Login da Página*/
+.input-login{
+    width: 80%;
+    height: 40px;
+    margin: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 1rem;
+    color: var(--light-text);
+}
+
+/*Botão de Login*/
+.btn-login{
+    width: 50%;
+    height: 35px;
+    border: 2px solid var(--primary-color);
+    color: var(--light-text);
+    background-color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.5s ease, color 0.3s ease;
+}
+
+.btn-login:hover{
+    transform: scale(1.05);
+}
+
+/*Botão esqueceu a senha*/
+
+.btn-esqueceu-senha{
+    color: blue;
+    margin-top: 20px;
+    cursor: pointer;
+}
