@@ -64,7 +64,7 @@
     align-items: center;
     padding: 0.9rem 1.25rem;
     text-decoration: none;
-    color: var(--light-text);
+    color: var(--primary-color);
     font-weight: 500;
     white-space: nowrap;
 }

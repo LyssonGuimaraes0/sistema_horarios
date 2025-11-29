@@ -27,8 +27,7 @@ $dados_user = dados_user()
     <?php include('./snippets/navbar.html'); ?>
 
     <main class="main-content">
-    <!-- Dados usuario -->
-    <?php include('./snippets/dados-user.php'); ?>
+
 
 
 

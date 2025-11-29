@@ -1,10 +1,14 @@
 @import url("../css/home.css");
 @import url("../css/navegacao.css");
 @import url("../css/login.css");
+@import url("../css/modal.css");
+@import url("../css/formulario.css");
+
 
 :root {
 
     --primary-color: #1a73e8;
+    --segundaria-color:#eeeeee;
     --dark-text: #333;
     --light-text: #666;
     --white-text: #fff;
@@ -26,7 +30,7 @@ body {
 
 h1 {
     font-size: 1.8rem;
-    font-weight: 500;
+
     color: var(--primary-color);
 }
 
@@ -40,6 +44,6 @@ h2{
 /*Container Principal que vai organizar a estrutura do site"*/
 
 .section-container{
-    width: 1350px;
+    max-width: 1350px;
     margin: 0 auto;
 }
