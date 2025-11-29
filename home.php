@@ -22,28 +22,7 @@ $dados_user = dados_user()
     }
     ?>
     <!-- Estrutura da Home -->
-    <section class="home-section">
-        <div class="section-container">
-            <div class="container-home">
-                <div class="container-welcome">
-                    <h2 class="title-container">Bem vindo! <?php echo $dados_user['nome'] ?> </h2>
-                </div>
-            </div>
-            <div class="container-card">
-                <div class="card-info">
-                    <span class="title-container">Registro Este Mês</span>
-                    <p> - </p>
-                    <div class="linha"></div>
-                </div>
-                <div class="card-info">
-                    <span class="title-container">Presentes <?php echo $dados_user['nome'] ?> </span>
-                </div>
-                <div class="card-info">
-                    <span class="title-container">Faltas <?php echo $dados_user['nome'] ?> </span>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php include('./dados-user.php') ?>
 
     <!-- Estrutura da script -->
     <?php include('./snippets/script.html') ?>
