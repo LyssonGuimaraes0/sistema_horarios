@@ -56,4 +56,5 @@ function verificar_permissoes($array)
 }
 
 
+
 ?>

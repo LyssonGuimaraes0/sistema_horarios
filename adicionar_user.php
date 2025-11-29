@@ -21,6 +21,11 @@ $dados_user = dados_user()
         include('./snippets/navbar.html');
     }
     ?>
+
+    <!-- Estrutura Modal-->
+    <?php include('./snippets/modal.html') ?>
+
+
     <!-- Estrutura da Home -->
     <section class="home-section">
         <div class="section-container">

@@ -2,8 +2,8 @@
     <div class="section-container">
         <div class="formulario">
             <div class="container-form">
-                <h1 style="text-align: center;">Cadastro de Úsuario</h1>
-                <form action="" class="">
+                <h1 style="text-align: center;">Cadastro de novo Úsuario</h1>
+                <form action="" class="" method="post"  onsubmit="return validarSenhas()">
                     <div class="container-item">
                         <div class="item-formulario">
                             <label for="">Nome Completo:</label>
@@ -28,7 +28,7 @@
                         <div class="item-formulario">
                             <label for="">Confirmar Senha:</label>
 
-                            <input type="password" class="input-login" name="senha" id="senha">
+                            <input type="password" class="input-login" name="senha-confirmar" id="senha-confirmar">
                         </div>
                         <label for="">Úsuario tem permissões de Administrador?</label>
                         <input style="margin-bottom: 25px;" type="checkbox" name="checkbox" id="checkbox">
@@ -40,3 +40,5 @@
     </div>
 
 </section>
+
+
