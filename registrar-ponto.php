@@ -1,38 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<!-- Cabeçalho comum incluído -->
 <?php
-session_start();
-//Chamada das configurações do banco de dados e logout
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
-$conn = conexao_banco();
-
-if ($_SESSION['user_id'] == null) {
-    header("location: index.php");
-    exit();
-}
-
+session_start();
+//Configura um tempo de inatividade para desconectar!
 time_out();
 $dados_user = dados_user()
 
-
-?>
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<!-- Cabeçalho comum incluído -->
+    ?>
 <?php include('./snippets/head.html'); ?>
 
 <body>
+    <!-- Navbar -->
 
-    <!-- Cabeçalho comum incluído -->
-    <?php include('./snippets/navbar.html'); ?>
+    <?php if (verificar_permissoes($dados_user) == true) {
+        include('./snippets/navbar-admin.html');
+    } else {
+        include('./snippets/navbar.html');
+    }
+    ?>
+    <!-- Estrutura da Home -->
+    <section class="home-section">
+        <div class="section-container">
+            <div class="container-home">
+                <div class="container-welcome">
+                    <h2 class="title-container">Registro de Horario </h2>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <main class="main-content">
+    <!-- Estrutura da script -->
+    <?php include('./snippets/script.html') ?>
 
+</body>
 
-
-
-
-
-            <!-- Chamada dos Scripts -->
-            <?php include('./snippets/script.html'); ?>
-    </main>
+</html>

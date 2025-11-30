@@ -1,4 +1,8 @@
 <?php
+
+
+
+
 function time_out()
 {
     //time out de logout por inatividade
