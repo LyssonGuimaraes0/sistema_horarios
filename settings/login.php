@@ -6,7 +6,6 @@ session_start();
 
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];
-var_dump($usuario);
 
 //Verificação de login via Banco de dados
 

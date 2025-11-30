@@ -3,34 +3,38 @@
         <div class="formulario">
             <div class="container-form">
                 <h1 style="text-align: center;">Cadastro de novo Úsuario</h1>
-                <form action="./settings/conf.cadastro.php" class="" method="post"  onsubmit="return validarSenhas()">
+                <form action="./settings/conf_cadastro.php" class="" method="post"  onsubmit="return validarSenhas()">
                     <div class="container-item">
                         <div class="item-formulario">
                             <label for="">Nome Completo:</label>
-                            <input type="text" class="input-login" name="nome_completo" id="nome_completo">
+                            <input type="text" class="input-login" name="nome_completo" id="nome_completo"  required>
                         </div>
                         <div class="item-formulario">
                             <label for="">Nome de acesso:</label>
-                            <input type="text" class="input-login" name="username" id="username">
+                            <input type="text" class="input-login" name="username" id="username" required>
+                        </div>
+                        <div class="item-formulario">
+                            <label for="">CPF:</label>
+                            <input type="text" class="input-login" name="cpf" id="cpf" placeholder="000.000.000-00" required>
                         </div>
                         <div class="item-formulario">
                             <label for="">Email:</label>
-                            <input type="email" class="input-login" name="email" id="email">
+                            <input type="email" class="input-login" name="email" id="email" required>
                         </div>
                         <div class="item-formulario">
                             <label for="">Setor:</label>
-                            <input type="text" class="input-login" name="setor" id="setor">
+                            <input type="text" class="input-login" name="setor" id="setor" required>
                         </div>
                         <div class="item-formulario">
                             <label for="">Senha:</label>
-                            <input type="password" class="input-login" name="senha" id="senha">
+                            <input type="password" class="input-login" name="senha" id="senha" required>
                         </div>
                         <div class="item-formulario">
                             <label for="">Confirmar Senha:</label>
-                            <input type="password" class="input-login" name="senha-confirmar" id="senha-confirmar">
+                            <input type="password" class="input-login" name="senha-confirmar" id="senha-confirmar" required>
                         </div>
                         <label for="">Úsuario tem permissões de Administrador?</label>
-                        <input style="margin-bottom: 25px;" type="checkbox" name="permissao" id="checkbox">
+                        <input style="margin-bottom: 25px;" type="checkbox" name="permissao" id="checkbox" >
                         <div class="item-formulario"><input type="submit" value="Criar usuario" class="btn-login"></div>
                     </div>
                 </form>
@@ -39,5 +43,6 @@
     </div>
 
 </section>
+
 
 

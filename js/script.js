@@ -43,6 +43,35 @@ function validarSenhas() {
 }
 
 
+//Máscara de CPF
+
+document.getElementById('cpf').addEventListener('input', function () {
+    let cpf = this.value;
+
+    // 1) remove tudo que NÃO é número
+    cpf = cpf.replace(/\D/g, '');
+
+    // 2) coloca o primeiro ponto depois de 3 números
+    if (cpf.length > 3) {
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+    }
+
+    // 3) coloca o segundo ponto depois de 6 números
+    if (cpf.length > 7) {
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+    }
+
+    // 4) coloca o traço nos últimos dois dígitos
+    if (cpf.length > 11) {
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    }
+
+    this.value = cpf;
+});
+
+
+
+
 
 
 

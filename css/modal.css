@@ -28,6 +28,18 @@
     border: 2px solid red;
 }
 
+.modal-cabecalho span{
+    font-size: var(--modal-font-titulo);
+}
+
+.sucesso{
+    border: 2px solid var(--green-color);
+}
+
+.sucesso .modal-cabecalho span{
+    color: var(--green-color);
+} 
+
 .modal-cabecalho {
     font-size: 40px;
     font-weight: 300;
