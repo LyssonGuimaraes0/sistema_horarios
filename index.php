@@ -23,7 +23,7 @@ unset($_SESSION['error_login']); // remove após usar
     <script>
         //Configuração de Tela de erro ao tenta realizar Login
             var error_login = <?php echo json_encode($error_login); ?>;
-            modal_error(error_login);
+            apresenta_modal('modal-login','btn-login',error_login);
     </script>
 
 </body>

@@ -9,53 +9,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-//Ativação de modal Caso a senha ou usuario esteja errada!
+//Função para apresenta tdos os modais!
 
-function modal_error(tentativa) {
-    const BackgroundModal = document.getElementById('modal-background');
-    const btnModal = document.getElementById('btn-modal');
+function apresenta_modal(idmodal, idbtn, tentativa = true) {
 
-    if(tentativa === true){
-        BackgroundModal.style.display = "block"
+    // Só abre se tentativa for true
+    if (tentativa !== true) {
+        return;
     }
 
-    btnModal.addEventListener('click', () =>{
-        BackgroundModal.style.display = "none"
-    });
-    
+    const modal = document.getElementById(idmodal);
+    const btnModal = document.getElementById(idbtn);
+
+    modal.style.display = "block";
+
+    // Evita múltiplos addEventListeners
+    btnModal.onclick = () => {
+        modal.style.display = "none";
+    };
 }
 
-//Ativação de modal Caso a senha ou usuario esteja errada!
-
-function modal_error_senha(tentativa) {
-    const BackgroundModalsenha = document.getElementById('modal-background-senha');
-    const btnModalsenha = document.getElementById('btn-modal-senha');
-    
-
-    if(tentativa === true){
-        BackgroundModalsenha.style.display = "block"
-    }
-
-    btnModalsenha.addEventListener('click', () =>{
-        BackgroundModalsenha.style.display = "none"
-    });
-    
-}
-
-
-    //Confirmar caso a senha do usuario estiver certa
+//Confirmar caso a senha do usuario estiver certa(Utilizar modal acima)
 
 function validarSenhas() {
     var senha = document.getElementById('senha').value;
     var senhaConfirmar = document.getElementById('senha-confirmar').value;
 
     if (senha !== senhaConfirmar) {
-        var tentativa = true;
-        modal_error_senha(tentativa);
+        apresenta_modal('modal-senha','btn-senha');
+        return false
     }
-
-    return false;
+    return true;
 }
+
+
+
+
 
 
 
