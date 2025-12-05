@@ -5,8 +5,10 @@
 <!--Verifica caso teve erro no Login-->
 <?php error_login() ?>
 <?php session_start();
-$error_login = $_SESSION['error_login'] ?? false;
+$login = $_SESSION['error_login'] ?? null;
+$mensagem = $_SESSION['mensagem'] ?? null;
 unset($_SESSION['error_login']); // remove após usar
+unset($_SESSION['mensagem']);
 ?>
 <?php include('./snippets/head.html'); ?>
 
@@ -18,12 +20,13 @@ unset($_SESSION['error_login']); // remove após usar
         <?php include('./snippets/modal.html'); ?>
         <!-- Chamada Script-->
 
-        <?php include('./snippets/script.html') ?>
+        <?php include('./snippets/script.html'); ?>
     </main>
     <script>
         //Configuração de Tela de erro ao tenta realizar Login
-            var error_login = <?php echo json_encode($error_login); ?>;
-            apresenta_modal('modal-login','btn-login',error_login);
+            var error_login = <?php echo json_encode($login); ?>;
+            var mensagem = <?php echo json_encode($mensagem); ?>;
+            apresenta_modal(error_login,mensagem);
     </script>
 
 </body>

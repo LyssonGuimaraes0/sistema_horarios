@@ -11,36 +11,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //Função para apresenta tdos os modais!
 
-function apresenta_modal(idmodal, idbtn, tentativa = true) {
+function apresenta_modal(condicao, mensagem) {
 
-    // Só abre se tentativa for true
-    if (tentativa !== true) {
-        return;
+    var TituloModal = document.createElement('span');
+    var DescricaoModal = document.createElement('p');
+    DescricaoModal.innerHTML = mensagem;
+
+    switch (condicao) {
+        case 'sucesso':
+
+            var cor = "#14dd57"
+            TituloModal.innerHTML = "<i class='fa-solid fa-circle-check'></i> Sucesso!";
+            conf_modal(TituloModal, DescricaoModal, cor);
+            break;
+
+        case 'falha':
+
+            var cor = "#f03210ff"
+            TituloModal.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> Falha!";
+            conf_modal(TituloModal, DescricaoModal, cor);
+
+            break;
+
+        case 'alerta':
+
+            var cor = "#f07c10ff"
+            TituloModal.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Alerta!";
+            conf_modal(TituloModal, DescricaoModal, cor);
+
+            break;
+
+        default:
+            break;
     }
 
-    const modal = document.getElementById(idmodal);
-    const btnModal = document.getElementById(idbtn);
+    function conf_modal(titulo, descricao, cor) {
+        //Coleta Informações do formulario
+        const ModalBackground = document.querySelector('.modal-background');
+        const ModalContainer = document.querySelector('.modal-container');
+        const ModalCabecalho = document.querySelector('.modal-cabecalho');
+        const ModalDescricao = document.querySelector('.modal-descricao');
+        const ModalBtn = document.querySelector('.btn-modal');
 
-    modal.style.display = "block";
+        //Limpa o modal
+        ModalCabecalho.innerHTML = "";
+        ModalDescricao.innerHTML = "";
 
-    // Evita múltiplos addEventListeners
-    btnModal.onclick = () => {
-        modal.style.display = "none";
-    };
-}
+        //Monta modal
+        ModalContainer.style.border = `2px solid ${cor}`
+        titulo.style.color = cor;
+        ModalCabecalho.appendChild(titulo);
+        ModalDescricao.appendChild(descricao)
 
-//Confirmar caso a senha do usuario estiver certa(Utilizar modal acima)
+        //Apresnta o modal
+        ModalBackground.style.display = "flex";
 
-function validarSenhas() {
-    var senha = document.getElementById('senha').value;
-    var senhaConfirmar = document.getElementById('senha-confirmar').value;
+        ModalBtn.onclick = () => {
+            ModalBackground.style.display = "none";
+        };
 
-    if (senha !== senhaConfirmar) {
-        apresenta_modal('modal-senha','btn-senha');
-        return false
+
+
     }
-    return true;
 }
+
 
 
 //Máscara de CPF

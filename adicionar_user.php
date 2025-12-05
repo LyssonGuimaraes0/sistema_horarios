@@ -47,42 +47,23 @@ if (verificar_permissoes($dados_user) !== true) {
     <!-- Estrutura da Página de adicionar usuario -->
     <?php include('./snippets/adicionar_user.html') ?>
 
-    <!-- Estrutura da script -->
-    <?php include('./snippets/script.html') ?>
+    <!-- Chamada Script-->
 
+    <?php include('./snippets/script.html') ?>
     <script>
         //Coleta valor recebido em conf_cadastro.php é armazena
         <?php $cadastro = $_SESSION['cadastro'] ?? null;
+              $mensagem = $_SESSION['mensagem'] ?? null;
         //Limpa valor anterior para novos cadastros!
         unset($_SESSION['cadastro']);
-
+        unset($_SESSION['mensagem']);
         ?>
         //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
-        var VerificarCadastro = <?php echo json_encode($cadastro); ?>;
+        var codicao = <?php echo json_encode($cadastro); ?>;
+        var mensagem = <?php echo json_encode($mensagem); ?>;
 
-        switch (VerificarCadastro) {
-            //usuario cadastrado com sucesso
-            case "cadastrado":
+        apresenta_modal(codicao,mensagem);
 
-                apresenta_modal('modal-cad-sucesso', 'btn-cad-sucesso');
-
-                break;
-            //usuario nao foi cadastrado
-            case "falha":
-
-                apresenta_modal('modal-cad-falha', 'btn-cad-falha');
-
-                break;
-
-            case "usuario ja cadastrado":
-
-                apresenta_modal('modal-cpf', 'btn-cpf');
-
-                break;
-
-            default:
-                break;
-        }
 
     </script>
 

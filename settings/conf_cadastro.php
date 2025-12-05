@@ -36,17 +36,19 @@ for ($i=0; $i < count($result_cpf); $i++) {
         }
     }
 
-$cadastro_user = $conn->prepare("INSERT INTO usuario(nome,cpf,,username,setor,email,senha,permissoes) VALUE (?,?,?,?,?,?,?)");
+$cadastro_user = $conn->prepare("INSERT INTO usuario(nome,cpf,username,setor,email,senha,permissoes) VALUE (?,?,?,?,?,?,?)");
 
 $cadastro_user->bind_param("sssssss", $nome,$cpf,$username,$setor,$email,$senha,$permissao);
 
 if($cadastro_user->execute()){
 
-    $_SESSION['cadastro'] = "cadastrado";
+    $_SESSION['cadastro'] = "sucesso";
+    $_SESSION['mensagem'] = "O usuario foi cadastro com sucesso!";
     header("location: ../adicionar_user.php");
     
 }else{
     $_SESSION['cadastro'] = "falha";
+    $_SESSION['mensagem'] = "Ocorreu um erro ao tenta cadastra o usuario <br>Tente novamente mais tarde!";
     header("location: ../adicionar_user.php");   
 } 
 

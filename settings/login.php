@@ -27,7 +27,8 @@ if($usuario === $result_credencial['username'] && $password === $result_credenci
 
 } else {
     //Envia para a $_SESSION para apresenta uma tela de erro no java script
-    $_SESSION['error_login'] = true;
+    $_SESSION['error_login'] = "falha";
+    $_SESSION['mensagem'] = "Usuario ou senha errada<br>Tente Novamente";
     $conn->close();
     header("location: ../index.php");
     exit;
