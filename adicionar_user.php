@@ -41,7 +41,6 @@ if (verificar_permissoes($dados_user) !== true) {
                 </div>
             </div>
         </div>
-
     </section>
 
     <!-- Estrutura da Página de adicionar usuario -->

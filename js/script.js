@@ -1,13 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // === SIDEBAR ===========================================================
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
 
-    // Alternar a barra lateral
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-    });
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+    }
+
+
+    // === MÁSCARA DE CPF ====================================================
+    const cpfInput = document.getElementById('cpf');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function () {
+
+            let cpf = this.value;
+
+            // remove tudo que não é número
+            cpf = cpf.replace(/\D/g, '');
+
+            if (cpf.length > 3) {
+                cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            }
+
+            if (cpf.length > 7) {
+                cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            }
+
+            if (cpf.length > 11) {
+                cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            }
+
+            this.value = cpf;
+        });
+    }
 
 });
+
+//Função de oculta calendario ate o usuario clica no btn
+
+function abrircalendario() {
+
+    const ContainerCalendario = document.querySelector('.calendario-container');
+
+    ContainerCalendario.style.display = "block";
+}
+
+
 
 //Função para apresenta tdos os modais!
 
@@ -77,31 +119,9 @@ function apresenta_modal(condicao, mensagem) {
 
 
 
-//Máscara de CPF
 
-document.getElementById('cpf').addEventListener('input', function () {
-    let cpf = this.value;
 
-    // 1) remove tudo que NÃO é número
-    cpf = cpf.replace(/\D/g, '');
 
-    // 2) coloca o primeiro ponto depois de 3 números
-    if (cpf.length > 3) {
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-    }
-
-    // 3) coloca o segundo ponto depois de 6 números
-    if (cpf.length > 7) {
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-    }
-
-    // 4) coloca o traço nos últimos dois dígitos
-    if (cpf.length > 11) {
-        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    }
-
-    this.value = cpf;
-});
 
 
 

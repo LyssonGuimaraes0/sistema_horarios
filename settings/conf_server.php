@@ -1,5 +1,14 @@
 <?php
+//Configurações de Datas do Servidor :(
+date_default_timezone_set('America/Sao_Paulo');
 
+//Configura datas do servidor
+function qnt_dias($mes,$ano){
+
+   $qnt_dias = cal_days_in_month(CAL_GREGORIAN,$mes,$ano);
+
+    return $qnt_dias;
+}
 
 
 
@@ -58,6 +67,8 @@ function verificar_permissoes($array)
         return false;
     }
 }
+
+
 
 
 
