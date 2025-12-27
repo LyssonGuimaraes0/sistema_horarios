@@ -5,18 +5,27 @@
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 session_start();
+
+$mes  = $_POST['mes'] ?? null;
+$ano  = $_POST['ano'] ?? null;
+$dias = null;
+
+if ($mes && $ano) {
+    $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+}
+
 //Configura um tempo de inatividade para desconectar!
 time_out();
 $dados_user = dados_user();
-
-//Configura 
-
 ?>
-
 
 <?php include('./snippets/head.html'); ?>
 
 <body>
+
+    <!-- Estrutura Modal-->
+    <?php include('./snippets/modal.html'); ?>
+
     <!-- Navbar -->
 
     <?php if (verificar_permissoes($dados_user) == true) {
@@ -59,12 +68,12 @@ $dados_user = dados_user();
                                 <?php
                                 $anoatual = date('Y');
                                 $anolimite = "2024";
-                                ?>
-                                <?php for ($ano = $anoatual; $ano >= $anolimite; $ano--): ?>
-                                    <option value="<?= $ano ?>"><?= $ano ?></option>
+
+                                for ($a = $anoatual; $a >= $anolimite; $a--): ?>
+                                    <option value="<?= $a ?>"><?= $a ?></option>
                                 <?php endfor; ?>
                             </select>
-                            <button type="button" id="abrir-calendario" >Busca</button>
+                            <button type="submit" id="abrir-calendario">Busca</button>
 
                         </form>
                     </div>
@@ -84,15 +93,10 @@ $dados_user = dados_user();
                             <!--Leva as variaveis para o proximo formulario-->
                             <input type="hidden" name="mes" value="<?= $mes ?>">
                             <input type="hidden" name="ano" value="<?= $ano ?>">
+                            <input type="hidden" name="dias" value="<?= $dias ?? '' ?>">
                             <?php
-                            if (isset($_POST['mes']) && isset($_POST['ano'])) {
-                                //Coleta dados
-                                $mes = $_POST['mes'];
-                                $ano = $_POST['ano'];
+                            if ($mes && $ano) {
 
-                                // Quantos dias tem o mês
-                                $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
-                                // Array dos dias da semana em português
                                 $dias_semana = [
                                     'Sunday'    => 'Domingo',
                                     'Monday'    => 'Segunda-feira',
@@ -110,16 +114,19 @@ $dados_user = dados_user();
                                     echo "
                                     <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
                                         <strong>$dia ($nome_dia)</strong><br>
-                                        <input type='text' name='entrada[$dia]' placeholder='Entrada (Ex: 08:00)'>
-                                        <input type='text' name='saida_pf[$dia]' placeholder='Almoço (Ex: 08:00)'>
-                                        <input type='text' name='entrada_pf[$dia]' placeholder='Retorno Almoço (Ex: 08:00)'>
-                                        <input type='text' name='saida[$dia]' placeholder='Saída (Ex: 17:00)'>
+                                        <div>
+                                        <input type='text' name='entrada[$dia]' placeholder='Entrada'>
+                                        <input type='text' name='saida_pf[$dia]' placeholder='Almoço'>
+                                        <input type='text' name='entrada_pf[$dia]' placeholder='Retorno Almoço'>
+                                        <input type='text' name='saida[$dia]' placeholder='Saída'>
+                                        </div>
                                     </div>
                                     ";
                                 }
+                                echo "<button type='submit' class='btn-login'>Enviar datas</button>";
                             }
                             ?>
-                            <button type="submit" class="btn-login">Enviar datas</button>
+                            
                         </form>
 
                     </div>
@@ -128,9 +135,24 @@ $dados_user = dados_user();
 
         </section>
     </div>
-
     <!-- Estrutura da script -->
+
     <?php include('./snippets/script.html') ?>
+    <script>
+        //Coleta valor recebido em conf_data.php é armazena
+        <?php $cadastro = $_SESSION['cadastro'] ?? null;
+        $mensagem = $_SESSION['mensagem'] ?? null;
+        //Limpa valor anterior para novos cadastros!
+        unset($_SESSION['cadastro']);
+        unset($_SESSION['mensagem']);
+        ?>
+
+        //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
+        var codicao = <?php echo json_encode($cadastro); ?>;
+        var mensagem = <?php echo json_encode($mensagem); ?>;
+
+        apresenta_modal(codicao, mensagem);
+    </script>
 
 </body>
 
