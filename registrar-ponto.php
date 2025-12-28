@@ -4,8 +4,16 @@
 <?php
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
-session_start();
 
+verificar_sessao();
+$dados_user = dados_user();
+
+//Configuração para Dropdown inicia com valor selecionado pelo usuario
+$mes_selecionado = $_POST['mes'] ?? '';
+$ano_selecionado = $_POST['ano'] ?? '';
+$mes_atual = meses($mes_selecionado) ?? '';  
+
+//Configurações de Mes é Ano
 $mes  = $_POST['mes'] ?? null;
 $ano  = $_POST['ano'] ?? null;
 $dias = null;
@@ -13,10 +21,6 @@ $dias = null;
 if ($mes && $ano) {
     $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
 }
-
-//Configura um tempo de inatividade para desconectar!
-time_out();
-$dados_user = dados_user();
 ?>
 
 <?php include('./snippets/head.html'); ?>
@@ -51,18 +55,18 @@ $dados_user = dados_user();
                     <div class="container-dropdown">
                         <form method="post">
                             <select class="dropdown" name="mes">
-                                <option value="1">Janeiro</option>
-                                <option value="2">Fevereio</option>
-                                <option value="3">Março</option>
-                                <option value="4">Abril</option>
-                                <option value="5">Maio</option>
-                                <option value="6">Junho</option>
-                                <option value="7">Julho</option>
-                                <option value="8">Agosto</option>
-                                <option value="9">Setembro</option>
-                                <option value="10">Outubro</option>
-                                <option value="11">Novembro</option>
-                                <option value="12">Dezembro</option>
+                                <option value="1" <?=  ($mes_selecionado == 1) ? 'selected' : '' ?>>Janeiro</option>
+                                <option value="2" <?=  ($mes_selecionado == 2) ? 'selected' : '' ?>>Fevereio</option>
+                                <option value="3" <?=  ($mes_selecionado == 3) ? 'selected' : '' ?>>Março</option>
+                                <option value="4" <?=  ($mes_selecionado == 4) ? 'selected' : '' ?>>Abril</option>
+                                <option value="5" <?=  ($mes_selecionado == 5) ? 'selected' : '' ?>>Maio</option>
+                                <option value="6" <?=  ($mes_selecionado == 6) ? 'selected' : '' ?>>Junho</option>
+                                <option value="7" <?=  ($mes_selecionado == 7) ? 'selected' : '' ?>>Julho</option>
+                                <option value="8" <?=  ($mes_selecionado == 8) ? 'selected' : '' ?>>Agosto</option>
+                                <option value="9" <?=  ($mes_selecionado == 9) ? 'selected' : '' ?>>Setembro</option>
+                                <option value="10" <?=  ($mes_selecionado == 10) ? 'selected' : '' ?>>Outubro</option>
+                                <option value="11" <?=  ($mes_selecionado == 11) ? 'selected' : '' ?>>Novembro</option>
+                                <option value="12" <?=  ($mes_selecionado == 12) ? 'selected' : '' ?>>Dezembro</option>
                             </select>
                             <select class="dropdown" name="ano" id="">
                                 <?php
@@ -70,7 +74,7 @@ $dados_user = dados_user();
                                 $anolimite = "2024";
 
                                 for ($a = $anoatual; $a >= $anolimite; $a--): ?>
-                                    <option value="<?= $a ?>"><?= $a ?></option>
+                                    <option value="<?= $a ?>"<?=  ($ano_selecionado == $a) ? 'selected' : '' ?>><?= $a ?></option>
                                 <?php endfor; ?>
                             </select>
                             <button type="submit" id="abrir-calendario">Busca</button>
@@ -83,10 +87,12 @@ $dados_user = dados_user();
 
         <section class="home-section">
             <div class="section-container">
-                <div class="container-home">
+                                <!--Calendario Fica Oculto ate o usuario escolher o Mes-->
+                <div class="container-home" style="display:<?= ($mes_selecionado != '') ? 'block' : 'none' ?>">
                     <div class="container-calendario calendario-container">
                         <div class="calendario-header">
                             <span>Calendario</span>
+                            <span><?= $mes_atual . "/" . $ano_selecionado?>  </span>
                         </div>
 
                         <form action="./settings/conf_data.php" method="post">

@@ -3,13 +3,43 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 
-//Configura datas do servidor
-function qnt_dias($mes, $ano)
-{
+//verifica mes correspondente
+function meses($mes){
+    $meses = [
+    1  => 'Janeiro',
+    2  => 'Fevereiro',
+    3  => 'Março',
+    4  => 'Abril',
+    5  => 'Maio',
+    6  => 'Junho',
+    7  => 'Julho',
+    8  => 'Agosto',
+    9  => 'Setembro',
+    10 => 'Outubro',
+    11 => 'Novembro',
+    12 => 'Dezembro'
+];
 
-    $qnt_dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+if ($mes == '') {
+    return;
+}
 
-    return $qnt_dias;
+$mes_atual = $meses[$mes];
+
+return $mes_atual;
+}
+
+
+function verificar_sessao(){
+    session_start();
+    //Verifica se existe algum dado de usuario da sessão, se n tiver devolve pra tela de login.php
+    if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+    }
+
+    //Configura um tempo de inatividade para desconectar!
+    time_out();
 }
 
 

@@ -4,12 +4,10 @@
 <?php
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
-session_start();
-//Configura um tempo de inatividade para desconectar!
-time_out();
+verificar_sessao();
 $dados_user = dados_user()
 
-    ?>
+?>
 <?php include('./snippets/head.html'); ?>
 
 <body>
