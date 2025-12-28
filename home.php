@@ -2,9 +2,11 @@
 <html lang="pt_BR">
 <!-- Cabeçalho comum incluído -->
 <?php
+session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
+
 $dados_user = dados_user()
 
 ?>
@@ -32,7 +34,7 @@ $dados_user = dados_user()
                         </div>
                         <div class="container-card">
                             <div class="card-info">
-                                <span class="title-container">Registro Este Mês</span>
+                                <span class="title-container">Registro Realizados esse Mês</span>
                                 <span> - </span>
                                 <div class="linha blue"></div>
                             </div>
@@ -53,7 +55,7 @@ $dados_user = dados_user()
                                 <i class="fa-solid fa-clock card-icon"></i>
                                 <span class="title-container">Registrar Ponto</span>
                                 <p>Registre seu horário de entrada e saída</p>
-                                <div class="btn-container"><input class="btn-cards" type="submit" value="Ir para Folha de Ponto">
+                                <div class="btn-container"><a href="registrar-ponto.php"><button button class="btn-cards">Ir para Folha de Ponto</button></a>
                                 </div>
                             </div>
                             <div class="card-inferior">

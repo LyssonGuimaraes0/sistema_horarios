@@ -2,16 +2,17 @@
 <html lang="pt_BR">
 <!-- Cabeçalho comum incluído -->
 <?php
+session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
-
 verificar_sessao();
+
 $dados_user = dados_user();
 
 //Configuração para Dropdown inicia com valor selecionado pelo usuario
 $mes_selecionado = $_POST['mes'] ?? '';
 $ano_selecionado = $_POST['ano'] ?? '';
-$mes_atual = meses($mes_selecionado) ?? '';  
+$mes_atual = meses($mes_selecionado) ?? '';
 
 //Configurações de Mes é Ano
 $mes  = $_POST['mes'] ?? null;
@@ -55,18 +56,18 @@ if ($mes && $ano) {
                     <div class="container-dropdown">
                         <form method="post">
                             <select class="dropdown" name="mes">
-                                <option value="1" <?=  ($mes_selecionado == 1) ? 'selected' : '' ?>>Janeiro</option>
-                                <option value="2" <?=  ($mes_selecionado == 2) ? 'selected' : '' ?>>Fevereio</option>
-                                <option value="3" <?=  ($mes_selecionado == 3) ? 'selected' : '' ?>>Março</option>
-                                <option value="4" <?=  ($mes_selecionado == 4) ? 'selected' : '' ?>>Abril</option>
-                                <option value="5" <?=  ($mes_selecionado == 5) ? 'selected' : '' ?>>Maio</option>
-                                <option value="6" <?=  ($mes_selecionado == 6) ? 'selected' : '' ?>>Junho</option>
-                                <option value="7" <?=  ($mes_selecionado == 7) ? 'selected' : '' ?>>Julho</option>
-                                <option value="8" <?=  ($mes_selecionado == 8) ? 'selected' : '' ?>>Agosto</option>
-                                <option value="9" <?=  ($mes_selecionado == 9) ? 'selected' : '' ?>>Setembro</option>
-                                <option value="10" <?=  ($mes_selecionado == 10) ? 'selected' : '' ?>>Outubro</option>
-                                <option value="11" <?=  ($mes_selecionado == 11) ? 'selected' : '' ?>>Novembro</option>
-                                <option value="12" <?=  ($mes_selecionado == 12) ? 'selected' : '' ?>>Dezembro</option>
+                                <option value="1" <?= ($mes_selecionado == 1) ? 'selected' : '' ?>>Janeiro</option>
+                                <option value="2" <?= ($mes_selecionado == 2) ? 'selected' : '' ?>>Fevereio</option>
+                                <option value="3" <?= ($mes_selecionado == 3) ? 'selected' : '' ?>>Março</option>
+                                <option value="4" <?= ($mes_selecionado == 4) ? 'selected' : '' ?>>Abril</option>
+                                <option value="5" <?= ($mes_selecionado == 5) ? 'selected' : '' ?>>Maio</option>
+                                <option value="6" <?= ($mes_selecionado == 6) ? 'selected' : '' ?>>Junho</option>
+                                <option value="7" <?= ($mes_selecionado == 7) ? 'selected' : '' ?>>Julho</option>
+                                <option value="8" <?= ($mes_selecionado == 8) ? 'selected' : '' ?>>Agosto</option>
+                                <option value="9" <?= ($mes_selecionado == 9) ? 'selected' : '' ?>>Setembro</option>
+                                <option value="10" <?= ($mes_selecionado == 10) ? 'selected' : '' ?>>Outubro</option>
+                                <option value="11" <?= ($mes_selecionado == 11) ? 'selected' : '' ?>>Novembro</option>
+                                <option value="12" <?= ($mes_selecionado == 12) ? 'selected' : '' ?>>Dezembro</option>
                             </select>
                             <select class="dropdown" name="ano" id="">
                                 <?php
@@ -74,7 +75,7 @@ if ($mes && $ano) {
                                 $anolimite = "2024";
 
                                 for ($a = $anoatual; $a >= $anolimite; $a--): ?>
-                                    <option value="<?= $a ?>"<?=  ($ano_selecionado == $a) ? 'selected' : '' ?>><?= $a ?></option>
+                                    <option value="<?= $a ?>" <?= ($ano_selecionado == $a) ? 'selected' : '' ?>><?= $a ?></option>
                                 <?php endfor; ?>
                             </select>
                             <button type="submit" id="abrir-calendario">Busca</button>
@@ -87,12 +88,12 @@ if ($mes && $ano) {
 
         <section class="home-section">
             <div class="section-container">
-                                <!--Calendario Fica Oculto ate o usuario escolher o Mes-->
+                <!--Calendario Fica Oculto ate o usuario escolher o Mes-->
                 <div class="container-home" style="display:<?= ($mes_selecionado != '') ? 'block' : 'none' ?>">
                     <div class="container-calendario calendario-container">
                         <div class="calendario-header">
                             <span>Calendario</span>
-                            <span><?= $mes_atual . "/" . $ano_selecionado?>  </span>
+                            <span><?= $mes_atual . "/" . $ano_selecionado ?> </span>
                         </div>
 
                         <form action="./settings/conf_data.php" method="post">
@@ -112,27 +113,65 @@ if ($mes && $ano) {
                                     'Friday'    => 'Sexta-feira',
                                     'Saturday'  => 'Sábado'
                                 ];
+
+                                //Coleta os dados ja registrados anteriomente
+                                $datas_registradas = horas_registradas($_SESSION['user_id']);
+
                                 for ($dia = 1; $dia <= $dias; $dia++) {
                                     // Formato para pegar o nome do dia da semana
-                                    $data_str = "$ano-$mes-$dia";
+                                    $data_str = sprintf('%04d-%02d-%02d', $ano, $mes, $dia);
+                                    $registroDia = $datas_registradas[$data_str] ?? null;
+
                                     $nome_dia_ingles = date('l', strtotime($data_str));
                                     $nome_dia = $dias_semana[$nome_dia_ingles];
-                                    echo "
+
+                                    //Verificação de caso existe algum registro no banco das datas
+
+
+
+
+                                    if ($nome_dia == "Sábado" || $nome_dia == "Domingo") {
+                                        echo "
                                     <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
                                         <strong>$dia ($nome_dia)</strong><br>
                                         <div>
-                                        <input type='text' name='entrada[$dia]' placeholder='Entrada'>
-                                        <input type='text' name='saida_pf[$dia]' placeholder='Almoço'>
-                                        <input type='text' name='entrada_pf[$dia]' placeholder='Retorno Almoço'>
-                                        <input type='text' name='saida[$dia]' placeholder='Saída'>
+                                            <span>Final de Semana</span>
                                         </div>
                                     </div>
                                     ";
+                                    } else {
+                                        echo "
+                                            <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
+                                                <strong>$dia ($nome_dia)</strong><br>
+                                                    <div>
+                                                        <input type='text' name='entrada[$dia]'
+                                                        value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'
+                                                        " . (!empty($registroDia['entrada']) ? 'readonly' : '') . "
+                                                        >
+
+                                                        <input type='text' name='saida_pf[$dia]'
+                                                        value='" . (!empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '') . "'
+                                                        " . (!empty($registroDia['saida_almoco']) ? 'readonly' : '') . "
+                                                        >
+
+                                                        <input type='text' name='entrada_pf[$dia]'
+                                                        value='" . (!empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '') . "'
+                                                        " . (!empty($registroDia['volta_almoco']) ? 'readonly' : '') . "
+                                                        >
+
+                                                        <input type='text' name='saida[$dia]'
+                                                        value='" . (!empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '') . "'
+                                                        " . (!empty($registroDia['saida']) ? 'readonly' : '') . "
+                                                        >
+                                                    </div>
+                                            </div>
+                                        ";
+                                    }
                                 }
                                 echo "<button type='submit' class='btn-login'>Enviar datas</button>";
                             }
                             ?>
-                            
+
                         </form>
 
                     </div>
@@ -156,6 +195,9 @@ if ($mes && $ano) {
         //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
         var codicao = <?php echo json_encode($cadastro); ?>;
         var mensagem = <?php echo json_encode($mensagem); ?>;
+
+        console.log(codicao);
+        console.log(mensagem);
 
         apresenta_modal(codicao, mensagem);
     </script>

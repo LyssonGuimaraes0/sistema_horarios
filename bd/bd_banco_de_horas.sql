@@ -85,14 +85,15 @@ DROP TABLE IF EXISTS `ponto_diario`;
 CREATE TABLE `ponto_diario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
-  `data_registro` date NOT NULL,
-  `entrada_manha` time DEFAULT NULL,
+  `data_completo` date,
+  `entrada` time DEFAULT NULL,
   `saida_almoco` time DEFAULT NULL,
   `volta_almoco` time DEFAULT NULL,
-  `saida_tarde` time DEFAULT NULL,
+  `saida` time DEFAULT NULL,
   `status_dia` varchar(50) DEFAULT 'Em Andamento',
+  `data_registro` timestamp default current_timestamp,  
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_ponto_dia` (`usuario_id`,`data_registro`),
+  UNIQUE KEY `unique_ponto_dia` (`usuario_id`,`data_completo`),
   CONSTRAINT `ponto_diario_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

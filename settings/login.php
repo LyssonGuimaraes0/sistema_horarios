@@ -1,8 +1,9 @@
 <?php 
+session_start();
 include('conf_bd.php');
 //Conexão com o banco de dados
 $conn = conexao_banco();
-session_start();
+
 
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];

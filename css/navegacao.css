@@ -76,7 +76,7 @@
 
 .nav-link.active a {
     background-color: var(--light-grey);
-    color: var(--primary-blue);
+    color: var(--primary-color-hover);
 }
 
 .sidebar-menu li a i {

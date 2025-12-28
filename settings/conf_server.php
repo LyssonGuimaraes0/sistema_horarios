@@ -4,38 +4,42 @@ date_default_timezone_set('America/Sao_Paulo');
 
 
 //verifica mes correspondente
-function meses($mes){
+function meses($mes)
+{
+    //valor do mes atual
+    $mes_atual_numero = date("m");
+
     $meses = [
-    1  => 'Janeiro',
-    2  => 'Fevereiro',
-    3  => 'Março',
-    4  => 'Abril',
-    5  => 'Maio',
-    6  => 'Junho',
-    7  => 'Julho',
-    8  => 'Agosto',
-    9  => 'Setembro',
-    10 => 'Outubro',
-    11 => 'Novembro',
-    12 => 'Dezembro'
-];
+        1  => 'Janeiro',
+        2  => 'Fevereiro',
+        3  => 'Março',
+        4  => 'Abril',
+        5  => 'Maio',
+        6  => 'Junho',
+        7  => 'Julho',
+        8  => 'Agosto',
+        9  => 'Setembro',
+        10 => 'Outubro',
+        11 => 'Novembro',
+        12 => 'Dezembro'
+    ];
 
-if ($mes == '') {
-    return;
+    if ($mes == '') {
+        return;
+    }
+
+    $mes_atual = $meses[$mes];
+
+    return $mes_atual;
 }
 
-$mes_atual = $meses[$mes];
 
-return $mes_atual;
-}
-
-
-function verificar_sessao(){
-    session_start();
+function verificar_sessao()
+{
     //Verifica se existe algum dado de usuario da sessão, se n tiver devolve pra tela de login.php
     if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit;
+        header("Location: index.php");
+        exit;
     }
 
     //Configura um tempo de inatividade para desconectar!
@@ -97,4 +101,28 @@ function verificar_permissoes($array)
     } else {
         return false;
     }
+}
+
+//Função de coleta de todas datas do usuario para consulta
+function horas_registradas($id_user)
+{
+
+    $conn = conexao_banco();
+
+    $stmt = $conn->prepare(
+        'SELECT * FROM ponto_diario WHERE usuario_id = ?'
+    );
+    $stmt->bind_param("i", $id_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Inicializa o array
+    $datas_registradas = [];
+
+    while ($row = $result->fetch_assoc()) {
+        // data_completo deve estar no formato YYYY-MM-DD
+        $datas_registradas[$row['data_completo']] = $row;
+    }
+
+    return $datas_registradas;
 }

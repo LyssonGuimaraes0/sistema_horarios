@@ -2,6 +2,7 @@
 <html lang="pt_BR">
 <!-- Cabeçalho comum incluído -->
 <?php
+session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
