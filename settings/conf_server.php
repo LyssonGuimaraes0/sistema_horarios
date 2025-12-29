@@ -4,34 +4,46 @@ date_default_timezone_set('America/Sao_Paulo');
 
 
 //verifica mes correspondente
-function meses($mes)
-{
-    //valor do mes atual
-    $mes_atual_numero = date("m");
+
+
+function mese_atual(){
+
+    // Pega dia, mês e ano
+    $dia = date("d");   // 01 a 31
+    $mes = date("m");   // 01 a 12
+    $ano = date("Y");   // Ex: 2025
+
+    //Nome do mes correspondente
 
     $meses = [
-        1  => 'Janeiro',
-        2  => 'Fevereiro',
-        3  => 'Março',
-        4  => 'Abril',
-        5  => 'Maio',
-        6  => 'Junho',
-        7  => 'Julho',
-        8  => 'Agosto',
-        9  => 'Setembro',
-        10 => 'Outubro',
-        11 => 'Novembro',
-        12 => 'Dezembro'
+        "01"  => 'Janeiro',
+        "02"  => 'Fevereiro',
+        "03"  => 'Março',
+        "04"  => 'Abril',
+        "05"  => 'Maio',
+        "06"  => 'Junho',
+        "07"  => 'Julho',
+        "08" => 'Agosto',
+        "09" => 'Setembro',
+        "10" => 'Outubro',
+        "11" => 'Novembro',
+        "12" => 'Dezembro'
     ];
 
-    if ($mes == '') {
-        return;
-    }
+    $mes_nome = $meses[$mes];
 
-    $mes_atual = $meses[$mes];
+    // Retorna como array associativo
+    return [
+        'dia' => $dia,
+        'mes_nome' => $mes_nome,
+        'mes' => $mes,
+        'ano' => $ano,
+        'data_completa' => "$dia/$mes/$ano",
+        'meses'      => $meses
 
-    return $mes_atual;
+    ] ;
 }
+
 
 
 function verificar_sessao()
