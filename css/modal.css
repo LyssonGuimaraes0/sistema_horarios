@@ -28,7 +28,7 @@
 }
 
 .modal-cabecalho span{
-    font-size: var(--modal-font-titulo);
+    font-size: 30px;
 }
 
 .sucesso{
@@ -60,6 +60,11 @@
     text-align: center;
     font-size: 1.1rem;
     color: #333;
+}
+
+.btn-modal{
+    text-align: center;
+    margin-top: 30px;
 }
 
 

@@ -3,6 +3,10 @@
     height: 500px;
     background-color: var(--primary-color);
     overflow: scroll;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    border: 0px solid ;
+    border-radius: 8px;
 
 }
 

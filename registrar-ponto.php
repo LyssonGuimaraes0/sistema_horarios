@@ -226,9 +226,6 @@ if ($mes && $ano) {
     var codicao = <?php echo json_encode($cadastro); ?>;
     var mensagem = <?php echo json_encode($mensagem); ?>;
 
-    console.log(codicao);
-    console.log(mensagem);
-
     apresenta_modal(codicao, mensagem);
     </script>
 
