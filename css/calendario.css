@@ -24,14 +24,16 @@
 .container-horarios{
     display: grid;
     width: 100%;
-    margin: 10px;
+    margin: 10px auto;
     padding: 20px;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr) repeat(2, 0.5fr);
     
 }
 
-.intem-horarios{
-    margin: 20px;
+.items-botoes{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
 }
 
 /*Input do calendario*/
@@ -45,6 +47,12 @@
     font-size: 16px;
     color: var(--dark-text);
     box-shadow: var(--shadow);
+}
+
+
+
+.botao-calendario{
+    font-size: 20px;
 }
 
 /*Colocar css quando o fomulario esta preenchido esta preenxido*/
@@ -65,3 +73,4 @@ input[readonly]:focus {
     outline: none;
     box-shadow: none;
 }
+

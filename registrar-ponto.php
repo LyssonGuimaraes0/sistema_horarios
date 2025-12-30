@@ -131,20 +131,23 @@ if ($mes && $ano) {
                                 for ($dia = 1; $dia <= $dias; $dia++) {
                                     // Formato para pegar o nome do dia da semana
                                     $data_str = sprintf('%04d-%02d-%02d', $ano, $mes, $dia);
+
+                                    //Data formatada para formato brasileiro
+                                    $data_brasil = sprintf('%02d/%02d/%04d', $dia, $mes, $ano);
                                     $registroDia = $datas_registradas[$data_str] ?? null;
 
                                     $nome_dia_ingles = date('l', strtotime($data_str));
                                     $nome_dia = $dias_semana[$nome_dia_ingles];
 
                                     //Verificação de caso existe algum registro no banco das datas
-                            
+
 
 
 
                                     if ($nome_dia == "Sábado" || $nome_dia == "Domingo") {
                                         echo "
                                     <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
-                                        <strong>$data_completa ($nome_dia)</strong><br>
+                                        <strong>$data_brasil ($nome_dia)</strong><br>
                                         <div>
                                             <span>Final de Semana</span>
                                         </div>
@@ -153,38 +156,36 @@ if ($mes && $ano) {
                                     } else {
                                         echo "
                                         <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
-                                                <strong>$data_completa - $nome_dia</strong><br>";
+                                                <strong>$data_brasil - $nome_dia</strong><br>";
                                         //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
                                         echo "<div class='container-horarios'>";
                                         echo "<div class='items-horarios'>";
                                         echo "<input class='horario-input' type='text' name='entrada[$dia]' value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'" . (!empty($registroDia['entrada']) ? 'readonly' : '') . ">";
-                                        echo (!empty($registroDia['entrada']) ? '<i class="fa-solid fa-pen-to-square editar-botao"></i>' : '');
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
                                         echo "<input class='horario-input' type='text' name='saida_pf[$dia]' value='" . (!empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['saida_almoco']) ? 'readonly' : '') . ">";
-                                        echo (!empty($registroDia['saida_almoco']) ? '<i class="fa-solid fa-pen-to-square editar-botao"></i>' : '');
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
                                         echo "<input class='horario-input' type='text' name='entrada_pf[$dia]'value='" . (!empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['volta_almoco']) ? 'readonly' : '') . ">";
-                                        echo (!empty($registroDia['volta_almoco']) ? '<i class="fa-solid fa-pen-to-square editar-botao"></i>' : '');
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
                                         echo "<input class='horario-input' type='text' name='saida[$dia]'value='" . (!empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '') . "'" . (!empty($registroDia['saida']) ? 'readonly' : '') . " >";
-                                        echo (!empty($registroDia['saida']) ? '<i class="fa-solid fa-pen-to-square editar-botao"></i>' : '');
                                         echo "</div>";
 
                                         if (!empty($registroDia['entrada']) || !empty($registroDia['saida_almoco']) || !empty($registroDia['volta_almoco']) || !empty($registroDia['saida'])) {
-                                            echo "<i class='fa-solid fa-trash-can'></i>";
+                                            echo "<div class='items-botoes'>";
+                                            echo "<i class='fa-solid fa-pen-to-square botao-calendario'></i>";
+                                            echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_usuario('$data_str','$data_brasil')\"></i>";
+                                            echo "</div>";
                                         }
                                         echo "</div>";
                                         echo "</div>";
                                     }
                                 }
                                 echo "<button type='submit' class='btn-login'>Enviar datas</button>";
-
                             }
 
                             ?>
@@ -201,22 +202,34 @@ if ($mes && $ano) {
 
     <?php include('./snippets/script.html') ?>
     <script>
-        //Coleta valor recebido em conf_data.php é armazena
-        <?php $cadastro = $_SESSION['cadastro'] ?? null;
-        $mensagem = $_SESSION['mensagem'] ?? null;
-        //Limpa valor anterior para novos cadastros!
-        unset($_SESSION['cadastro']);
-        unset($_SESSION['mensagem']);
-        ?>
+        //Verifica caso o botão de lixeira foi precionado
+            function remover_usuario(data,data_visualizacao) {
+                document.getElementById('data_delete').value = data;
+                document.getElementById('data-remocao').innerText = data_visualizacao;
+                document.getElementById('modal-delete').style.display = 'flex';
+            }
 
-        //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
-        var codicao = <?php echo json_encode($cadastro); ?>;
-        var mensagem = <?php echo json_encode($mensagem); ?>;
+        function fechar_modal() {
+            document.getElementById('modal-delete').style.display = 'none';
+        }
 
-        console.log(codicao);
-        console.log(mensagem);
 
-        apresenta_modal(codicao, mensagem);
+    //Coleta valor recebido em conf_data.php é armazena
+    <?php $cadastro = $_SESSION['cadastro'] ?? null;
+    $mensagem = $_SESSION['mensagem'] ?? null;
+    //Limpa valor anterior para novos cadastros!
+    unset($_SESSION['cadastro']);
+    unset($_SESSION['mensagem']);
+    ?>
+
+    //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
+    var codicao = <?php echo json_encode($cadastro); ?>;
+    var mensagem = <?php echo json_encode($mensagem); ?>;
+
+    console.log(codicao);
+    console.log(mensagem);
+
+    apresenta_modal(codicao, mensagem);
     </script>
 
 </body>

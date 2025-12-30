@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
 
-    
+
 
     // === SIDEBAR ===========================================================
     const sidebar = document.getElementById('sidebar');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        // === MENU ACTIVE ======================================================
+    // === MENU ACTIVE ======================================================
     const itensMenu = document.querySelectorAll('.nav-link');
     const caminhoAtual = window.location.pathname;
 
@@ -77,7 +77,7 @@ function abrircalendario() {
 
 //Função para apresenta tdos os modais!
 
-function apresenta_modal(condicao, mensagem) {
+function apresenta_modal(condicao, mensagem,) {
 
     var TituloModal = document.createElement('span');
     var DescricaoModal = document.createElement('p');
@@ -111,13 +111,17 @@ function apresenta_modal(condicao, mensagem) {
             break;
     }
 
-    function conf_modal(titulo, descricao, cor) {
+    function conf_modal(titulo, descricao, cor, funcao = null) {
         //Coleta Informações do formulario
         const ModalBackground = document.querySelector('.modal-background');
         const ModalContainer = document.querySelector('.modal-container');
         const ModalCabecalho = document.querySelector('.modal-cabecalho');
         const ModalDescricao = document.querySelector('.modal-descricao');
         const ModalBtn = document.querySelector('.btn-modal');
+        //botao cancelar
+        const ModalBtnCancelar = document.querySelector('#botao-cancelar');
+        //botao okay ou confirmar
+        const ModalBtncConfirmar = document.querySelector('#botao-confirmar');
 
         //Limpa o modal
         ModalCabecalho.innerHTML = "";
@@ -131,6 +135,7 @@ function apresenta_modal(condicao, mensagem) {
 
         //Apresnta o modal
         ModalBackground.style.display = "flex";
+
 
         ModalBtn.onclick = () => {
             ModalBackground.style.display = "none";

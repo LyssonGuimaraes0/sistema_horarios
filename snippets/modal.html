@@ -1,19 +1,43 @@
 <section>
     <div class="modal-background">
-            <div class="section-container">
-                <div class="modal-container">
-                    <div class="modal">
-                        <div class="modal-cabecalho">
-                            <!--Titulo-->
-                        </div>
-                        <div class="modal-descricao">
-                            <!--Descrição-->
-                        </div>
-                        <div class="btn-modal" id="btn-senha"><input type="button" value="Okay" class="btn-login"></div>
+        <div class="section-container">
+            <div class="modal-container">
+                <div class="modal">
+                    <div class="modal-cabecalho">
+                        <!--Titulo-->
+                    </div>
+                    <div class="modal-descricao">
+                        <!--Descrição-->
+                    </div>
+                    <div class="btn-modal">
+                        <input type="button" id="botao-confirmar" value="Okay" class="btn-login">
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </section>
 
+<!-- Modal para exclução de usuario -->
+
+<div id="modal-delete" class="modal-background" style="display:none;">
+    <div class="section-container">
+        <div class="modal-container">
+            <div class="modal">
+                <div class="modal-cabecalho">
+                    <span>Confirmar exclusão</span>
+                </div>
+                <div class="modal-descricao">
+                    <p>Tem certeza que deseja apagar o registro do dia?</p>
+                    <span id="data-remocao"></span>
+                </div>
+                <form action="./settings/delete_registro.php" method="post">
+                    <input type="hidden" name="data" id="data_delete">
+                    <button type="submit" class="btn-confirmar">Confirmar</button>
+                    <button type="button" onclick="fechar_modal()" class="btn-cancelar">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
