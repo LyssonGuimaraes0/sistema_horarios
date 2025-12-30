@@ -75,7 +75,8 @@ if ($mes && $ano) {
                                         break;
                                     } ?>
                                     <option value="<?= $numero ?>" <?= ($mes_selecionado == $numero) ? 'selected' : '' ?>>
-                                        <?= $nome_mes ?></option>
+                                        <?= $nome_mes ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                             <select class="dropdown" name="ano" id="">
@@ -140,7 +141,7 @@ if ($mes && $ano) {
                                     $nome_dia = $dias_semana[$nome_dia_ingles];
 
                                     //Verificação de caso existe algum registro no banco das datas
-
+                            
 
 
 
@@ -160,25 +161,25 @@ if ($mes && $ano) {
                                         //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
                                         echo "<div class='container-horarios'>";
                                         echo "<div class='items-horarios'>";
-                                        echo "<input class='horario-input' type='text' name='entrada[$dia]' value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'" . (!empty($registroDia['entrada']) ? 'readonly' : '') . ">";
+                                        echo "<input class='horario-input' maxlength='5' type='text' name='entrada[$dia]' value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'" . (!empty($registroDia['entrada']) ? 'readonly' : '') . ">";
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
-                                        echo "<input class='horario-input' type='text' name='saida_pf[$dia]' value='" . (!empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['saida_almoco']) ? 'readonly' : '') . ">";
+                                        echo "<input class='horario-input' maxlength='5' type='text' name='saida_pf[$dia]' value='" . (!empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['saida_almoco']) ? 'readonly' : '') . ">";
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
-                                        echo "<input class='horario-input' type='text' name='entrada_pf[$dia]'value='" . (!empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['volta_almoco']) ? 'readonly' : '') . ">";
+                                        echo "<input class='horario-input' maxlength='5' type='text' name='entrada_pf[$dia]'value='" . (!empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '') . "'" . (!empty($registroDia['volta_almoco']) ? 'readonly' : '') . ">";
                                         echo "</div>";
 
                                         echo "<div class='items-horarios'>";
-                                        echo "<input class='horario-input' type='text' name='saida[$dia]'value='" . (!empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '') . "'" . (!empty($registroDia['saida']) ? 'readonly' : '') . " >";
+                                        echo "<input class='horario-input' maxlength='5' type='text' name='saida[$dia]'value='" . (!empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '') . "'" . (!empty($registroDia['saida']) ? 'readonly' : '') . " >";
                                         echo "</div>";
 
                                         if (!empty($registroDia['entrada']) || !empty($registroDia['saida_almoco']) || !empty($registroDia['volta_almoco']) || !empty($registroDia['saida'])) {
                                             echo "<div class='items-botoes'>";
-                                            echo "<i class='fa-solid fa-pen-to-square botao-calendario'></i>";
-                                            echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_usuario('$data_str','$data_brasil')\"></i>";
+                                            echo "<i class='fa-solid fa-pen-to-square botao-calendario' onclick=\"editar_horario(this)\"></i>";
+                                            echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
                                             echo "</div>";
                                         }
                                         echo "</div>";
@@ -203,30 +204,66 @@ if ($mes && $ano) {
     <?php include('./snippets/script.html') ?>
     <script>
         //Verifica caso o botão de lixeira foi precionado
-            function remover_usuario(data,data_visualizacao) {
-                document.getElementById('data_delete').value = data;
-                document.getElementById('data-remocao').innerText = data_visualizacao;
-                document.getElementById('modal-delete').style.display = 'flex';
-            }
+        function remover_horario(data, data_visualizacao) {
+            document.getElementById('data_delete').value = data;
+            document.getElementById('data-remocao').innerText = data_visualizacao;
+            document.getElementById('modal-delete').style.display = 'flex';
+        }
 
         function fechar_modal() {
             document.getElementById('modal-delete').style.display = 'none';
         }
 
+        // == EDITAR HORARIO ====================================================
 
-    //Coleta valor recebido em conf_data.php é armazena
-    <?php $cadastro = $_SESSION['cadastro'] ?? null;
-    $mensagem = $_SESSION['mensagem'] ?? null;
-    //Limpa valor anterior para novos cadastros!
-    unset($_SESSION['cadastro']);
-    unset($_SESSION['mensagem']);
-    ?>
+        function editar_horario(elemento) {
+            const ContainerDia = elemento.closest('.container-horarios');
+            const inputsDias = ContainerDia.querySelectorAll('.horario-input');
+            //Coleta Valores
+            const modoEdicao = inputsDias[0].hasAttribute('readonly');
 
-    //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
-    var codicao = <?php echo json_encode($cadastro); ?>;
-    var mensagem = <?php echo json_encode($mensagem); ?>;
+            //Entra no modo edição
+            if (modoEdicao) {
+                inputsDias.forEach(inputdia => {
+                    //define valor antigo
+                    inputdia.dataset.valorAntigo = inputdia.value;
+                    elemento.classList.replace('fa-pen-to-square', 'fa-x');
+                    inputdia.removeAttribute('readonly');
+                });
 
-    apresenta_modal(codicao, mensagem);
+                //Bloquea novamente é retorna aos valores padrões  
+            } else {
+                inputsDias.forEach(inputdia => {
+                    if (inputdia.dataset.valorAntigo !== undefined) {
+                        inputdia.value = inputdia.dataset.valorAntigo;
+                    }
+                    elemento.classList.replace('fa-x', 'fa-pen-to-square');
+                    inputdia.setAttribute('readonly', 'readonly');
+                });
+
+            }
+
+
+
+
+        }
+
+
+
+
+        //Coleta valor recebido em conf_data.php é armazena
+        <?php $cadastro = $_SESSION['cadastro'] ?? null;
+        $mensagem = $_SESSION['mensagem'] ?? null;
+        //Limpa valor anterior para novos cadastros!
+        unset($_SESSION['cadastro']);
+        unset($_SESSION['mensagem']);
+        ?>
+
+        //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
+        var codicao = <?php echo json_encode($cadastro); ?>;
+        var mensagem = <?php echo json_encode($mensagem); ?>;
+
+        apresenta_modal(codicao, mensagem);
     </script>
 
 </body>

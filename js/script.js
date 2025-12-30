@@ -41,6 +41,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // === MÁSCARA DE HORARIOS ====================================================
+    const inputHorarios = document.querySelectorAll('.horario-input');
+
+    inputHorarios.forEach((input) => {
+        input.addEventListener('input', function () {
+            // 1. Limpeza inicial e máscara básica
+            this.style.border = "none";
+            let horario = this.value.replace(/\D/g, '');
+            horario = horario.slice(0, 4);
+
+            // Validações de formato (HH:MM)
+            if (horario.length === 1 && !/[0-2]/.test(horario[0])) { this.value = ''; return; }
+            if (horario.length === 3 && !/[0-5]/.test(horario[2])) { this.value = horario.slice(0, 2); return; }
+
+            // 2. LÓGICA DE COMPARAÇÃO TOTAL
+            if (horario.length === 4) {
+                const containerDia = this.closest('.container-horarios');
+                const inputsDoDia = Array.from(containerDia.querySelectorAll('.horario-input'));
+                const indiceAtual = inputsDoDia.indexOf(this);
+
+                const minAtual = Number(horario.slice(0, 2)) * 60 + Number(horario.slice(2));
+
+                // VERIFICA TODOS OS CAMPOS ANTERIORES
+                for (let i = 0; i < indiceAtual; i++) {
+                    if (inputsDoDia[i].value.length === 5) {
+                        let val = inputsDoDia[i].value.replace(':', '');
+                        let minAnt = Number(val.slice(0, 2)) * 60 + Number(val.slice(2));
+                        if (minAtual <= minAnt) {
+                            this.style.border = "2px solid red";
+                            this.value = '';
+                            return;
+                        }
+                    }
+                }
+
+                // VERIFICA TODOS OS CAMPOS POSTERIORES (Aqui resolve o Índice 0 vs 1)
+                for (let i = indiceAtual + 1; i < inputsDoDia.length; i++) {
+                    if (inputsDoDia[i].value.length === 5) {
+                        let val = inputsDoDia[i].value.replace(':', '');
+                        let minProx = Number(val.slice(0, 2)) * 60 + Number(val.slice(2));
+                        if (minAtual >= minProx) {
+                            this.style.border = "2px solid red";
+                            this.value = '';
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // 3. Aplica a máscara visual final
+            if (horario.length > 2) {
+                horario = horario.replace(/^(\d{2})(\d{1,2})$/, '$1:$2');
+            }
+            this.value = horario;
+        });
+    });
+
+
     // === MENU ACTIVE ======================================================
     const itensMenu = document.querySelectorAll('.nav-link');
     const caminhoAtual = window.location.pathname;
