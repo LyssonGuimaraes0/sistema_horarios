@@ -1,6 +1,3 @@
-.formulario{
-    padding: 20px;
-}
 
 
 .container-form{
@@ -13,7 +10,6 @@
     flex-wrap: wrap;
     box-shadow: var(--shadow);
     position: relative;
-    padding: 15px;
 }
 
 .container-item{
@@ -22,6 +18,8 @@
     left: 22%;
 
 }
+
+
 
 
 

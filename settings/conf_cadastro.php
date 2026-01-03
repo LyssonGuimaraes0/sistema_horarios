@@ -40,8 +40,19 @@ $cadastro_user = $conn->prepare("INSERT INTO usuario(nome,cpf,username,setor,ema
 $cadastro_user->bind_param("sssssss", $nome, $cpf, $username, $setor, $email, $senha, $permissao);
 
 if ($cadastro_user->execute()) {
+    //Coleta o ID do usuario para criação da Pasta
+    $id_user = $conn->insert_id;
+
+   //Formata nome do usuario 
+   $nome_formatado = str_replace(" ","_",$nome);
+   $nome_formatado = strtolower($nome_formatado);
+
     $cadastro_user->close();
     $conn->close();
+    //Cria pasta do Usuario
+    mkdir("../docs/id_". $id_user ."_".$nome_formatado . "/justificativas", 0770, true);
+    mkdir("../docs/id_". $id_user ."_".$nome_formatado . "/ponto_mensal", 0770, true);
+
     $_SESSION['cadastro'] = "sucesso";
     $_SESSION['mensagem'] = "O usuario foi cadastro com sucesso!";
     header("location: ../adicionar_user.php");

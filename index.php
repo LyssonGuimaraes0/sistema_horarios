@@ -28,7 +28,6 @@ unset($_SESSION['mensagem']);
             var error_login = <?php echo json_encode($login); ?>;
             var mensagem = <?php echo json_encode($mensagem); ?>;
             apresenta_modal(error_login,mensagem);
-            console.log(error_login);
     </script>
 
 </body>

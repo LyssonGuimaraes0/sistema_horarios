@@ -8,7 +8,7 @@
 
 :root {
     /* --primary-color: #1a73e8; */
-    --primary-color: #24e9ae;
+    --primary-color: #2490e9;
     --primary-color-hover:  color-mix(in srgb, var(--primary-color), black 50%);
     --segundaria-color:#eeeeee;
     --green-color:green;

@@ -1,9 +1,9 @@
 .container-calendario {
+    position: relative;
     width: 100%;
     height: 500px;
     background-color: var(--primary-color);
     overflow: scroll;
-    padding: 30px;
     box-shadow: var(--shadow);
     border: 0px solid ;
     border-radius: 8px;
@@ -15,12 +15,34 @@
     height: 100px;
     color: aliceblue;
     text-align: center;
+    display: flex;
+    justify-content: space-around;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--primary-color-hover);
+}
+
+.calendario-body{
+    margin-top: 35px;
+}
+
+.calendario-titulo{
+    margin-top: 20px;
 }
 
 .calendario-header span {
     color: aliceblue;
     font-size: 24px;
 
+}
+
+.btn-calendario{
+    width: 100px;
+    height: 50px;
+    padding: 10px;
+    border: 2px solid var(--primary-color);
+    margin-top: 20px;
 }
 
 /*Container de inputs*/
@@ -57,6 +79,7 @@
 
 .botao-calendario{
     font-size: 20px;
+    cursor: pointer;
 }
 
 /*Colocar css quando o fomulario esta preenchido esta preenxido*/

@@ -6,7 +6,8 @@ date_default_timezone_set('America/Sao_Paulo');
 //verifica mes correspondente
 
 
-function mese_atual(){
+function mese_atual()
+{
 
     // Pega dia, mês e ano
     $dia = date("d");   // 01 a 31
@@ -41,7 +42,7 @@ function mese_atual(){
         'data_completa' => "$dia/$mes/$ano",
         'meses'      => $meses
 
-    ] ;
+    ];
 }
 
 
@@ -138,3 +139,5 @@ function horas_registradas($id_user)
 
     return $datas_registradas;
 }
+
+

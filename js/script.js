@@ -122,6 +122,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+//Fecha modal
+function fechar_modal() {
+    document.querySelectorAll('.modal-background').forEach(modal => {
+        modal.style.display = 'none';
+    });
+}
+
+// == EDITAR HORARIO ====================================================
+
+function editar_horario(elemento) {
+    const ContainerDia = elemento.closest('.container-horarios');
+    const inputsDias = ContainerDia.querySelectorAll('.horario-input');
+    //Coleta Valores
+    const modoEdicao = inputsDias[0].hasAttribute('readonly');
+
+    //Entra no modo edição
+    if (modoEdicao) {
+        inputsDias.forEach(inputdia => {
+            //define valor antigo
+            inputdia.dataset.valorAntigo = inputdia.value;
+            elemento.classList.replace('fa-pen-to-square', 'fa-x');
+            inputdia.removeAttribute('readonly');
+        });
+
+        //Bloquea novamente é retorna aos valores padrões  
+    } else {
+        inputsDias.forEach(inputdia => {
+            if (inputdia.dataset.valorAntigo !== undefined) {
+                inputdia.value = inputdia.dataset.valorAntigo;
+            }
+            elemento.classList.replace('fa-x', 'fa-pen-to-square');
+            inputdia.setAttribute('readonly', 'readonly');
+        });
+
+    }
+
+}
+
+// == Adicionar Justificativa ====================================================
+    function adicionar_justificativa(data){
+        ModalBackground = document.getElementById('modal-justificativa');
+        var dataModificar = document.querySelector('#data_justificativa');
+        dataModificar.value = data;
+        ModalBackground.style.display = "block";
+        
+    }
+
+
 //Função de oculta calendario ate o usuario clica no btn
 
 function abrircalendario() {
@@ -196,7 +244,7 @@ function apresenta_modal(condicao, mensagem,) {
 
 
         ModalBtn.onclick = () => {
-            ModalBackground.style.display = "none";
+            fechar_modal();
         };
 
 
