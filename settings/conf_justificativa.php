@@ -40,7 +40,7 @@ if (strtolower($verificar_anexo['extension']) !== 'pdf') {
 $novo_nome = "id_{$dados_user['id']}_Data_{$data_registro}.pdf";
 
 $nome_formatado = strtolower(str_replace(" ", "_", $dados_user['nome']));
-$diretorio = "../docs/id_{$dados_user['id']}_{$nome_formatado}/";
+$diretorio = "../docs/id_{$dados_user['id']}_{$nome_formatado}/justificativas/";
 
 if (!is_dir($diretorio)) {
     mkdir($diretorio, 0777, true);

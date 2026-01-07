@@ -1,0 +1,25 @@
+@page{
+    size: A4 portrait;
+  margin: 20mm;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.4;
+}
+
+.container-pdf {
+  width: 100%;
+}
+
+h1 {
+  font-size: 18pt;
+  margin-bottom: 10px;
+}

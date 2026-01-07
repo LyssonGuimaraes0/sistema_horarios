@@ -139,25 +139,21 @@ if ($mes && $ano) {
 
                                         $nome_dia_ingles = date('l', strtotime($data_str));
                                         $nome_dia = $dias_semana[$nome_dia_ingles];
+                                        $status_dia = $registroDia['status_dia'] ?? null;
 
                                         //Verificação de caso existe algum registro no banco das datas
 
-
-
-
+                                        echo "<div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>";
+                                        echo "<strong>$data_brasil ($nome_dia)</strong><br>";
                                         if ($nome_dia == "Sábado" || $nome_dia == "Domingo") {
-                                            echo "
-                                                        <div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
-                                                    <strong>$data_brasil ($nome_dia)</strong><br>
-                                                        <div>
-                                                         <span>Final de Semana</span>
-                                                         </div>
-                                                        </div>
-                                                        ";
+                                            echo "<span>Final de Semana</span>";
+                                            echo "</div>";
                                         } else {
-                                            echo "<div class='linha-dia' style='margin-bottom:10px; padding:5px; border-bottom:1px solid #ddd;'>
-                                                    <strong>$data_brasil - $nome_dia</strong><br>";
+
+
                                             //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
+
+                                            echo ($status_dia === "Atestado") ? "<span>Atestado</span>" : "" ;
                                             echo "<div class='container-horarios'>";
                                             echo "<div class='items-horarios'>";
                                             echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'" . (!empty($registroDia['entrada']) ? 'readonly' : '') . ">";
@@ -176,12 +172,12 @@ if ($mes && $ano) {
                                             echo "</div>";
 
                                             echo "<div class='items-botoes'>";
-                                            
+
 
                                             if (!empty($registroDia['entrada']) || !empty($registroDia['saida_almoco']) || !empty($registroDia['volta_almoco']) || !empty($registroDia['saida'])) {
                                                 echo "<i class='fa-solid fa-pen-to-square botao-calendario' onclick=\"editar_horario(this)\"></i>";
                                                 echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
-                                            }else {
+                                            } else {
                                                 echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";
                                             }
                                             echo "</div>";
