@@ -89,6 +89,14 @@ if ($mes && $ano) {
                             <button type="submit" id="abrir-calendario">Busca</button>
 
                         </form>
+                        <!--Botão de enviar PDF-->
+                        <div class="contaienr-pdf">
+                            <form action="./settings/conf_pdf.php" method="post">
+                                <input type="hidden" name="mes_pdf" value="<?= $mes ?>">
+                                <input type="hidden" name="ano_pdf" value="<?= $ano ?>">
+                                <input type="submit" value="Imprimir PDF">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,7 +161,7 @@ if ($mes && $ano) {
 
                                             //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
 
-                                            echo ($status_dia === "Atestado") ? "<span>Atestado</span>" : "" ;
+                                            echo ($status_dia === "Atestado") ? "<span>Atestado</span>" : "";
                                             echo "<div class='container-horarios'>";
                                             echo "<div class='items-horarios'>";
                                             echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '') . "'" . (!empty($registroDia['entrada']) ? 'readonly' : '') . ">";

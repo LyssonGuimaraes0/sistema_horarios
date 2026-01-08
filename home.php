@@ -114,15 +114,13 @@ $data = mese_atual();
                                             <?= $existeRegistro ? 'readonly' : '' ?>>
                                     </div>
                                     <div class="items-horarios">
-
                                         <?php if ($existeRegistro): ?>
-                                            <div class="items-botoes">
-                                                <i class="fa-solid fa-pen-to-square botao-calendario"></i>
-                                                <button type="submit" class="btn-calendario home-calendario">
-                                                    Enviar datas
-                                                </button>
-                                            </div>
+                                            <i class="fa-solid fa-pen-to-square botao-calendario"></i>
                                         <?php endif; ?>
+                                        <button type="submit" class="btn-calendario home-calendario">
+                                            Enviar datas
+                                        </button>
+
 
                                     <?php } ?>
                                     </div>
