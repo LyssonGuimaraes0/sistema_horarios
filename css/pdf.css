@@ -54,6 +54,24 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
+  gap: 12px;
+}
+
+.row-info-horario{
+  width: 100%;
+}
+
+.dado.texto.tabela{
+  height: 55px;
+}
+
+.info{
+  margin-bottom: 15px;
+}
+
+.item-info {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .item-dado {
@@ -76,4 +94,28 @@
 
 .dado.texto span {
   color: var(--white-text);
+}
+
+/*Tabela do PDF*/
+
+.tabela_fs{
+  background-color: rgba(128, 128, 128, 0.205);
+}
+
+.assinatura-row{
+  margin: 140px auto 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 200px;
+  max-width: 800px;
+}
+
+.linha-assinatura{
+  width: 300px;
+  height: 1px;
+  background: grey;
+}
+
+.assinatura-item{
+  text-align: center;
 }
