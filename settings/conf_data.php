@@ -59,13 +59,15 @@ for ($dia = 1; $dia <= $dias_mes; $dia++) {
             saida = IFNULL(VALUES(saida), saida)');
         $query_horas->bind_param("isssss", $id_user, $data_completa, $entrada, $saida_pf, $entrada_pf, $saida);
     } else {
-        $query_horas = $conn->prepare('INSERT INTO ponto_diario (usuario_id, data_completo, entrada, saida_almoco, volta_almoco, saida, status_dia) VALUES (?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            entrada      = IFNULL(VALUES(entrada), entrada),
-            saida_almoco = IFNULL(VALUES(saida_almoco), saida_almoco),
-            volta_almoco = IFNULL(VALUES(volta_almoco), volta_almoco),
-            saida        = IFNULL(VALUES(saida), saida),
-            status_dia   = VALUES(status_dia)');
+        $query_horas = $conn->prepare("INSERT INTO ponto_diario 
+    (usuario_id, data_completo, entrada, saida_almoco, volta_almoco, saida, status_dia) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE 
+        entrada      = IFNULL(VALUES(entrada), entrada),
+        saida_almoco = IFNULL(VALUES(saida_almoco), saida_almoco),
+        volta_almoco = IFNULL(VALUES(volta_almoco), volta_almoco),
+        saida        = IFNULL(VALUES(saida), saida),
+        status_dia   = IF(status_dia = 'Atestado', status_dia, VALUES(status_dia))");
         $query_horas->bind_param("issssss", $id_user, $data_completa, $entrada, $saida_pf, $entrada_pf, $saida, $status);
     }
 

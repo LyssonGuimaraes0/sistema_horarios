@@ -9,8 +9,13 @@ verificar_sessao();
 
 $dados_user = dados_user();
 
+//coleta horarios registrados
+$datas_registradas = horas_registradas($dados_user['id']);
+
 //Configuração de data
 $data = mese_atual();
+$mes_atual = $data['mes'];
+$ano_atual = $data['ano'];
 
 ?>
 <?php include('./snippets/head.html'); ?>
@@ -45,9 +50,6 @@ $data = mese_atual();
                         <div class="inputs-container">
                             <form action="./settings/conf_data.php" method="post">
                                 <?php
-                                //Função para verificar horario ja registrando no banco
-                                $datas_registradas = horas_registradas($_SESSION['user_id']);
-
                                 //formata para estilo do banco
                                 $data_str = date('Y-m-d');
                                 $registroDia = $datas_registradas[$data_str] ?? null;
@@ -135,18 +137,59 @@ $data = mese_atual();
                 </div>
                 <div class="container-card">
                     <div class="card-info">
-                        <span class="title-container">Registro Realizados esse Mês</span>
-                        <span> - </span>
+                        <?php
+                        $registros =  $datas_registradas;
+                        $total_mes = 0;
+                        foreach ($registros as $data => $registro) {
+                            [$ano_data, $mes_data, $dia_data] = explode("-", $data);
+
+                            if ($mes_data === $mes_atual && $ano_data === $ano_atual) {
+                                $total_mes++;
+                            }
+                        }
+                        ?>
+                        <span class="title-container">Registro Realizados no Mês</span>
+                        <span><?= $total_mes ?> </span>
                         <div class="linha blue"></div>
                     </div>
                     <div class="card-info">
-                        <span class="title-container">Presentes </span>
-                        <span> <?php echo $dados_user['nome'] ?> </span>
+                        <span class="title-container">Registros Completos</span>
+                        <?php
+                        $total_completo = 0;
+                        foreach ($registros as $data => $registro) {
+                            [$ano_data, $mes_data, $dia_data] = explode("-", $data);
+                            $data_status = $registro['status_dia'];
+                            if ($mes_data === $mes_atual && $ano_data === $ano_atual && $data_status === "Completo" || $data_status === "Atestado" ) {
+                                $total_completo++;
+                            }
+                        }
+
+                        ?>
+                        <span> <?= $total_completo ?></span>
                         <div class="linha green"></div>
                     </div>
                     <div class="card-info">
-                        <span class="title-container">Faltas </span>
-                        <span> <?php echo $dados_user['nome'] ?> </span>
+                        <span class="title-container">Registros em Aberto </span>
+                        <?php
+                        $data_atual = new dateTime("$ano_atual-$mes_atual-01");
+                        $ultimoDia = $data_atual->format("t");
+
+                        $total_falta = 0;
+                        $dias_validos = 0;
+
+                        for ($dia = 1; $dia < $ultimoDia; $dia++) {
+                            $data_format = sprintf('%04d-%02d-%02d', $ano_atual, $mes_atual, $dia);
+                            $data_verificar = date('l',strtotime($data_format));
+                            if ($data_verificar == "Saturday" || $data_verificar == "Sunday" ) {
+                                continue;
+                            }
+                            $dias_validos++;
+                        }
+
+                        $total_falta = $dias_validos - $total_mes ;
+                        ?>
+                        
+                        <span> <?= $total_falta ?> </span>
                         <div class="linha red"></div>
                     </div>
                 </div>
