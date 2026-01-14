@@ -64,208 +64,132 @@ $data_atual = $mes_atual['data_completa'];
 </head>
 
 <style>
-    @page {
-  size: A4 portrait;
-  margin: 20mm;
+@page {
+    size: A4 landscape;
+    margin: 8mm;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
 }
 
 .pagina-pdf {
-  padding: 20px;
-  width: 100%;
+    width: 100%;
 }
 
-.container-pdf {
-  width: 100%;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* CRÍTICO */
 }
 
-/*Cabeçalho*/
-
-.cabecalho {
-  display: grid;
-  width: 100%;
-  height: 80px;
-  margin: 10px auto;
-  margin-bottom: 25px;
-  grid-template-columns: 1fr 0.3fr;
+th, td {
+    border: 1px solid #000;
+    padding: 3px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
 }
 
-.cabecalho-titulo {
-  border: 4px solid var(--primary-color);
-  border-right: 0px;
-  text-align: center;
+/* Cabeçalho */
+h1 {
+    font-size: 14px;
+    margin: 5px 0;
 }
 
-.cabecalho-titulo h1 {
-  padding: 15px;
+/* Ajuste das colunas */
+.col-data { width: 12%; }
+.col-hora { width: 10%; }
+.col-obs  { width: 28%; }
+
+/* Final de semana */
+.tabela_fs {
+    background-color: #f0f0f0;
+    font-style: italic;
 }
 
-.periodo {
-  background-color: var(--primary-color);
-  text-align: center;
-  height: 30px;
-  padding: 5px;
+/* Assinaturas */
+.assinatura-row {
+    margin-top: 20px;
+    display: table;
+    width: 100%;
+    margin-top: 50px;
 }
 
-.periodo span {
-  color: var(--white-text);
+.assinatura-item {
+    display: table-cell;
+    text-align: center;
 }
 
-.row-data {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-}
-
-.row-info {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  align-items: center;
-  gap: 12px;
-}
-
-.row-info-horario{
-  width: 100%;
-}
-
-.dado.texto.tabela{
-  height: 55px;
-}
-
-.info{
-  margin-bottom: 15px;
-}
-
-.item-info {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.item-dado {
-  display: grid;
-  grid-template-columns: 0.6fr 1fr;
-}
-
-
-.dado {
-  height: 30px;
-  text-align: center;
-  padding: 2px;
-  border: 1px solid rgb(41, 40, 40);
-}
-
-.dado.texto {
-  background-color: var(--primary-color-hover);
-  color: var(--white-text);
-}
-
-.dado.texto span {
-  color: var(--white-text);
-}
-
-/*Tabela do PDF*/
-
-.tabela_fs{
-  background-color: rgba(128, 128, 128, 0.205);
-}
-
-.assinatura-row{
-  margin: 140px auto 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 200px;
-  max-width: 800px;
-}
-
-.linha-assinatura{
-  width: 300px;
-  height: 1px;
-  background: grey;
-}
-
-.assinatura-item{
-  text-align: center;
+.linha-assinatura {
+    border-bottom: 1px solid #000;
+    width: 80%;
+    margin: 0 auto 5px auto;
 }
 </style>
 
 <body>
     <section class="pagina-pdf">
-        <div class="container-pdf">
-            <div class="cabecalho">
-                <div class="cabecalho-titulo">
-                    <h1>Folha de Ponto <?= "$nome_mes/$ano" ?></h1>
-                </div>
-                <div class="cabecalho-mes">
-                    <div class="periodo">
-                        <span>Período</span>
+        <table class="row-info-horario">
+            <thead>
+                <!--Cabecalho-->
+                <th class="tabela">
+                    <div class="cabecalho-titulo">
+                        <h1>Folha de Ponto <?= "$nome_mes/$ano" ?></h1>
                     </div>
-                    <div class="container-meses">
-                        <div class="row-data">
-                            <div class="dado texto">
-                                <span>Data Inicio</span>
-                            </div>
-                            <div class="dado data-dado">
-                                <span><?= "01/$mes/$ano" ?></span>
-                            </div>
+                </th>
+                <th class="dado texto tabela">
+                    <div class="cabecalho-mes">
+                        <div class="periodo">
+                            <span>Período</span>
                         </div>
+                        <div class="container-meses">
+                            <div class="row-data">
+                                <div class="dado">
+                                    <span>Data Inicio</span>
+                                </div>
+                                <div class="dado data-dado">
+                                    <span><?= "01/$mes/$ano" ?></span>
+                                </div>
+                            </div>
 
-                        <div class="row-data">
-                            <div class="dado texto">
-                                <!--Pega data Final-->
-                                <?php
-                                $data = new dateTime("$ano-$mes-01");
-                                $ultimoDia = $data->format("t");
-                                ?>
-                                <span>Data Fim</span>
+                            <div class="row-data">
+                                <div class="dado">
+                                    <!--Pega data Final-->
+                                    <?php
+                                    $data = new dateTime("$ano-$mes-01");
+                                    $ultimoDia = $data->format("t");
+                                    ?>
+                                    <span>Data Fim</span>
+                                </div>
+                                <div class="dado data-dado">
+                                    <span><?= "$ultimoDia/$mes/$ano" ?></span>
+                                </div>
                             </div>
-                            <div class="dado data-dado">
-                                <span><?= "$ultimoDia/$mes/$ano" ?></span>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </th>
+            </thead>
+        </table>
 
-            <!--Dados Usuario-->
-            <div class="info">
-                <div class="row-info">
-                    <div class="item-dado">
-                        <div class="dado texto">
-                            <span>ID</span>
-                        </div>
-                        <div class="dado data-dado">
-                            <span><?= $dados_user['id'] ?></span>
-                        </div>
-                    </div>
-                    <div class="item-dado">
-                        <div class="dado texto">
-                            <span>Nome</span>
-                        </div>
-                        <div class="dado data-dado">
-                            <span><?= $dados_user['nome'] ?></span>
-                        </div>
-                    </div>
-                    <div class="item-dado">
-                        <div class="dado texto">
-                            <span>Setor</span>
-                        </div>
-                        <div class="dado data-dado">
-                            <span><?= $dados_user['setor'] ?></span>
-                        </div>
-                    </div>
-                    <div class="item-dado">
-                        <div class="dado texto">
-                            <span>C. da folha de Ponto</span>
-                        </div>
-                        <div class="dado data-dado">
-                            <span><?= $data_atual ?></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Tabela-->
-            <table class="row-info-horario" border="2">
-                <thead>
+        <!--Dados Usuario-->
+        <table class="row-info-horario" class="row-info-horario" border="1">
+            <tbody>
+                <td class="dado">ID:</td>
+                <td class="dado"><span><?= $dados_user['id'] ?></span></td>
+                <td class="dado">Empregado:</td>
+                <td class="dado"><span><?= $dados_user['nome'] ?></span></td>
+                <td class="dado">Setor:</td>
+                <td class="dado"><span><?= $dados_user['setor'] ?></span></td>
+                <td class="dado">C. da folha de Ponto:</td>
+                <td class="dado"><span><?= $data_atual ?></span></td>
+            </tbody>
+        </table>
+        <!--Tabela-->
+        <table class="row-info-horario" border="2">
+            <thead>
+                <tr>
                     <!--Cabecalho-->
                     <th class="dado texto tabela">Data</th>
                     <th class="dado texto tabela">Entrada</th>
@@ -273,128 +197,87 @@ $data_atual = $mes_atual['data_completa'];
                     <th class="dado texto tabela">Volta Almoço</th>
                     <th class="dado texto tabela">Saida</th>
                     <th class="dado texto tabela">Observação</th>
-                    <th class="dado texto tabela">Data</th>
-                    <th class="dado texto tabela">Entrada</th>
-                    <th class="dado texto tabela">Saida Almoço</th>
-                    <th class="dado texto tabela">Volta Almoço</th>
-                    <th class="dado texto tabela">Saida</th>
-                    <th class="dado texto tabela">Observação</th>
-                </thead>
-                <?php
-                $datas = [];
-                //Utiliza Varial $ultimoDia criado anteriomente
-                for ($dia = 1; $dia <= $ultimoDia; $dia++) {
-                    $datas[] = date("d/m/Y", strtotime("$ano-$mes-$dia"));
-                    $limitecoluna1 = ceil(count($datas) / 2);
 
-                    $totalLinhas = $limitecoluna1;
+                </tr>
+
+            </thead>
+            <?php
+            $datas = [];
+            //Utiliza Varial $ultimoDia criado anteriomente
+            for ($dia = 1; $dia <= $ultimoDia; $dia++) {
+                $datas[] = date("d/m/Y", strtotime("$ano-$mes-$dia"));
+                $totalLinhas = ceil(count($datas));
+            }
+
+
+            //Criação da Tabela
+
+            for ($i = 0; $i < $totalLinhas; $i++) {
+                //Definindo datas para serem apresentadas
+                $data1 = $datas[$i];
+
+                //Coleta registros do banco
+                $datas_registradas = horas_registradas($dados_user['id']);
+
+                $diaColuna1 = $i + 1;
+
+                $dataColuna1 = sprintf('%04d-%02d-%02d', $ano, $mes, $diaColuna1);
+
+                //Nome do Dia
+                $nomediaColuna1 = date('l', strtotime($dataColuna1));
+
+                $registroColuna1 = $datas_registradas[$dataColuna1] ?? null;
+
+                //Coleta de valores da data relacionada
+                $entradaColuna1 = $registroColuna1['entrada'] ?? null;
+                $saidaAlmocoColuna1 = $registroColuna1['saida_almoco'] ?? null;
+                $voltaAlmocoColuna1 = $registroColuna1['volta_almoco'] ?? null;
+                $saidaColuna1 = $registroColuna1['saida'] ?? null;
+                $statusColuna1 = $registroColuna1['status_dia'] ?? null;
+
+                echo "<tr>";
+                if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday") {
+
+                    echo "<td class='tabela_fs'>$data1</td>";
+                    echo "<td class='tabela_fs'></td>";
+                    echo "<td class='tabela_fs'></td>";
+                    echo "<td class='tabela_fs'></td>";
+                    echo "<td class='tabela_fs'></td>";
+                    echo "<td class='tabela_fs'>Final de Semana</td>";
+                } elseif ($statusColuna1 === "Atestado") {
+
+                    echo "<td>$data1</td>";
+                    echo "<td>$entradaColuna1</td>";
+                    echo "<td>$saidaAlmocoColuna1</td>";
+                    echo "<td>$voltaAlmocoColuna1</td>";
+                    echo "<td>$saidaColuna1</td>";
+                    echo "<td class=''>Atestado</td>";
+                } else {
+
+                    echo "<td>$data1</td>";
+                    echo "<td>$entradaColuna1</td>";
+                    echo "<td>$saidaAlmocoColuna1</td>";
+                    echo "<td>$voltaAlmocoColuna1</td>";
+                    echo "<td>$saidaColuna1</td>";
+                    echo "<td></td>";
                 }
+                echo "</tr>";
+            }
 
+            ?>
+        </table>
 
-                //Criação da Tabela
-
-                for ($i = 0; $i < $totalLinhas; $i++) {
-                    //Definindo datas para serem apresentadas
-                    $data1 = $datas[$i];
-                    $data2 = $datas[$i + $limitecoluna1] ? $datas[$i + $limitecoluna1] : "";
-
-                    //Coleta registros do banco
-                    $datas_registradas = horas_registradas($dados_user['id']);
-
-                    $diaColuna1 = $i + 1;
-                    $diaColuna2 = $diaColuna1 + $limitecoluna1;
-
-                    $dataColuna1 = sprintf('%04d-%02d-%02d', $ano, $mes, $diaColuna1);
-                    $dataColuna2 = sprintf('%04d-%02d-%02d', $ano, $mes, $diaColuna2);
-
-                    //Nome do Dia
-                    $nomediaColuna1 = date('l', strtotime($dataColuna1));
-                    $nomediaColuna2 = date('l', strtotime($dataColuna2));
-
-                    $registroColuna1 = $datas_registradas[$dataColuna1] ?? null;
-                    $registroColuna2 = $datas_registradas[$dataColuna2] ?? null;
-                    //Coleta de valores da data relacionada
-                    $entradaColuna1 = $registroColuna1['entrada'] ?? null;
-                    $entradaColuna2 = $registroColuna2['entrada'] ?? null;
-                    $saidaAlmocoColuna1 = $registroColuna1['saida_almoco'] ?? null;
-                    $saidaAlmocoColuna2 = $registroColuna2['saida_almoco'] ?? null;
-                    $voltaAlmocoColuna1 = $registroColuna1['volta_almoco'] ?? null;
-                    $voltaAlmocoColuna2 = $registroColuna2['volta_almoco'] ?? null;
-                    $saidaColuna1 = $registroColuna1['saida'] ?? null;
-                    $saidaColuna2 = $registroColuna2['saida'] ?? null;
-                    $statusColuna1 = $registroColuna1['status_dia'] ?? null;
-                    $statusColuna2 = $registroColuna2['status_dia'] ?? null;
-
-
-                    echo "<tr>";
-                    if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday") {
-
-                        echo "<td class='tabela_fs'>$data1</td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'>Final de Semana</td>";
-                    } elseif ($statusColuna1 === "Atestado") {
-
-                        echo "<td>$data1</td>";
-                        echo "<td>$entradaColuna1</td>";
-                        echo "<td>$saidaAlmocoColuna1</td>";
-                        echo "<td>$voltaAlmocoColuna1</td>";
-                        echo "<td>$saidaColuna1</td>";
-                        echo "<td class=''>Atestado</td>";
-                    } else {
-
-                        echo "<td>$data1</td>";
-                        echo "<td>$entradaColuna1</td>";
-                        echo "<td>$saidaAlmocoColuna1</td>";
-                        echo "<td>$voltaAlmocoColuna1</td>";
-                        echo "<td>$saidaColuna1</td>";
-                        echo "<td></td>";
-                    }
-                    if ($nomediaColuna2 === "Saturday" || $nomediaColuna2 === "Sunday") {
-
-                        echo "<td class='tabela_fs'>$data2</td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'>Final de Semana</td>";
-                    } elseif ($statusColuna2 === "Atestado") {
-
-                        echo "<td class='tabela_at'>$data2</td>";
-                        echo "<td>$data2</td>";
-                        echo "<td>$entradaColuna2</td>";
-                        echo "<td>$saidaAlmocoColuna2</td>";
-                        echo "<td>$voltaAlmocoColuna2</td>";
-                        echo "<td>$saidaColuna2</td>";
-                        echo "<td class='tabela_at'>Atestado</td>";
-                    } else {
-
-                        echo "<td>$data2</td>";
-                        echo "<td>$entradaColuna2</td>";
-                        echo "<td>$saidaAlmocoColuna2</td>";
-                        echo "<td>$voltaAlmocoColuna2</td>";
-                        echo "<td>$saidaColuna2</td>";
-                        echo "<td></td>";
-                    }
-                    echo "</tr>";
-                }
-
-                ?>
-            </table>
-
-            <div class="assinatura-row">
-                <div class="assinatura-item">
-                    <div class="linha-assinatura"></div>
-                    <span>Assinatura de Empregado</span>
-                </div>
-
-                <div class="assinatura-item">
-                    <div class="linha-assinatura"></div>
-                    <span>Assinatura de RH</span>
-                </div>
+        <div class="assinatura-row">
+            <div class="assinatura-item">
+                <div class="linha-assinatura"></div>
+                <span>Assinatura de Empregado</span>
             </div>
+
+            <div class="assinatura-item">
+                <div class="linha-assinatura"></div>
+                <span>Assinatura de RH</span>
+            </div>
+        </div>
         </div>
 
 
@@ -404,17 +287,18 @@ $data_atual = $mes_atual['data_completa'];
 
 </html>
 
-<?php 
+<?php
 
 $html = ob_get_clean(); // captura todo HTML
 
 $dompdf = new Dompdf();
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait'); 
+$dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 
 // Mostra o PDF no navegador
-$dompdf->stream("Folha_Ponto_<?= $nome_mes ?>_<?= $ano ?>.pdf", [
+$nomePDF = "Folha_Ponto";
+$dompdf->stream("Folha_Ponto_$nome_mes" . "_" . " $ano.pdf", [
     "Attachment" => false // false = abre no navegador | true = baixa
 ]);
 exit;

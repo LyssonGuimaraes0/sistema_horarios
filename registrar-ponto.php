@@ -91,7 +91,7 @@ if ($mes && $ano) {
                         </form>
                         <!--Botão de enviar PDF-->
                         <div class="contaienr-pdf">
-                            <form action="./settings/conf_pdf.php" method="post">
+                            <form action="./settings/conf_pdf.php" method="post" target="_blank">
                                 <input type="hidden" name="mes_pdf" value="<?= $mes ?>">
                                 <input type="hidden" name="ano_pdf" value="<?= $ano ?>">
                                 <input type="submit" value="Imprimir PDF">
