@@ -159,7 +159,7 @@ $ano_atual = $data['ano'];
                         foreach ($registros as $data => $registro) {
                             [$ano_data, $mes_data, $dia_data] = explode("-", $data);
                             $data_status = $registro['status_dia'];
-                            if ($mes_data === $mes_atual && $ano_data === $ano_atual && $data_status === "Completo" || $data_status === "Atestado" ) {
+                            if ($mes_data === $mes_atual && $ano_data === $ano_atual && $data_status === "Completo" || $data_status === "Atestado") {
                                 $total_completo++;
                             }
                         }
@@ -179,16 +179,16 @@ $ano_atual = $data['ano'];
 
                         for ($dia = 1; $dia < $ultimoDia; $dia++) {
                             $data_format = sprintf('%04d-%02d-%02d', $ano_atual, $mes_atual, $dia);
-                            $data_verificar = date('l',strtotime($data_format));
-                            if ($data_verificar == "Saturday" || $data_verificar == "Sunday" ) {
+                            $data_verificar = date('l', strtotime($data_format));
+                            if ($data_verificar == "Saturday" || $data_verificar == "Sunday") {
                                 continue;
                             }
                             $dias_validos++;
                         }
 
-                        $total_falta = $dias_validos - $total_mes ;
+                        $total_falta = $dias_validos - $total_mes;
                         ?>
-                        
+
                         <span> <?= $total_falta ?> </span>
                         <div class="linha red"></div>
                     </div>
@@ -213,13 +213,13 @@ $ano_atual = $data['ano'];
                     </div>
                     <div class="card-inferior">
                         <i class="fa-solid fa-clock card-icon"></i>
-                        <span class="title-container">Imprimir Frequencia</span>
-                        <p>Imprima seu registro para assinatura do Coordenador</p>
-                        <div class="btn-container"><input class="btn-cards" type="submit"
-                                value="Ir para Imprimir Frequencia"></div>
+                        <span class="title-container">Anexar Frequencia</span>
+                        <p>Anexe sua frequencia nos seus registros</p>
+                        <div class="btn-container">
+                            <a href="./anexar_frequencia.php"><button class="btn-cards">Ir para Anexar Frequencia</button></a>
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
     </div>
     <!-- Estrutura da script -->

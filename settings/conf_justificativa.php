@@ -43,7 +43,7 @@ $nome_formatado = strtolower(str_replace(" ", "_", $dados_user['nome']));
 $diretorio = "../docs/id_{$dados_user['id']}_{$nome_formatado}/justificativas/";
 
 if (!is_dir($diretorio)) {
-    mkdir($diretorio, 0777, true);
+    mkdir($diretorio, 0770, true);
 }
 
 $caminho = $diretorio . $novo_nome;

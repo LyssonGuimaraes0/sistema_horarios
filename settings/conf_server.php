@@ -137,9 +137,21 @@ function horas_registradas($id_user)
         $datas_registradas[$row['data_completo']] = $row;
     }
 
+    $conn->close();
+
     return $datas_registradas;
 }
 
+function folha_ponto_registro($id_user, $mes, $ano)
+{
+    $conn = conexao_banco();
 
+    $query = $conn->prepare('SELECT * FROM folha_ponto_mensal WHERE usuario_id = ? AND mes = ? AND ano = ?');
+    $query->bind_param('iss', $id_user, $mes, $ano);
+    $query->execute();
+    $resultado = $query->get_result();
+    $ponto_result = $resultado->fetch_assoc();
+    $conn->close();
 
-
+    return $ponto_result;
+}
