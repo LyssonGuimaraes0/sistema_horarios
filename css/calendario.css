@@ -1,34 +1,37 @@
 .container-calendario {
     position: relative;
     width: 100%;
-    height: 500px;
-    background-color: var(--primary-color);
+    height: 720px;
+    background-color: var(--white-text);
     overflow: scroll;
     box-shadow: var(--shadow);
-    border: 0px solid ;
-    border-radius: 8px;
+    border: 0px solid;
+    border-radius: 0px 0px 8px 8px;
 
 }
 
 .calendario-header {
     width: 100%;
-    height: 100px;
+    height: 85px;
     color: aliceblue;
     text-align: center;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     position: sticky;
+    padding-left: 30px;
+    padding-right: 30px;
     top: 0;
     left: 0;
-    background-color: var(--primary-color-hover);
+    background-color: var(--primary-color);
+    z-index: 2;
 }
 
-.calendario-body{
-    margin-top: 35px;
+.calendario-body {
+    margin-top: 10px;
 }
 
-.calendario-titulo{
-    margin-top: 20px;
+.calendario-titulo {
+    margin-top: 27px;
 }
 
 .calendario-header span {
@@ -37,67 +40,135 @@
 
 }
 
-.btn-calendario{
-    width: 100px;
-    height: 50px;
-    padding: 10px;
-    border: 2px solid var(--primary-color);
-    margin-top: 20px;
+.btn-calendario {
+    width: 130px;
+    height: 30px;
+    padding: 5px;
+    border: 0px solid;
+    border-radius: 3px;
+    margin-top: 27px;
+    background: var(--white-text);
+    transition: background 0.5s ease, transform 0.5s ease, color 0.3s ease;
+    cursor: pointer;
 }
+
+.btn-calendario:hover {
+    background: color-mix(in srgb, var(--white-text), black 20%);
+}
+
 
 /*Container de inputs*/
 
-.container-horarios{
-    display: grid;
+.container-horarios {
+    display: flex;
     width: 100%;
     margin: 10px auto;
-    padding: 20px;
-    grid-template-columns: repeat(4, 1fr) repeat(2, 0.5fr);
-    
+    gap: 20px;
+
 }
 
-.items-botoes{
-    margin-top: 10px;
+.items-botoes {
+    margin-top: 30px;
+    width: 200px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly
+}
+
+.items-horarios {
+    margin-top: 7px;
 }
 
 /*Input do calendario*/
 
-.horario-input{
-    width: 170px;
-    height: 35px;
-    border: 1px solid var(--border-color);
+.horario-input {
+    width: 140px;
+    height: 30px;
+    border: 1px solid color-mix(in srgb, var(--light-text), white 70%);
     border-radius: 4px;
     padding: 5px;
     font-size: 16px;
     color: var(--dark-text);
-    box-shadow: var(--shadow);
+}
+
+.input-colunm {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    font-size: 10px;
+    margin-left: 50px;
+}
+
+.input-colunm span {
+    font-size: 14px;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.circule-data {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    border: 0px solid;
+    border-radius: 30px;
+}
+
+.circule-dia{
+    background: color-mix(in srgb, var(--primary-color), black 25%);
+}
+
+.circule-data span {
+    position: relative;
+    top: 19px;
+    left: 18px;
+    color: var(--white-text);
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.linha-vertical {
+    width: 2px;
+    height: 60px;
+    background: var(--primary-color);
+
+}
+
+.linha-dia {
+    padding: 11px;
+    border-bottom: 1px solid #ddd;
+}
+
+.linha-dia.proximo-dia{
+    opacity: 50%;
+    pointer-events: none;
 }
 
 
-
-.botao-calendario{
+.botao-calendario {
     font-size: 20px;
     cursor: pointer;
 }
+
 
 /*Colocar css quando o fomulario esta preenchido esta preenxido*/
 
 input[readonly] {
     background-color: color-mix(in srgb, var(--white-text), gray 30%);
     border: 1px solid #ddd;
-    color:var(--dark-text);
+    color: var(--dark-text);
     cursor: default;
     box-shadow: none;
-    user-select: none;           /* impede seleção do texto */
-    -webkit-user-select: none;   /* para Chrome/Safari */
-    -moz-user-select: none;      /* para Firefox */
-    -ms-user-select: none;       /* para IE/Edge */
+    user-select: none;
+    /* impede seleção do texto */
+    -webkit-user-select: none;
+    /* para Chrome/Safari */
+    -moz-user-select: none;
+    /* para Firefox */
+    -ms-user-select: none;
+    /* para IE/Edge */
 }
 
 input[readonly]:focus {
     outline: none;
     box-shadow: none;
 }
-

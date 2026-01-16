@@ -19,7 +19,24 @@
 
 }
 
+.btn-formulario{
+    width: 80px;
+    padding: 4px;
+    background: var(--primary-color);
+    color: var(--segundaria-color);
+    border: 0 solid;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.5s ease, transform 0.5s ease, color 0.3s ease;
+}
 
+.btn-formulario:hover{
+   background: color-mix(in srgb, var(--primary-color), black 20%); 
+}
+
+.btn-formulario.btn-registrar{
+    margin-left: 50px;
+}
 
 
 
