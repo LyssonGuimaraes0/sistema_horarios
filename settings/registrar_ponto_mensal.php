@@ -89,10 +89,15 @@ if (!move_uploaded_file($_FILES['anexo_mes']['tmp_name'], $caminho)) {
     exit;
 }
 
+preg_match('/\.(\..*)/', $caminho, $caminho_novo);
+
+
+                                                            
+
 /* ============================ PREPARAR ENVIO PARA O BANCO DE DADOS ======================*/
 
 $query = $conn->prepare('INSERT INTO folha_ponto_mensal (usuario_id,mes,ano,caminho_folha_de_ponto) VALUE (?,?,?,?)');
-$query->bind_param("isss", $dados_user['id'], $mes, $ano, $caminho);
+$query->bind_param("isss", $dados_user['id'], $mes, $ano, $caminho_novo[1]);
 if (!$query->execute()) {
     $conn->close();
     $_SESSION['cadastro'] = "falha";

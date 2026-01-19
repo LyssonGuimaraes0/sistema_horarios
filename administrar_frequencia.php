@@ -5,7 +5,7 @@ session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
-
+limparFiltros();
 $dados_user = dados_user();
 
 include('./snippets/head.html'); ?>

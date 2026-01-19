@@ -6,6 +6,8 @@ session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
+limparFiltros();
+
 
 $dados_user = dados_user();
 
@@ -21,6 +23,7 @@ $mes_nome = $data['mes_nome'];
 $meses = $data['meses'];
 $ano_atual = $data['ano'];
 $data_completa = $data['data_completa'];
+$anolimite = $data['ano_limite'];
 
 
 
@@ -82,8 +85,6 @@ if ($mes && $ano) {
                                 <span> Ano:</span>
                                 <select class="dropdown" name="ano" id="selectAno">
                                     <?php
-
-                                    $anolimite = "2024";
 
                                     for ($i = $ano_atual; $i >= $anolimite; $i--): ?>
                                         <option value="<?= $i ?>" <?= ($ano_selecionado == $i) ? 'selected' : '' ?>><?= $i ?>

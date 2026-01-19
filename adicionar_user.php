@@ -6,6 +6,7 @@ session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
+limparFiltros();
 $dados_user = dados_user();
 
 if (verificar_permissoes($dados_user) !== true) {

@@ -5,7 +5,9 @@
 <!--Verifica caso teve erro no Login-->
 <?php 
 error_login();
+
 session_start();
+limparFiltros();
 $login = $_SESSION['error_login'] ?? null;
 $mensagem = $_SESSION['mensagem'] ?? null;
 unset($_SESSION['error_login']); // remove após usar

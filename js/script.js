@@ -122,6 +122,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// === ACCORDION ACTIVE ======================================================
+
+const AccordionBnts = document.querySelectorAll('.accordion-header');
+
+AccordionBnts.forEach(accordionBtn =>{
+
+    accordionBtn.addEventListener('click', () => {
+      const item = accordionBtn.parentElement;
+
+      item.classList.toggle('active');
+    });
+
+});
+
+
+
+
+
 //Fecha modal
 function fechar_modal() {
     document.querySelectorAll('.modal-background').forEach(modal => {

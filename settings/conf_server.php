@@ -33,6 +33,8 @@ function mese_atual()
 
     $mes_nome = $meses[$mes];
 
+    $ano_limite = 2024;
+
     // Retorna como array associativo
     return [
         'dia' => $dia,
@@ -40,7 +42,8 @@ function mese_atual()
         'mes' => $mes,
         'ano' => $ano,
         'data_completa' => "$dia/$mes/$ano",
-        'meses'      => $meses
+        'meses'      => $meses,
+        'ano_limite' => $ano_limite
 
     ];
 }
@@ -150,8 +153,72 @@ function folha_ponto_registro($id_user, $mes, $ano)
     $query->bind_param('iss', $id_user, $mes, $ano);
     $query->execute();
     $resultado = $query->get_result();
-    $ponto_result = $resultado->fetch_assoc();
+
+    $ponto_result = [];
+
+    if ($resultado) {
+        while ($row = $resultado->fetch_assoc()) {
+            $ponto_result[$row['mes']] = $row; 
+        }
+    }else{
+        $ponto_result === null;
+    }
     $conn->close();
 
     return $ponto_result;
 }
+
+//Função para coletar dados sobre setores registrados no banco
+
+function setores(){
+     $conn = conexao_banco();
+
+     $query = $conn->prepare('SELECT DISTINCT setor FROM usuario');
+     $query->execute();
+     $result = $query->get_result();
+     $setores = [];
+
+     while ($row = $result->fetch_assoc()) {
+        $setores[] = $row['setor'];
+     }
+
+     $conn->close();
+
+     return $setores;
+
+}
+
+//Função para coletar dados sobre usuarios de cada setor registrados no banco
+
+function coletar_user(){
+     $conn = conexao_banco();
+    //Organizar os nomes em ordem
+     $query = $conn->prepare('SELECT * FROM usuario ORDER BY nome ASC');
+     $query->execute();
+     $result = $query->get_result();
+     $usuarios_coletados = [];
+
+     while ($row = $result->fetch_assoc()) {
+        $usuarios_coletados[] = $row;
+     }
+
+     $conn->close();
+
+     return $usuarios_coletados;
+
+}
+
+//Limpar variaveis de sessão caso outra pagina seja acessada
+
+function limparFiltros()
+{
+    if (basename($_SERVER['PHP_SELF']) !== 'buscar_usuario.php') {
+        unset(
+            $_SESSION['usuario_selecionado'],
+            $_SESSION['setor_selecionado'],
+            $_SESSION['ano_selecionado']
+        );
+    }
+}
+
+
