@@ -71,3 +71,63 @@
     width: 500px;
     height: 400px;
 }
+
+/*Modal de justificativa*/
+.container-justificativa {
+    width: 600px;
+    height: 650px;
+    padding: 10px 20px;
+}
+
+.modal-justifi {
+    margin-top: 25px;
+}
+
+.grid-justificativa {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-left: 0px !important;
+}
+
+.item-justificativa {
+    display: grid;
+    flex-wrap: wrap;
+}
+
+.input-justificativa {
+    width: 160px;
+    height: 30px;
+    border: 1px solid color-mix(in srgb, var(--light-text), white 70%);
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 16px;
+    color: var(--dark-text);
+}
+
+.item-justificativa span {
+    font-size: 14px;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.dropdown-justificativa {
+    width: 63%;
+    height: 30px;
+    border: 1px solid color-mix(in srgb, var(--light-text), white 70%);
+    margin: 0;
+    border-radius: 3px;
+}
+
+.aviso-justificativa{
+    border: 2px solid red;
+    border-radius: 3px;
+}
+
+.aviso-justificativa span{
+    color: red !important;
+}
+
+.aviso-justificativa small{
+    color: red !important;
+}

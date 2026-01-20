@@ -149,6 +149,10 @@
     cursor: pointer;
 }
 
+.d-none{
+    display: none;
+}
+
 
 /*Colocar css quando o fomulario esta preenchido esta preenxido*/
 

@@ -8,6 +8,10 @@ include('./settings/conf_server.php');
 verificar_sessao();
 limparFiltros();
 
+//Remove erros de Warning
+error_reporting(E_ALL & ~E_WARNING);
+ini_set('display_errors', 0);
+
 
 $dados_user = dados_user();
 
@@ -183,7 +187,7 @@ if ($mes && $ano) {
                                             //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
 
                                             echo ($status_dia === "Atestado") ? "<span>Atestado</span>" : "";
-                                            echo "<div class='container-horarios'>";
+                                            echo "<div class='container-horarios' data-data='{$registroDia['data_completo']}'>";
                                             echo "<div class='circule-data" . (($dia_proximo === "dia atual") ? " circule-dia" : "") . "'><span>$data_dia</span></div>";
                                             echo "<div class='linha-vertical'></div>";
                                             echo "<div class='items-horarios'>
@@ -215,7 +219,9 @@ if ($mes && $ano) {
 
 
                                             if (!empty($registroDia['entrada']) || !empty($registroDia['saida_almoco']) || !empty($registroDia['volta_almoco']) || !empty($registroDia['saida'])) {
-                                                echo "<i class='fa-solid fa-pen-to-square botao-calendario' onclick=\"editar_horario(this)\"></i>";
+                                                echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
+                                                echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
+                                                echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
                                                 echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
                                             } else {
                                                 echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";

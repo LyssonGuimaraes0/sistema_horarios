@@ -117,9 +117,6 @@ $ano_atual = $data['ano'];
                                             <?= $existeRegistro ? 'readonly' : '' ?>>
                                     </div>
                                     <div class="items-horarios">
-                                        <?php if ($existeRegistro): ?>
-                                            <i class="fa-solid fa-pen-to-square botao-calendario"></i>
-                                        <?php endif; ?>
                                         <button type="submit" class="btn-calendario home-calendario">
                                             Enviar datas
                                         </button>

@@ -54,6 +54,12 @@ function verificar_sessao()
 {
     //Verifica se existe algum dado de usuario da sessão, se n tiver devolve pra tela de login.php
     if (!isset($_SESSION['user_id'])) {
+        if (defined('AJAX')) {
+            http_response_code(401);
+            echo json_encode(['status' => 'unauthorized']);
+            exit;
+        }
+
         header("Location: index.php");
         exit;
     }
@@ -73,6 +79,11 @@ function time_out()
         // Destroi a sessão após o timeout
         session_unset();
         session_destroy();
+        if (defined('AJAX')) {
+            http_response_code(401);
+            echo json_encode(['status' => 'timeout']);
+            exit;
+        }
         header("Location: ./index.php");
         exit();
     }
@@ -158,9 +169,9 @@ function folha_ponto_registro($id_user, $mes, $ano)
 
     if ($resultado) {
         while ($row = $resultado->fetch_assoc()) {
-            $ponto_result[$row['mes']] = $row; 
+            $ponto_result[$row['mes']] = $row;
         }
-    }else{
+    } else {
         $ponto_result === null;
     }
     $conn->close();
@@ -170,42 +181,42 @@ function folha_ponto_registro($id_user, $mes, $ano)
 
 //Função para coletar dados sobre setores registrados no banco
 
-function setores(){
-     $conn = conexao_banco();
+function setores()
+{
+    $conn = conexao_banco();
 
-     $query = $conn->prepare('SELECT DISTINCT setor FROM usuario');
-     $query->execute();
-     $result = $query->get_result();
-     $setores = [];
+    $query = $conn->prepare('SELECT DISTINCT setor FROM usuario');
+    $query->execute();
+    $result = $query->get_result();
+    $setores = [];
 
-     while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $setores[] = $row['setor'];
-     }
+    }
 
-     $conn->close();
+    $conn->close();
 
-     return $setores;
-
+    return $setores;
 }
 
 //Função para coletar dados sobre usuarios de cada setor registrados no banco
 
-function coletar_user(){
-     $conn = conexao_banco();
+function coletar_user()
+{
+    $conn = conexao_banco();
     //Organizar os nomes em ordem
-     $query = $conn->prepare('SELECT * FROM usuario ORDER BY nome ASC');
-     $query->execute();
-     $result = $query->get_result();
-     $usuarios_coletados = [];
+    $query = $conn->prepare('SELECT * FROM usuario ORDER BY nome ASC');
+    $query->execute();
+    $result = $query->get_result();
+    $usuarios_coletados = [];
 
-     while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $usuarios_coletados[] = $row;
-     }
+    }
 
-     $conn->close();
+    $conn->close();
 
-     return $usuarios_coletados;
-
+    return $usuarios_coletados;
 }
 
 //Limpar variaveis de sessão caso outra pagina seja acessada
@@ -220,5 +231,3 @@ function limparFiltros()
         );
     }
 }
-
-

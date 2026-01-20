@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -126,12 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const AccordionBnts = document.querySelectorAll('.accordion-header');
 
-AccordionBnts.forEach(accordionBtn =>{
+AccordionBnts.forEach(accordionBtn => {
 
     accordionBtn.addEventListener('click', () => {
-      const item = accordionBtn.parentElement;
+        const item = accordionBtn.parentElement;
 
-      item.classList.toggle('active');
+        item.classList.toggle('active');
     });
 
 });
@@ -149,43 +150,161 @@ function fechar_modal() {
 
 // == EDITAR HORARIO ====================================================
 
+let containerEmEdicao = null;
+
 function editar_horario(elemento) {
-    const ContainerDia = elemento.closest('.container-horarios');
-    const inputsDias = ContainerDia.querySelectorAll('.horario-input');
-    //Coleta Valores
-    const modoEdicao = inputsDias[0].hasAttribute('readonly');
+    const container = elemento.closest('.container-horarios');
+    const inputs = container.querySelectorAll('.horario-input');
+    const btnConfirmar = container.querySelector('.btn-confirmar');
+    const btnCancelar = container.querySelector('#btn-cancelar');
 
-    //Entra no modo edição
-    if (modoEdicao) {
-        inputsDias.forEach(inputdia => {
-            //define valor antigo
-            inputdia.dataset.valorAntigo = inputdia.value;
-            elemento.classList.replace('fa-pen-to-square', 'fa-x');
-            inputdia.removeAttribute('readonly');
-        });
-
-        //Bloquea novamente é retorna aos valores padrões  
-    } else {
-        inputsDias.forEach(inputdia => {
-            if (inputdia.dataset.valorAntigo !== undefined) {
-                inputdia.value = inputdia.dataset.valorAntigo;
-            }
-            elemento.classList.replace('fa-x', 'fa-pen-to-square');
-            inputdia.setAttribute('readonly', 'readonly');
-        });
-
+    // 🚫 só um por vez
+    if (containerEmEdicao && containerEmEdicao !== container) {
+        alert('Finalize ou cancele a edição atual antes.');
+        return;
     }
 
+    containerEmEdicao = container;
+
+    inputs.forEach(input => {
+        input.dataset.valorAntigo = input.value;
+        input.removeAttribute('readonly');
+    });
+
+    elemento.classList.add('d-none');
+    btnConfirmar?.classList.remove('d-none');
+    btnCancelar?.classList.remove('d-none');
+}
+
+
+function confirmar_horario(elemento) {
+    const container = elemento.closest('.container-horarios');
+    const inputs = container.querySelectorAll('.horario-input');
+    const btnEditar = container.querySelector('#btn-editar');
+    const btnCancelar = container.querySelector('#btn-cancelar');
+
+    const dados = {
+        data: container.dataset.data,
+        dias: {}
+    };
+
+
+    inputs.forEach(input => {
+        const match = input.name.match(/^([a-z_]+)\[(\d+)\]$/);
+        if (!match) return;
+
+        const campo = match[1];
+        const dia = match[2];
+
+        if (!dados.dias[dia]) {
+            dados.dias[dia] = {};
+        }
+
+        dados.dias[dia][campo] = input.value ?? '';
+        input.setAttribute('readonly', 'readonly');
+    });
+
+    elemento.classList.add('d-none');
+    btnCancelar?.classList.add('d-none');
+    btnEditar?.classList.remove('d-none');
+
+    containerEmEdicao = null;
+
+    salvarHorario(dados);
+}
+
+function cancelar_horario(elemento) {
+    const container = elemento.closest('.container-horarios');
+    const inputs = container.querySelectorAll('.horario-input');
+    const btnEditar = container.querySelector('#btn-editar');
+    const btnConfirmar = container.querySelector('#btn-confirmar');
+    const btnCancelar = container.querySelector('#btn-cancelar');
+
+    inputs.forEach(input => {
+        input.value = input.dataset.valorAntigo ?? '';
+        input.setAttribute('readonly', 'readonly');
+    });
+
+    elemento.classList.add('d-none');
+    btnConfirmar?.classList.add('d-none');
+    btnEditar?.classList.remove('d-none');
+
+    containerEmEdicao = null;
+}
+
+
+function salvarHorario(dados) {
+fetch('./settings/editar_horario.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dados)
+})
+.then(r => r.json())
+.then(resp => {
+    if (resp.status === 'ok') {
+        window.location.href = resp.redirect;
+    }
+});
 }
 
 // == Adicionar Justificativa ====================================================
-    function adicionar_justificativa(data){
-        ModalBackground = document.getElementById('modal-justificativa');
-        var dataModificar = document.querySelector('#data_justificativa');
-        dataModificar.value = data;
-        ModalBackground.style.display = "block";
-        
-    }
+function adicionar_justificativa(data) {
+
+    ModalBackground = document.getElementById('modal-justificativa');
+    var dataModificar = document.querySelector('#data_justificativa');
+    var inputDiasAtestados = document.querySelector('#input-dias-atestados');
+    const inputOrigem = document.querySelector('#data-origem');
+    const inputInicio = document.querySelector('#data-inicio');
+    const inputFim = document.querySelector('#data-fim');
+    //Reparte data enviada
+    const [ano, mes, dia] = data.split('-').map(Number);
+    const dataOficial = new Date(ano, mes - 1, dia);
+
+    //formatação de data
+
+    const diaorigem = String(dataOficial.getDate()).padStart(2, '0');       // adiciona zero se precisar
+    const mesorigem = String(dataOficial.getMonth() + 1).padStart(2, '0');  // +1 porque meses começam em 0
+    const anoorigem = dataOficial.getFullYear();
+
+    const dataorigem = `${diaorigem}/${mesorigem}/${anoorigem}`;
+
+    //Adicionar valor no input
+    inputOrigem.value = dataorigem;
+    inputInicio.value = dataorigem;
+    inputFim.value = dataorigem;
+
+
+
+    inputDiasAtestados.addEventListener('input', () => {
+        const dataNova = new Date(dataOficial);
+        const dias = Number(inputDiasAtestados.value) || 0;
+        dataNova.setDate(dataNova.getDate() + dias - 1);
+
+        const diafim = String(dataNova.getDate()).padStart(2, '0');       // adiciona zero se precisar
+        const mesfim = String(dataNova.getMonth() + 1).padStart(2, '0');  // +1 porque meses começam em 0
+        const anofim = dataNova.getFullYear();
+
+        const datafim = `${diafim}/${mesfim}/${anofim}`;
+
+
+        inputFim.value = datafim;
+    });
+
+
+
+
+
+
+
+
+
+
+    dataModificar.value = data;
+    ModalBackground.style.display = "block";
+
+}
 
 
 //Função de oculta calendario ate o usuario clica no btn
