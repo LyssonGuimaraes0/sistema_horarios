@@ -2,10 +2,10 @@
 
 
 $bd_config = [
-    'host' => 'localhost',
+    'host' => '10.28.0.4',
     'username' => 'root',
-    'password' => '',
-    'database' => 'banco_de_horas'
+    'password' => 'SenhaSegura!123',
+    'database' => 'bd_banco_de_horas'
 ];
 
 function conexao_banco()

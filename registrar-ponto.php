@@ -162,7 +162,7 @@ if ($mes && $ano) {
                                         //Verificação de caso existe algum registro no banco das datas
                                         if ($data_completa === $data_brasil) {
                                             $dia_proximo = "dia atual";
-                                        } else if ($data_completa < $data_brasil) {
+                                        } else if ($data_completa < $data_brasil && $mes === $mes_atual && $ano === $ano_atual) {
                                             $dia_proximo = "proximo dia";
                                         }
 

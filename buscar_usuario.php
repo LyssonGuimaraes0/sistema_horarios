@@ -203,8 +203,8 @@ if (verificar_permissoes($dados_user) !== true) {
                                                             continue;
                                                         }
                                                         //Coleta dados do mes atual
-                                                        if (isset($registros_folha[$formata_mes])) {
-                                                            $caminho_arquivo = $registros_folha[$formata_mes]['caminho_folha_de_ponto'];
+                                                        if (isset($registros_folha[$mes])) {
+                                                            $caminho_arquivo = $registros_folha[$mes]['caminho_folha_de_ponto'];
                                                         } else {
                                                             $caminho_arquivo = '';
                                                         }
