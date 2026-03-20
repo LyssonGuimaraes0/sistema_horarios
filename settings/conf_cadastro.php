@@ -11,6 +11,7 @@ $nome = $_REQUEST['nome_completo'];
 $username = $_REQUEST['username'];
 $email = $_REQUEST['email'];
 $setor = $_REQUEST['setor'];
+$cargo = $_REQUEST['cargo'];
 $cpf = $_REQUEST['cpf'];
 $senha = $_REQUEST['senha'];
 //utilizanod o ternario para definir ou como false ou true a checkbox
@@ -35,9 +36,9 @@ for ($i = 0; $i < count($result_cpf); $i++) {
     }
 }
 
-$cadastro_user = $conn->prepare("INSERT INTO usuario(nome,cpf,username,setor,email,senha,permissoes) VALUE (?,?,?,?,?,?,?)");
+$cadastro_user = $conn->prepare("INSERT INTO usuario(nome,cpf,username,setor,email,senha,permissoes,cargo) VALUE (?,?,?,?,?,?,?,?)");
 
-$cadastro_user->bind_param("sssssss", $nome, $cpf, $username, $setor, $email, $senha, $permissao);
+$cadastro_user->bind_param("ssssssss", $nome, $cpf, $username, $setor, $email, $senha, $permissao, $cargo);
 
 if ($cadastro_user->execute()) {
     //Coleta o ID do usuario para criação da Pasta
