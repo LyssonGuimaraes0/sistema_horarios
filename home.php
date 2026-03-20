@@ -156,8 +156,9 @@ $ano_atual = $data['ano'];
                         $total_completo = 0;
                         foreach ($registros as $data => $registro) {
                             [$ano_data, $mes_data, $dia_data] = explode("-", $data);
+
                             $data_status = $registro['status_dia'];
-                            if ($mes_data === $mes_atual && $ano_data === $ano_atual && $data_status === "Completo" || $data_status === "Atestado") {
+                            if ($mes_data == $mes_atual  && $ano_data === $ano_atual) {
                                 $total_completo++;
                             }
                         }
