@@ -231,6 +231,17 @@ if ($mes && $ano) {
                                                 echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . (($horario_saida != "") ? $horario_saida : substr($horario_cargo['cargo_saida'], 0, 5)) . "' $ro_saida>";
                                                 echo "</div>";
 
+                                                echo "<div class='items-botoes'>";
+
+                                                if (!empty($registroDia['entrada']) && !empty($registroDia['saida'])) {
+                                                    echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
+                                                } else {
+                                                    echo "<button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>";
+                                                    echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";
+                                                }
                                             } else {
 
                                                 echo "<div class='items-horarios input-colunm'>";
@@ -252,18 +263,19 @@ if ($mes && $ano) {
                                                 echo "<span>Saida</span>";
                                                 echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . (($horario_saida != "") ? $horario_saida : substr($horario_cargo['cargo_saida'], 0, 5)) . "' $ro_saida>";
                                                 echo "</div>";
-                                            }
 
-                                            echo "<div class='items-botoes'>";
 
-                                            if (!empty($registroDia['entrada']) && !empty($registroDia['saida_almoco']) && !empty($registroDia['volta_almoco']) && !empty($registroDia['saida'])) {
-                                                echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
-                                                echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
-                                                echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
-                                                echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
-                                            } else {
-                                                echo "<button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>";
-                                                echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";
+                                                echo "<div class='items-botoes'>";
+
+                                                if (!empty($registroDia['entrada']) && !empty($registroDia['saida_almoco']) && !empty($registroDia['volta_almoco']) && !empty($registroDia['saida'])) {
+                                                    echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";
+                                                } else {
+                                                    echo "<button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>";
+                                                    echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";
+                                                }
                                             }
                                             echo "</div>";
                                             echo "</div>";

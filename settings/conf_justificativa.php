@@ -5,6 +5,7 @@ include('./conf_server.php');
 
 $conn = conexao_banco();
 $dados_user = dados_user();
+$horario_cargo = horario_cargo();
 
 /* ================= COLETA ================= */
 $tipo_documento = $_POST['tipo_documento'] ?? '';
@@ -60,8 +61,22 @@ if (!move_uploaded_file($_FILES['justi_pdf']['tmp_name'], $caminho)) {
 $data_inicio = new DateTime($data_registro);
 $data_atestado = clone $data_inicio;
 
-$query_horas = $conn->prepare(
-    "INSERT INTO ponto_diario 
+if ($horario_cargo['cargo'] == "Estágiario-Manha" || $horario_cargo['cargo'] == "Estágiario-Tarde") {
+    $query_horas = $conn->prepare(
+        "INSERT INTO ponto_diario 
+    (usuario_id, data_completo, entrada, saida, status_dia)
+    VALUES (?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE 
+        entrada = IFNULL(VALUES(entrada), entrada),
+        saida = IFNULL(VALUES(saida), saida),
+        status_dia = VALUES(status_dia)"
+    );
+    $entrada  = $horario_cargo['cargo_entrada'];
+    $saida  = $horario_cargo['cargo_entrada'];
+} else {
+
+    $query_horas = $conn->prepare(
+        "INSERT INTO ponto_diario 
     (usuario_id, data_completo, entrada, saida_almoco, volta_almoco, saida, status_dia)
     VALUES (?, ?, ?, ?, ?, ?, ?)
     ON DUPLICATE KEY UPDATE 
@@ -70,12 +85,14 @@ $query_horas = $conn->prepare(
         volta_almoco = IFNULL(VALUES(volta_almoco), volta_almoco),
         saida = IFNULL(VALUES(saida), saida),
         status_dia = VALUES(status_dia)"
-);
+    );
+    $entrada      = $horario_cargo['cargo_entrada'];
+    $saida_almoco = $horario_cargo['cargo_saida_almoco'];
+    $volta_almoco = $horario_cargo['cargo_volta_almoco'];
+    $saida        = $horario_cargo['cargo_entrada'];
+}
 
-$entrada      = "08:00";
-$saida_almoco = "12:00";
-$volta_almoco = "13:00";
-$saida        = "17:00";
+
 $status_dia   = "Atestado";
 
 for ($i = 0; $i < $total_data; $i++) {
@@ -88,17 +105,28 @@ for ($i = 0; $i < $total_data; $i++) {
         $data_atestado->modify('+1 day');
         continue;
     }
+    if ($horario_cargo['cargo'] == "Estágiario-Manha" || $horario_cargo['cargo'] == "Estágiario-Tarde") {
+        $query_horas->bind_param(
+            "issss",
+            $dados_user['id'],
+            $data_formatada,
+            $entrada,
+            $saida,
+            $status_dia
+        );
+    } else {
+        $query_horas->bind_param(
+            "issssss",
+            $dados_user['id'],
+            $data_formatada,
+            $entrada,
+            $saida_almoco,
+            $volta_almoco,
+            $saida,
+            $status_dia
+        );
+    }
 
-    $query_horas->bind_param(
-        "issssss",
-        $dados_user['id'],
-        $data_formatada,
-        $entrada,
-        $saida_almoco,
-        $volta_almoco,
-        $saida,
-        $status_dia
-    );
 
     if (!$query_horas->execute()) {
         $_SESSION['cadastro'] = "falha";
