@@ -32,6 +32,7 @@ $ano_atual = $data['ano'];
     } else {
         include('./snippets/navbar.html');
     }
+
     ?>
     <!-- Estrutura da Home -->
 

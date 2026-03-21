@@ -41,19 +41,20 @@
 }
 
 .btn-calendario {
-    width: 130px;
+    width: 100px;
     height: 30px;
     padding: 5px;
     border: 0px solid;
+    color: var(--white-text);
     border-radius: 3px;
-    margin-top: 27px;
-    background: var(--white-text);
+    background: color-mix(in srgb, var(--primary-color), black 20%);
     transition: background 0.5s ease, transform 0.5s ease, color 0.3s ease;
     cursor: pointer;
 }
 
 .btn-calendario:hover {
-    background: color-mix(in srgb, var(--white-text), black 20%);
+    background: color-mix(in srgb, #14dd57, black 20%);
+    transform: scale(1.05);
 }
 
 

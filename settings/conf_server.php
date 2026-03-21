@@ -99,6 +99,8 @@ function error_login()
     unset($_SESSION['error_login']);
 }
 
+//Coleta dados do usuario
+
 function dados_user()
 {
 
@@ -106,7 +108,15 @@ function dados_user()
 
     $usuario_id = $_SESSION['user_id'];
 
-    $query = $conn->prepare("SELECT * FROM usuario WHERE id = ?");
+    $query = $conn->prepare("SELECT u.id, 
+    u.nome,
+    u.cpf,
+    u.setor,
+    u.cargo,
+    u.permissoes,
+    u.username,
+    u.email
+    FROM usuario u WHERE u.id = ?;");
 
     $query->bind_param("s", $usuario_id);
 
@@ -116,6 +126,33 @@ function dados_user()
     $conn->close();
 
     return $dados_usuario;
+}
+
+//Coleta horarios de cargo
+
+function horario_cargo (){
+
+    $conn = conexao_banco();
+
+    $dados_usuario = dados_user();
+
+    $query = $conn->prepare("SELECT c.cargo, 
+    c.cargo_entrada,
+    c.cargo_saida_almoco,
+    c.cargo_volta_almoco,
+    c.cargo_saida
+    FROM cargo c WHERE c.id = ?;");
+
+    $query->bind_param("i",$dados_usuario['cargo']);
+
+    $query->execute();
+    $resultado = $query->get_result();
+    $horarios_cargo = $resultado->fetch_assoc();
+
+    $conn->close();
+
+    return $horarios_cargo;
+
 }
 
 //Verifica Permissoes do usuario
