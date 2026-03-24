@@ -32,9 +32,6 @@ $ano_atual = $data['ano'];
 $data_completa = $data['data_completa'];
 $anolimite = $data['ano_limite'];
 
-
-
-
 //Configurações de Mes é Ano
 $mes = $_POST['mes'] ?? null;
 $ano = $_POST['ano'] ?? null;
@@ -84,9 +81,9 @@ if ($mes && $ano) {
                                     foreach ($meses as $numero => $nome_mes):
 
                                         if ($mes_selecionado == "") {
-                                            $selected = ((int)$numero === (int)$mes_atual) ? 'selected' : '';
+                                            $selected = ((int) $numero === (int) $mes_atual) ? 'selected' : '';
                                         } else {
-                                            $selected = ((int)$numero === (int)$mes_selecionado) ? 'selected' : '';
+                                            $selected = ((int) $numero === (int) $mes_selecionado) ? 'selected' : '';
                                         }
 
                                         echo "<option data-mes='$numero' value='$numero' $selected> $nome_mes</option>";
@@ -104,7 +101,8 @@ if ($mes && $ano) {
                                         </option>
                                     <?php endfor; ?>
                                 </select>
-                                <button class="btn-formulario btn-registrar" type="submit" id="abrir-calendario">Carregar</button>
+                                <button class="btn-formulario btn-registrar" type="submit"
+                                    id="abrir-calendario">Carregar</button>
 
                             </form>
                             <!--Botão de enviar PDF-->
@@ -160,6 +158,10 @@ if ($mes && $ano) {
 
                                         //Data formatada para formato brasileiro
                                         $data_brasil = sprintf('%02d/%02d/%04d', $dia, $mes, $ano);
+
+                                        //Coleta informações sobre feriados do Ano
+                                        $feriados = feriados($ano);
+
                                         $data_dia = sprintf('%02d', $dia);
                                         $registroDia = $datas_registradas[$data_str] ?? null;
 
@@ -193,11 +195,25 @@ if ($mes && $ano) {
                                             echo "</div>";
                                             echo "</div>";
                                             echo "</div>";
+                                        } elseif ($feriados[$data_brasil]) {
+                                            echo "<div class='container-horarios'>";
+                                            echo "<div class='circule-data" . (($dia_proximo === "dia atual") ? " circule-dia" : "") . "'><span>$data_dia</span></div>";
+                                            echo "<div class='linha-vertical'></div>";
+                                            echo "<div class='items-horarios'>
+                                                    <strong>$nome_dia</strong><br>
+                                                    <span>$mes_nome de $ano_selecionado</span>
+                                                  </div>
+                                            ";
+                                            echo "<div class='items-horarios input-colunm'>";
+                                            echo "<span>$feriados[$data_brasil]</span>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                            echo "</div>";
                                         } else {
 
 
                                             //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
-
+                                
                                             echo ($status_dia === "Atestado") ? "<span>Atestado</span>" : "";
                                             echo "<div class='container-horarios' data-data='{$registroDia['data_completo']}'>";
                                             echo "<div class='circule-data" . (($dia_proximo === "dia atual") ? " circule-dia" : "") . "'><span>$data_dia</span></div>";
@@ -251,7 +267,7 @@ if ($mes && $ano) {
 
                                                 echo "<div class='items-horarios input-colunm'>";
                                                 echo "<span>Intervalo inicio</span>";
-                                                echo "<input class='horario-input' maxlength='5' type='time' name='saida_pf[$dia]' value='" . (($horario_saida_almoco != "") ? $horario_saida_almoco : substr($horario_cargo['cargo_saida_almoco'], 0, 5))  . "' $ro_saida_almoco>";
+                                                echo "<input class='horario-input' maxlength='5' type='time' name='saida_pf[$dia]' value='" . (($horario_saida_almoco != "") ? $horario_saida_almoco : substr($horario_cargo['cargo_saida_almoco'], 0, 5)) . "' $ro_saida_almoco>";
                                                 echo "</div>";
 
                                                 echo "<div class='items-horarios input-colunm'>";

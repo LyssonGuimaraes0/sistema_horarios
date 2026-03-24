@@ -17,13 +17,13 @@ function mese_atual()
     //Nome do mes correspondente
 
     $meses = [
-        "01"  => 'Janeiro',
-        "02"  => 'Fevereiro',
-        "03"  => 'Março',
-        "04"  => 'Abril',
-        "05"  => 'Maio',
-        "06"  => 'Junho',
-        "07"  => 'Julho',
+        "01" => 'Janeiro',
+        "02" => 'Fevereiro',
+        "03" => 'Março',
+        "04" => 'Abril',
+        "05" => 'Maio',
+        "06" => 'Junho',
+        "07" => 'Julho',
         "08" => 'Agosto',
         "09" => 'Setembro',
         "10" => 'Outubro',
@@ -33,7 +33,7 @@ function mese_atual()
 
     $mes_nome = $meses[$mes];
 
-    $ano_limite = 2024;
+    $ano_limite = 2026;
 
     // Retorna como array associativo
     return [
@@ -42,10 +42,86 @@ function mese_atual()
         'mes' => $mes,
         'ano' => $ano,
         'data_completa' => "$dia/$mes/$ano",
-        'meses'      => $meses,
+        'meses' => $meses,
         'ano_limite' => $ano_limite
 
     ];
+}
+
+//Coleta datas de feriados
+
+function feriados($ano)
+{
+    $conn = conexao_banco();
+
+    $ano_selecionado = $ano;
+
+    $query = $conn->prepare("SELECT ano FROM feriados WHERE ano = ? LIMIT 1");
+
+    $query->bind_param("s", $ano_selecionado);
+    $query->execute();
+    $result = $query->get_result();
+    $row = $result->fetch_assoc();
+
+    //Se ja possuir registro do ano, não adicionar feriados
+    if (!$row) {
+
+        //Busca na API os feriados do Ano
+        $token = "25310|FDLu0dz4YNyrUvPyFPs9ZK9sP4zp2LlB";
+
+        $url = "https://api.invertexto.com/v1/holidays/$ano_selecionado?token=$token";
+
+        //Prepara conexão HTTP
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $resposta = curl_exec($ch);
+
+        //fecha conexão
+        curl_close($ch);
+
+        //Converte resposta de JSON para array
+        $feriados = json_decode($resposta, true);
+
+        //Faz um loop para registrar todos os feriados do ano
+        foreach ($feriados as $f) {
+            $data_array = explode("-", $f['date']);
+
+            $dia_mes_feriado = $data_array[2] . "/" . $data_array[1];
+            $nome_feriado = $f['name'];
+
+            //Prepara query para realizar registro no banco         
+            $query = $conn->prepare("INSERT INTO feriados (feriado,dia_mes,ano) VALUES (?,?,?)");
+
+            //Armazena no banco
+            $query->bind_param("sss", $nome_feriado, $dia_mes_feriado, $ano_selecionado);
+            $query->execute();
+
+        }
+
+    }
+
+    //Coleta todos dados do formulario
+
+    $query = $conn->prepare("SELECT feriado,dia_mes,ano FROM feriados WHERE ano = ?");
+    $query->bind_param("s", $ano_selecionado);
+    $query->execute();
+    $result = $query->get_result();
+
+    //Array para armazena datas e nome dos feriados
+    $lista_feriados = [];
+
+    while ($row = $result->fetch_assoc()) {
+       $data_formatada = $row['dia_mes'] . '/' . $row['ano'];
+       $lista_feriados[$data_formatada] = $row['feriado'];
+    }
+    $query->close();
+
+    return $lista_feriados;
+
 }
 
 
@@ -130,7 +206,8 @@ function dados_user()
 
 //Coleta horarios de cargo
 
-function horario_cargo (){
+function horario_cargo()
+{
 
     $conn = conexao_banco();
 
@@ -143,7 +220,7 @@ function horario_cargo (){
     c.cargo_saida
     FROM cargo c WHERE c.id = ?;");
 
-    $query->bind_param("i",$dados_usuario['cargo']);
+    $query->bind_param("i", $dados_usuario['cargo']);
 
     $query->execute();
     $resultado = $query->get_result();

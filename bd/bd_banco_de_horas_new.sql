@@ -75,6 +75,32 @@ INSERT INTO `documento_justificativa` VALUES (2,1,'../docs/id_1_alysson_andrade_
 UNLOCK TABLES;
 
 --
+-- Table structure for table `feriados`
+--
+
+DROP TABLE IF EXISTS `feriados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `feriados` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `feriado` varchar(200) DEFAULT NULL,
+  `dia_mes` char(5) DEFAULT NULL,
+  `ano` char(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feriados`
+--
+
+LOCK TABLES `feriados` WRITE;
+/*!40000 ALTER TABLE `feriados` DISABLE KEYS */;
+INSERT INTO `feriados` VALUES (1,'Confraternização Universal','01/01','2026'),(2,'Carnaval','16/02','2026'),(3,'Carnaval','17/02','2026'),(4,'Quarta-feira de Cinzas','18/02','2026'),(5,'Sexta-feira Santa','03/04','2026'),(6,'Tiradentes','21/04','2026'),(7,'Dia do Trabalhador','01/05','2026'),(8,'Corpus Christi','04/06','2026'),(9,'Independência do Brasil','07/09','2026'),(10,'Nossa Senhora Aparecida','12/10','2026'),(11,'Dia do Servidor Público','28/10','2026'),(12,'Finados','02/11','2026'),(13,'Proclamação da República','15/11','2026'),(14,'Dia Nacional de Zumbi e da Consciência Negra','20/11','2026'),(15,'Véspera de Natal','24/12','2026'),(16,'Natal','25/12','2026'),(17,'Véspera de Ano-Novo','31/12','2026');
+/*!40000 ALTER TABLE `feriados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `folha_ponto_mensal`
 --
 
@@ -125,7 +151,7 @@ CREATE TABLE `ponto_diario` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_ponto_dia` (`usuario_id`,`data_completo`),
   CONSTRAINT `ponto_diario_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +160,7 @@ CREATE TABLE `ponto_diario` (
 
 LOCK TABLES `ponto_diario` WRITE;
 /*!40000 ALTER TABLE `ponto_diario` DISABLE KEYS */;
-INSERT INTO `ponto_diario` VALUES (1,1,'2026-01-01','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 18:49:13'),(3,1,'2026-01-02','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 19:13:12'),(4,1,'2026-01-05','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 19:13:12'),(8,1,'2026-01-07','08:00:00','13:00:00','14:50:00','17:00:00','Completo','2026-01-08 01:59:44'),(13,1,'2026-01-29','08:10:00','13:11:00','14:50:00','18:00:00','Completo','2026-01-09 23:38:06'),(14,1,'2026-01-30','08:08:00','12:00:00','13:00:00','17:50:00','Completo','2026-01-09 23:38:06'),(15,1,'2026-01-08','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(16,1,'2026-01-09','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(17,1,'2026-01-12','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(18,1,'2026-03-20','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-03-20 14:15:13'),(26,1,'2026-01-13','08:00:00','12:00:00',NULL,NULL,'Em Andamento','2026-03-20 17:09:47');
+INSERT INTO `ponto_diario` VALUES (1,1,'2026-01-01','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 18:49:13'),(3,1,'2026-01-02','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 19:13:12'),(4,1,'2026-01-05','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-01-07 19:13:12'),(8,1,'2026-01-07','08:00:00','13:00:00','14:50:00','17:00:00','Completo','2026-01-08 01:59:44'),(13,1,'2026-01-29','08:10:00','13:11:00','14:50:00','18:00:00','Completo','2026-01-09 23:38:06'),(14,1,'2026-01-30','08:08:00','12:00:00','13:00:00','17:50:00','Completo','2026-01-09 23:38:06'),(15,1,'2026-01-08','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(16,1,'2026-01-09','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(17,1,'2026-01-12','08:00:00','12:00:00','13:00:00','17:00:00','Atestado','2026-01-10 00:53:13'),(18,1,'2026-03-20','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-03-20 14:15:13'),(26,1,'2026-01-13','08:00:00','12:00:00',NULL,NULL,'Em Andamento','2026-03-20 17:09:47'),(29,1,'2026-03-02','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-03-23 18:43:42'),(30,1,'2026-03-03','09:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-03-24 19:26:05'),(31,1,'2026-03-04','08:00:00','12:00:00','13:00:00','17:00:00','Completo','2026-03-24 19:26:54');
 /*!40000 ALTER TABLE `ponto_diario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,4 +207,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-20 17:04:00
+-- Dump completed on 2026-03-24 17:02:25
