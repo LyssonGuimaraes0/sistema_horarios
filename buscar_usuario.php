@@ -48,14 +48,14 @@ if (isset($_POST['ano-seletor'])) {
 //Valores coletados dos inputs dos usuarios
 
 $usuario_selecionado = $_SESSION['usuario_selecionado'] ?? '';
-$setor_selecionado   = $_SESSION['setor_selecionado'] ?? '';
+$setor_selecionado = $_SESSION['setor_selecionado'] ?? '';
 $ano_selecionado = $_SESSION['ano_selecionado'] ?? null;
 
 
 // Valores coletados dos inputs dos usuários
 $usuario_selecionado = $_SESSION['usuario_selecionado'] ?? '';
-$setor_selecionado   = $_SESSION['setor_selecionado'] ?? '';
-$ano_selecionado     = $_SESSION['ano_selecionado'] ?? null;
+$setor_selecionado = $_SESSION['setor_selecionado'] ?? '';
+$ano_selecionado = $_SESSION['ano_selecionado'] ?? null;
 
 
 $data = mese_atual();
@@ -149,6 +149,7 @@ if (verificar_permissoes($dados_user) !== true) {
                                     <thead>
                                         <th>Email:</th>
                                         <th>CPF</th>
+                                        <th>Cargo</th>
                                         <th>Permissões</th>
                                         <th>Nome de acesso</th>
                                     </thead>
@@ -156,6 +157,7 @@ if (verificar_permissoes($dados_user) !== true) {
                                         <tr>
                                             <td><?= $usuario_ficha['email'] ?></td>
                                             <td><?= $usuario_ficha['cpf'] ?></td>
+                                            <td><?= $usuario_ficha['cargo'] ?></td>
                                             <td><?= $usuario_ficha['permissoes'] ?></td>
                                             <td><?= $usuario_ficha['username'] ?></td>
                                         </tr>
@@ -163,7 +165,7 @@ if (verificar_permissoes($dados_user) !== true) {
                                 </table>
                                 <!--Accordion-->
                                 <div class="accordion">
-                                    <div class="accordion-item <?= ($ano_selecionado != '') ? "active" : ''  ?>">
+                                    <div class="accordion-item <?= ($ano_selecionado != '') ? "active" : '' ?>">
                                         <button class="accordion-header">Folha de Ponto mensal</button>
                                         <div class="accordion-content">
                                             <div class="row-dropdown">
@@ -177,16 +179,16 @@ if (verificar_permissoes($dados_user) !== true) {
 
                                                         ?>
                                                     </select>
-                                                    <button class="btn-formulario btn-registrar" type="submit">Buscar</button>
+                                                    <button class="btn-formulario btn-registrar"
+                                                        type="submit">Buscar</button>
 
                                                 </form>
                                             </div>
-                                            <table style="display:<?= ($ano_selecionado != '') ? 'inline-table' : 'none' ?>">
+                                            <table
+                                                style="display:<?= ($ano_selecionado != '') ? 'inline-table' : 'none' ?>">
                                                 <thead>
                                                     <th>Mes/Ano:</th>
-                                                    <th>Nome do arquivo</th>
                                                     <th>Verificar Arquivo</th>
-                                                    <th>Validação</th>
                                                 </thead>
                                                 <tbody>
                                                     <?php
@@ -196,10 +198,10 @@ if (verificar_permissoes($dados_user) !== true) {
                                                         $formata_mes = str_pad($mes, 2, '0', STR_PAD_LEFT);
 
                                                         //busca folha de ponto do usuario
-
+                                                    
                                                         $registros_folha = folha_ponto_registro($usuario_ficha['id'], $formata_mes, $ano_selecionado);
 
-                                                        if ($formata_mes != $mes_atual && $ano_selecionado == $ano_atual) {
+                                                        if ($formata_mes > $mes_atual && $ano_selecionado == $ano_atual) {
                                                             continue;
                                                         }
                                                         //Coleta dados do mes atual
@@ -209,7 +211,7 @@ if (verificar_permissoes($dados_user) !== true) {
                                                             $caminho_arquivo = '';
                                                         }
                                                         //formata nome do arquivo
-
+                                                    
 
 
 
@@ -219,19 +221,15 @@ if (verificar_permissoes($dados_user) !== true) {
                                                         $nome_mes = $meses[$formata_mes];
 
                                                         //cria Tabela com valores coletados
-
+                                                    
                                                         echo "<tr>";
                                                         echo "<td>$nome_mes/$ano_selecionado</td>";
-                                                        if ($caminho_arquivo === '' ) {
+                                                        if ($caminho_arquivo === '') {
                                                             echo "<td>Folha não Registrada</td>";
-                                                            echo "<td></td>";
-                                                            echo "<td></td>";
                                                             echo "</tr>";
                                                             continue;
                                                         }
-                                                        echo "<td>$nome_arquivo[1]</td>";
                                                         echo "<td><a href='$caminho_arquivo' target='_blank'>Ver</a></td>";
-                                                        echo "<td></td>";
                                                         echo "</tr>";
                                                     }
 
@@ -258,7 +256,7 @@ if (verificar_permissoes($dados_user) !== true) {
     <?php include('./snippets/script.html') ?>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const usuarios_coletados = <?= json_encode($usuarios_coletados); ?>;
             const setorSelecionadoPHP = <?= json_encode($setor_selecionado); ?>;
@@ -294,7 +292,7 @@ if (verificar_permissoes($dados_user) !== true) {
                 carregarUsuarios(setorSelecionadoPHP);
             }
 
-            selectSetor.addEventListener('change', function() {
+            selectSetor.addEventListener('change', function () {
                 carregarUsuarios(this.value);
             });
 

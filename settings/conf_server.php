@@ -115,8 +115,8 @@ function feriados($ano)
     $lista_feriados = [];
 
     while ($row = $result->fetch_assoc()) {
-       $data_formatada = $row['dia_mes'] . '/' . $row['ano'];
-       $lista_feriados[$data_formatada] = $row['feriado'];
+        $data_formatada = $row['dia_mes'] . '/' . $row['ano'];
+        $lista_feriados[$data_formatada] = $row['feriado'];
     }
     $query->close();
 
@@ -319,7 +319,19 @@ function coletar_user()
 {
     $conn = conexao_banco();
     //Organizar os nomes em ordem
-    $query = $conn->prepare('SELECT * FROM usuario ORDER BY nome ASC');
+    $query = $conn->prepare(
+        'SELECT u.id,
+        u.nome,
+        u.cpf,
+        c.cargo,
+        u.setor,
+        u.permissoes,
+        u.username,
+        u.email
+        FROM
+        usuario u
+        INNER JOIN cargo c ON u.cargo = c.id
+        ORDER BY nome ASC;');
     $query->execute();
     $result = $query->get_result();
     $usuarios_coletados = [];
