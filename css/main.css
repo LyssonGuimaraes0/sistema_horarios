@@ -9,7 +9,7 @@
 
 :root {
     /* --primary-color: #1a73e8; */
-    --primary-color: #210047;
+    --primary-color: #024934;
     --primary-color-hover:  color-mix(in srgb, var(--primary-color), black 50%);
     --segundaria-color:#eeeeee;
     --green-color:green;

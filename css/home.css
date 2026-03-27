@@ -47,6 +47,13 @@
     margin-top: 0 !important;
     height: 36px !important;
     padding: 0 !important;
+    background-color: var(--white-text) !important;
+    color: var(--dark-text) !important;
+}
+
+.home-calendario:hover{
+    background: color-mix(in srgb, #14dd57, black 20%) !important;
+    color: var(--white-text) !important;
 }
 
 .titulo-container {

@@ -234,19 +234,19 @@ function cancelar_horario(elemento) {
 
 
 function salvarHorario(dados) {
-fetch('./settings/editar_horario.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(dados)
-})
-.then(r => r.json())
-.then(resp => {
-    if (resp.status === 'ok') {
-        window.location.href = resp.redirect;
-    }
-});
+    fetch('./settings/editar_horario.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+    })
+        .then(r => r.json())
+        .then(resp => {
+            if (resp.status === 'ok') {
+                window.location.href = resp.redirect;
+            }
+        });
 }
 
 // == Adicionar Justificativa ====================================================
@@ -387,4 +387,5 @@ function apresenta_modal(condicao, mensagem,) {
 
 
     }
+
 }

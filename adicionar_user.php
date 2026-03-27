@@ -36,7 +36,7 @@ if (verificar_permissoes($dados_user) !== true) {
         <div class="section-container">
             <div class="container-home">
                 <div class="container-welcome">
-                    <h2 class="title-container">Bem vindo! <?php echo $dados_user['nome'] ?> </h2>
+                    <h2 class="title-container">Cadastro de novo Úsuario</h2>
                 </div>
             </div>
         </div>

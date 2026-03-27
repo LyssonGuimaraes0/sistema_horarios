@@ -8,12 +8,10 @@ session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
-limparFiltros();
-
 $dados_user = dados_user();
 $setores = setores();
 $usuarios_coletados = coletar_user();
-
+limparFiltros();
 // ===============================
 // USUÁRIO
 // ===============================
@@ -89,8 +87,8 @@ if (verificar_permissoes($dados_user) !== true) {
         <section class="home-section">
             <div class="section-container">
                 <div class="container-home">
-                    <div class="container-welcome">
-                        <h2 class="title-container">Buscar usuario </h2>
+                    <div class="container-welcome welcome-white">
+                        <h1 class="title-container">Buscar usuario </h1>
                     </div>
                 </div>
                 <div class="container-home">

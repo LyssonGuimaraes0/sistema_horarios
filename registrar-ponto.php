@@ -7,6 +7,8 @@ include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
 
+unset($_SESSION['exibir_formulario_anexo']);
+
 // Verifica se já exibiu o formulário antes
 $exibir_formulario = $_SESSION['formulario_exibido'] ?? false;
 

@@ -2,21 +2,28 @@
 <html lang="pt-BR">
 <!-- Cabeçalho comum incluído -->
 <?php
+
 session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
-limparFiltros();
+
+unset($_SESSION['formulario_exibido']);
+
+// Verifica se já exibiu o formulário antes
+$exibir_formulario_anexo = $_SESSION['exibir_formulario_anexo'] ?? false;
+
+// Se for a primeira execução, não exibe
+if (!$exibir_formulario_anexo) {
+    $_SESSION['exibir_formulario_anexo'] = true; // marca que já exibiu
+}
+
+
 
 $dados_user = dados_user();
 
 //coleta horarios registrados
 $datas_registradas = horas_registradas($dados_user['id']);
-
-//Configuração para Dropdown inicia com valor selecionado pelo usuario
-$mes_selecionado = $_POST['mes'] ?? '';
-$ano_selecionado = $_POST['ano'] ?? '';
-
 
 //Coleta data atual e informações de mes e ano
 
@@ -31,6 +38,16 @@ $data_completa = $data['data_completa'];
 $mes = $_POST['mes'] ?? null;
 $ano = $_POST['ano'] ?? null;
 $dias = null;
+
+
+//Configuração para Dropdown inicia com valor selecionado pelo usuario
+$mes_selecionado = $_POST['mes'] ?? '';
+$ano_selecionado = $_POST['ano'] ?? '';
+
+if ($mes_selecionado == null && $ano_selecionado == null) {
+    $mes_selecionado = $mes_atual;
+    $ano_selecionado = $ano_atual;
+}
 
 if ($mes && $ano) {
     $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
@@ -61,33 +78,38 @@ if ($mes && $ano) {
                 </div>
                 <div class="container-home">
                     <div class="container-dropdown">
-                        <form method="post">
-                            <select class="dropdown" name="mes" id="selectMes">
-                                <?php
-                                foreach ($meses as $numero => $nome_mes): ?>
-                                    <option data-mes="<?= $numero ?>" value="<?= $numero ?>" <?= ($mes_selecionado == $numero) ? 'selected' : '' ?>>
-                                        <?= $nome_mes ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <select class="dropdown" name="ano" id="selectAno">
-                                <?php
+                        <div class="row-dropdown">
+                            <form method="post">
+                                <span>Selecione um periodo:</span>
+                                <select class="dropdown" name="mes" id="selectMes">
+                                    <?php
+                                    foreach ($meses as $numero => $nome_mes): ?>
+                                        <option data-mes="<?= $numero ?>" value="<?= $numero ?>"
+                                            <?= ($mes_selecionado == $numero) ? 'selected' : '' ?>>
+                                            <?= $nome_mes ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <select class="dropdown" name="ano" id="selectAno">
+                                    <?php
 
-                                $anolimite = "2024";
+                                    $anolimite = "2024";
 
-                                for ($i = $ano_atual; $i >= $anolimite; $i--): ?>
-                                    <option value="<?= $i ?>" <?= ($ano_selecionado == $i) ? 'selected' : '' ?>><?= $i ?>
-                                    </option>
-                                <?php endfor; ?>
-                            </select>
-                            <button type="submit" id="abrir-calendario">Busca</button>
+                                    for ($i = $ano_atual; $i >= $anolimite; $i--): ?>
+                                        <option value="<?= $i ?>" <?= ($ano_selecionado == $i) ? 'selected' : '' ?>>
+                                            <?= $i ?>
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                                <button class="btn-formulario btn-registrar" type="submit" id="abrir-calendario">Busca</button>
+                            </form>
+                        </div>
 
-                        </form>
                     </div>
                 </div>
 
                 <form action="./settings/registrar_ponto_mensal.php" method="post" enctype="multipart/form-data">
-                    <div class="container-home" style="display:<?= ($mes_selecionado != '') ? 'block' : 'none' ?>">
+                    <div class="container-home"style="display:<?= ($exibir_formulario_anexo == true) ? 'block' : 'none' ?>">
                         <div class="container-calendario calendario-container">
                             <div class="calendario-header">
                                 <div class="calendario-titulo">

@@ -354,7 +354,11 @@ function limparFiltros()
             $_SESSION['usuario_selecionado'],
             $_SESSION['setor_selecionado'],
             $_SESSION['ano_selecionado'],
-            $_SESSION['formulario_exibido']
+            $_SESSION['formulario_exibido'],
+            $_SESSION['ano_selecionado'],
+            $_SESSION['mes_selecionado'],
+            $_SESSION['exibir_formulario_anexo']
+
         );
     }
 }
