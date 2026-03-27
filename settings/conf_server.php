@@ -341,7 +341,8 @@ function limparFiltros()
         unset(
             $_SESSION['usuario_selecionado'],
             $_SESSION['setor_selecionado'],
-            $_SESSION['ano_selecionado']
+            $_SESSION['ano_selecionado'],
+            $_SESSION['formulario_exibido']
         );
     }
 }

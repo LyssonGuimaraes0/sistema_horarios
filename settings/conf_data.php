@@ -4,6 +4,10 @@ include('./conf_bd.php');
 include('./conf_server.php');
 $conn = conexao_banco();
 
+$_SESSION['mes_selecionado'] = $_POST['mes'] ?? null;
+$_SESSION['ano_selecionado'] = $_POST['ano'] ?? null;
+
+
 $horario_cargo = horario_cargo();
 
 //Coleta dados do usuario

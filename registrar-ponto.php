@@ -6,7 +6,15 @@ session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
 verificar_sessao();
-limparFiltros();
+
+// Verifica se já exibiu o formulário antes
+$exibir_formulario = $_SESSION['formulario_exibido'] ?? false;
+
+// Se for a primeira execução, não exibe
+if (!$exibir_formulario) {
+    $_SESSION['formulario_exibido'] = true; // marca que já exibiu
+}
+
 
 //Remove erros de Warning
 error_reporting(E_ALL & ~E_WARNING);
@@ -16,30 +24,49 @@ ini_set('display_errors', 0);
 $dados_user = dados_user();
 $horario_cargo = horario_cargo();
 
-
-
 //Configuração para Dropdown inicia com valor selecionado pelo usuario
-$mes_selecionado = $_POST['mes'] ?? '';
-$ano_selecionado = $_POST['ano'] ?? '';
+$mes_selecionado = $_POST['mes']
+    ?? $_SESSION['mes_selecionado']
+    ?? '';
 
-//Coleta data atual e informações de mes e ano
+$ano_selecionado = $_POST['ano']
+    ?? $_SESSION['ano_selecionado']
+    ?? '';
 
+
+// salva POST na sessão
+if (isset($_POST['mes']) && isset($_POST['ano'])) {
+    $_SESSION['mes_selecionado'] = $_POST['mes'];
+    $_SESSION['ano_selecionado'] = $_POST['ano'];
+}
+
+// pega mês/ano
+$mes = $_POST['mes'] ?? $_SESSION['mes_selecionado'] ?? null;
+$ano = $_POST['ano'] ?? $_SESSION['ano_selecionado'] ?? null;
+
+// pega dados do sistema
 $data = mese_atual();
-$mes_atual = $data['mes'];
-$mes_nome = $data['mes_nome'];
+
 $meses = $data['meses'];
+$mes_atual = $data['mes'];
 $ano_atual = $data['ano'];
 $data_completa = $data['data_completa'];
 $anolimite = $data['ano_limite'];
 
-//Configurações de Mes é Ano
-$mes = $_POST['mes'] ?? null;
-$ano = $_POST['ano'] ?? null;
+
+$mes_nome = $meses[$mes] ?? '';
+
+
+
 $dias = null;
 
-if ($mes && $ano) {
+if (!empty($mes_selecionado) && !empty($ano_selecionado)) {
+    $mes = $mes_selecionado;
+    $ano = $ano_selecionado;
+
     $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
 }
+
 ?>
 
 <?php include('./snippets/head.html'); ?>
@@ -58,6 +85,7 @@ if ($mes && $ano) {
     }
     ?>
     <!-- Estrutura da Home -->
+
     <div class="main-content">
         <section class="home-section">
             <div class="section-container">
@@ -122,8 +150,8 @@ if ($mes && $ano) {
         <form action="./settings/conf_data.php" method="post">
             <section class="home-section home-up">
                 <div class="section-container">
-                    <!--Calendario Fica Oculto ate o usuario escolher o Mes-->
-                    <div style="display:<?= ($mes_selecionado != '') ? 'block' : 'none' ?>">
+                    <!--Calendario Fica Oculto Na primeira execução-->
+                    <div id="calendario" style="display:<?= ($exibir_formulario == true) ? 'block' : 'none' ?>">
                         <div class="container-calendario calendario-container">
                             <div class="calendario-header">
                                 <div class="calendario-titulo">
@@ -316,6 +344,24 @@ if ($mes && $ano) {
 
     <?php include('./snippets/script.html') ?>
     <script>
+
+        //Coleta valor recebido em conf_data.php é armazena
+        <?php $cadastro = $_SESSION['cadastro'] ?? null;
+        $mensagem = $_SESSION['mensagem'] ?? null;
+        //Limpa valor anterior para novos cadastros!
+        unset($_SESSION['cadastro']);
+        unset($_SESSION['mensagem']);
+        ?>
+
+        //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
+        var codicao = <?php echo json_encode($cadastro); ?>;
+        var mensagem = <?php echo json_encode($mensagem); ?>;
+
+        apresenta_modal(codicao, mensagem)
+
+
+
+
         //Apresenta Mes decorrente do Ano atual
         document.addEventListener('DOMContentLoaded', () => {
             const selectAno = document.getElementById('selectAno');
@@ -379,21 +425,6 @@ if ($mes && $ano) {
             document.getElementById('modal-delete').style.display = 'flex';
         }
 
-
-
-        //Coleta valor recebido em conf_data.php é armazena
-        <?php $cadastro = $_SESSION['cadastro'] ?? null;
-        $mensagem = $_SESSION['mensagem'] ?? null;
-        //Limpa valor anterior para novos cadastros!
-        unset($_SESSION['cadastro']);
-        unset($_SESSION['mensagem']);
-        ?>
-
-        //Apresenta modal caso cadastro tenha falhado ou realizado com sucesso
-        var codicao = <?php echo json_encode($cadastro); ?>;
-        var mensagem = <?php echo json_encode($mensagem); ?>;
-
-        apresenta_modal(codicao, mensagem);
     </script>
 
 </body>
