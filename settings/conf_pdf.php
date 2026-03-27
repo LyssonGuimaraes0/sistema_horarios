@@ -12,7 +12,10 @@ include("conf_bd.php");
 $conn = conexao_banco();
 session_start();
 verificar_sessao();
+
+//Configuração de dados do usuario
 $dados_user = dados_user();
+$cargo = horario_cargo();
 //Configuração de data
 
 $mes = $_POST["mes_pdf"];
@@ -28,13 +31,13 @@ if ($mes === "" || $ano === "") {
 //Array de Meses
 
 $meses = [
-    "01"  => 'Janeiro',
-    "02"  => 'Fevereiro',
-    "03"  => 'Março',
-    "04"  => 'Abril',
-    "05"  => 'Maio',
-    "06"  => 'Junho',
-    "07"  => 'Julho',
+    "01" => 'Janeiro',
+    "02" => 'Fevereiro',
+    "03" => 'Março',
+    "04" => 'Abril',
+    "05" => 'Maio',
+    "06" => 'Junho',
+    "07" => 'Julho',
     "08" => 'Agosto',
     "09" => 'Setembro',
     "10" => 'Outubro',
@@ -64,69 +67,79 @@ $data_atual = $mes_atual['data_completa'];
 </head>
 
 <style>
-@page {
-    size: A4 landscape;
-    margin: 8mm;
-}
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
-}
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9px;
+    }
 
-.pagina-pdf {
-    width: 100%;
-}
+    .pagina-pdf {
+        width: 100%;
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; /* CRÍTICO */
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        /* CRÍTICO */
+    }
 
-th, td {
-    border: 1px solid #000;
-    padding: 3px;
-    text-align: center;
-    vertical-align: middle;
-    word-wrap: break-word;
-}
+    th,
+    td {
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: center;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
 
-/* Cabeçalho */
-h1 {
-    font-size: 14px;
-    margin: 5px 0;
-}
+    /* Cabeçalho */
+    h1 {
+        font-size: 14px;
+        margin: 5px 0;
+    }
 
-/* Ajuste das colunas */
-.col-data { width: 12%; }
-.col-hora { width: 10%; }
-.col-obs  { width: 28%; }
+    /* Ajuste das colunas */
+    .col-data {
+        width: 12%;
+    }
 
-/* Final de semana */
-.tabela_fs {
-    background-color: #f0f0f0;
-    font-style: italic;
-}
+    .col-hora {
+        width: 10%;
+    }
 
-/* Assinaturas */
-.assinatura-row {
-    margin-top: 20px;
-    display: table;
-    width: 100%;
-    margin-top: 50px;
-}
+    .col-obs {
+        width: 28%;
+    }
 
-.assinatura-item {
-    display: table-cell;
-    text-align: center;
-}
+    /* Final de semana */
+    .tabela_fs {
+        background-color: #f0f0f0;
+        font-style: italic;
+    }
 
-.linha-assinatura {
-    border-bottom: 1px solid #000;
-    width: 80%;
-    margin: 0 auto 5px auto;
-}
+    /* Assinaturas */
+    .assinatura-row {
+        margin-top: 20px;
+        display: table;
+        width: 100%;
+        margin-top: 50px;
+    }
+
+    .assinatura-item {
+        display: table-cell;
+        text-align: center;
+    }
+
+    .linha-assinatura {
+        border-bottom: 1px solid #000;
+        width: 80%;
+        margin: 0 auto 5px auto;
+    }
 </style>
 
 <body>
@@ -176,10 +189,10 @@ h1 {
         <!--Dados Usuario-->
         <table class="row-info-horario" class="row-info-horario" border="1">
             <tbody>
-                <td class="dado">ID:</td>
-                <td class="dado"><span><?= $dados_user['id'] ?></span></td>
                 <td class="dado">Empregado:</td>
                 <td class="dado"><span><?= $dados_user['nome'] ?></span></td>
+                <td class="dado">Cargo:</td>
+                <td class="dado"><span><?=$cargo['cargo']?></span></td>
                 <td class="dado">Setor:</td>
                 <td class="dado"><span><?= $dados_user['setor'] ?></span></td>
                 <td class="dado">C. da folha de Ponto:</td>
@@ -191,12 +204,24 @@ h1 {
             <thead>
                 <tr>
                     <!--Cabecalho-->
-                    <th class="dado texto tabela">Data</th>
-                    <th class="dado texto tabela">Entrada</th>
-                    <th class="dado texto tabela">Saida Almoço</th>
-                    <th class="dado texto tabela">Volta Almoço</th>
-                    <th class="dado texto tabela">Saida</th>
-                    <th class="dado texto tabela">Observação</th>
+                    <?php
+
+                    if ($cargo['cargo'] == "Estágiario-Manha" || $cargo['cargo'] == "Estágiario-Tarde") {
+                        echo "<th class='dado texto tabela'>Data</th>";
+                        echo "<th class='dado texto tabela'>Entrada</th>";
+                        echo "<th class='dado texto tabela'>Saida</th>";
+                        echo "<th class='dado texto tabela'>Observação</th>";
+                    } else {
+                        echo "<th class='dado texto tabela'>Data</th>";
+                        echo "<th class='dado texto tabela'>Entrada</th>";
+                        echo "<th class='dado texto tabela'>Saida Almoço</th>";
+                        echo "<th class='dado texto tabela'>Volta Almoço</th>";
+                        echo "<th class='dado texto tabela'>Saida</th>";
+                        echo "<th class='dado texto tabela'>Observação</th>";
+                    }
+                    ?>
+
+
 
                 </tr>
 
@@ -211,7 +236,7 @@ h1 {
 
 
             //Criação da Tabela
-
+            
             for ($i = 0; $i < $totalLinhas; $i++) {
                 //Definindo datas para serem apresentadas
                 $data1 = $datas[$i];
@@ -223,45 +248,92 @@ h1 {
 
                 $dataColuna1 = sprintf('%04d-%02d-%02d', $ano, $mes, $diaColuna1);
 
+                //Busca feriados
+                $feriados = feriados($ano);
+
                 //Nome do Dia
                 $nomediaColuna1 = date('l', strtotime($dataColuna1));
 
                 $registroColuna1 = $datas_registradas[$dataColuna1] ?? null;
 
                 //Coleta de valores da data relacionada
-                $entradaColuna1 = $registroColuna1['entrada'] ?? null;
-                $saidaAlmocoColuna1 = $registroColuna1['saida_almoco'] ?? null;
-                $voltaAlmocoColuna1 = $registroColuna1['volta_almoco'] ?? null;
-                $saidaColuna1 = $registroColuna1['saida'] ?? null;
+            
+                //Coleta dados do dia caso seja atestado ou Feriado
                 $statusColuna1 = $registroColuna1['status_dia'] ?? null;
 
-                echo "<tr>";
-                if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday") {
 
-                    echo "<td class='tabela_fs'>$data1</td>";
-                    echo "<td class='tabela_fs'></td>";
-                    echo "<td class='tabela_fs'></td>";
-                    echo "<td class='tabela_fs'></td>";
-                    echo "<td class='tabela_fs'></td>";
-                    echo "<td class='tabela_fs'>Final de Semana</td>";
-                } elseif ($statusColuna1 === "Atestado") {
+                if ($cargo['cargo'] == "Estágiario-Manha" || $cargo['cargo'] == "Estágiario-Tarde") {
+                    echo "<tr>";
+                    //Coleta de valores da data relacionada
+                    $entradaColuna1 = $registroColuna1['entrada'] ?? null;
+                    $saidaColuna1 = $registroColuna1['saida'] ?? null;
+                    $statusColuna1 = $registroColuna1['status_dia'] ?? null;
 
-                    echo "<td>$data1</td>";
-                    echo "<td>$entradaColuna1</td>";
-                    echo "<td>$saidaAlmocoColuna1</td>";
-                    echo "<td>$voltaAlmocoColuna1</td>";
-                    echo "<td>$saidaColuna1</td>";
-                    echo "<td class=''>Atestado</td>";
+                    if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday" || $feriados[$data1] != null) {
+
+                        echo "<td class='tabela_fs'>$data1</td>";
+                        echo "<td class='tabela_fs'></td>";
+                        echo "<td class='tabela_fs'></td>";
+                        //Verifica se oq esta presente em $statusColuna1 é atestado ou se é o feriado
+                        echo "<td class='tabela_fs'>" . ($feriados[$data1] != null ? $feriados[$data1] : "Fim de Semana") . "</td>";
+
+                    } elseif ($statusColuna1 == "Atestado") {
+
+                        echo "<td>$data1</td>";
+                        echo "<td>$entradaColuna1</td>";
+                        echo "<td>$saidaColuna1</td>";
+                        echo "<td class=''>Atestado</td>";
+
+                    } else {
+
+                        echo "<td>$data1</td>";
+                        echo "<td>$entradaColuna1</td>";
+                        echo "<td>$saidaColuna1</td>";
+                        echo "<td></td>";
+                    }
+                    echo "</tr>";
+
+
                 } else {
 
-                    echo "<td>$data1</td>";
-                    echo "<td>$entradaColuna1</td>";
-                    echo "<td>$saidaAlmocoColuna1</td>";
-                    echo "<td>$voltaAlmocoColuna1</td>";
-                    echo "<td>$saidaColuna1</td>";
-                    echo "<td></td>";
+                    $entradaColuna1 = $registroColuna1['entrada'] ?? null;
+                    $saidaAlmocoColuna1 = $registroColuna1['saida_almoco'] ?? null;
+                    $voltaAlmocoColuna1 = $registroColuna1['volta_almoco'] ?? null;
+                    $saidaColuna1 = $registroColuna1['saida'] ?? null;
+
+                    echo "<tr>";
+
+                    if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday" || $feriados[$data1] != null) {
+
+                        echo "<td class='tabela_fs'>$data1</td>";
+                        echo "<td class='tabela_fs'></td>";
+                        echo "<td class='tabela_fs'></td>";
+                        echo "<td class='tabela_fs'></td>";
+                        echo "<td class='tabela_fs'></td>";
+                        echo "<td class='tabela_fs'>" . ($feriados[$data1] != null ? $feriados[$data1] : "Fim de Semana") . "</td>";
+
+                    } elseif ($statusColuna1 === "Atestado") {
+
+                        echo "<td>$data1</td>";
+                        echo "<td>$entradaColuna1</td>";
+                        echo "<td>$saidaAlmocoColuna1</td>";
+                        echo "<td>$voltaAlmocoColuna1</td>";
+                        echo "<td>$saidaColuna1</td>";
+                        echo "<td class=''>Atestado</td>";
+                    } else {
+
+                        echo "<td>$data1</td>";
+                        echo "<td>$entradaColuna1</td>";
+                        echo "<td>$saidaAlmocoColuna1</td>";
+                        echo "<td>$voltaAlmocoColuna1</td>";
+                        echo "<td>$saidaColuna1</td>";
+                        echo "<td></td>";
+                    }
+                    echo "</tr>";
+
                 }
-                echo "</tr>";
+
+
             }
 
             ?>
@@ -301,7 +373,7 @@ $nomePDF = "Folha_Ponto";
 $dompdf->stream("Folha_Ponto_$nome_mes" . "_" . " $ano.pdf", [
     "Attachment" => false // false = abre no navegador | true = baixa
 ]);
-exit;
+exit; 
 
 
 ?>
