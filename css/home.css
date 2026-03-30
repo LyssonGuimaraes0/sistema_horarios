@@ -1,7 +1,6 @@
 /*Configuração do section*/
 .home-section {
     flex: 1;
-    padding: 20px;
     margin-left: 10px;
 }
 
@@ -27,11 +26,16 @@
     display: flex;
     align-items: center;
     box-shadow: var(--shadow);
+    margin: 10px 0;
 }
 
 .container-welcome.welcome-white {
     background-color: var(--white-text);
     color: var(--primary-color);
+}
+
+.container-welcome.welcome-primary h1{
+    color: var(--white-text);
 }
 
 .welcome-horario {
@@ -69,6 +73,7 @@
     display: flex;
     align-items: center;
     border: 1px solid color-mix(in srgb, var(--light-text), white 70%);
+    margin-top: 25px;
 }
 
 .title-container {
@@ -155,13 +160,9 @@
 
 .row-dropdown {
     display: flex;
-    /* ativa o flexbox */
     align-items: center;
-    /* alinha verticalmente */
     gap: 30px;
-    /* espaço entre os itens */
     flex-wrap: wrap;
-    /* quebra linha se faltar espaço */
     padding: 15px;
 }
 

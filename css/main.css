@@ -4,7 +4,7 @@
 @import url("../css/modal.css");
 @import url("../css/formulario.css");
 @import url("../css/calendario.css");
-@import url("../css/calendario.css");
+@import url("../css/anexa_frequencia.css");
 
 
 :root {
@@ -73,3 +73,78 @@ span{
 .sidebar.collapsed + .main-content {
     margin-right: 20%; /* largura da sidebar recolhida */
 }
+
+/*Botão padronizado*/
+
+/*Botão de Login*/
+.btn-padrao{
+    width: 160px;
+    height: 35px;
+    color: var(--light-text);
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.5s ease, color 0.3s ease;
+    align-self: center;
+}
+
+.btn-padrao:hover{
+    transform: scale(1.05);
+}
+
+/*Input padrão*/
+
+.item-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.item-upload span {
+    font-weight: 600;
+}
+
+.item-upload small {
+    color: #777;
+    font-size: 12px;
+}
+
+/* INPUT */
+.btn-upload {
+    font-size: 14px;
+    color: #444;
+    border: 2px dashed #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: 0.3s;
+}
+
+/* Hover no input */
+.btn-upload:hover {
+    border-color: #007BFF;
+    background-color: #f1f7ff;
+}
+
+/* Botão interno */
+.btn-upload::file-selector-button {
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    margin-right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover botão */
+.btn-upload::file-selector-button:hover {
+    background: #0056b3;
+}
+
+

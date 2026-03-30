@@ -30,13 +30,13 @@
                 </div>
                 <div class="modal-descricao">
                     <p>Tem certeza que deseja apagar o registro do dia?</p>
-                    <span id="data-remocao"></span>
+                    <span class="span-data-remocao" id="data-remocao"></span>
                 </div>
                 <form action="./settings/delete_registro.php" method="post">
                     <input type="hidden" name="data" id="data_delete">
                     <div class="btn-modal ">
-                        <button type="submit" class="btn-confirmar">Confirmar</button>
-                        <button type="button" onclick="fechar_modal()" class="btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn-confirmar btn-padrao btn-alertar">Confirmar</button>
+                        <button type="button" class="btn-padrao btn-alertar" onclick="fechar_modal()" class="btn-cancelar">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -136,17 +136,17 @@
                             </select>
                         </div>
 
-                        <div class="item-justificativa">
+                        <div class="item-justificativa item-upload">
                             <span>Adicione o Anexo correspondente:</span>
                             <smalL>Arquivo permitido: PDF</small>
-                            <input type="file" name="justi_pdf" id="justi_pdf" required>
+                            <input class="btn-upload" type="file" name="justi_pdf" id="justi_pdf" required>
                         </div>
 
                     </div>
                     <input type="hidden" name="data" id="data_justificativa">
                     <div class="btn-modal ">
-                        <button type="submit" class="btn-confirmar">Confirmar</button>
-                        <button type="button" onclick="fechar_modal()" class="btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn-confirmar btn-padrao">Confirmar</button>
+                        <button type="button" class="btn-padrao" onclick="fechar_modal()" class="btn-cancelar">Cancelar</button>
                     </div>
                 </form>
             </div>

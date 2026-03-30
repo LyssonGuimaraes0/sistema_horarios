@@ -91,7 +91,7 @@ if (verificar_permissoes($dados_user) !== true) {
                         <h1 class="title-container">Buscar usuario </h1>
                     </div>
                 </div>
-                <div class="container-home">
+                <div class="container-home container-down">
                     <form method="post" autocomplete="off">
 
                         <div class="container-dropdown">
@@ -111,7 +111,7 @@ if (verificar_permissoes($dados_user) !== true) {
                             </div>
                         </div>
 
-                        <div class="container-dropdown" id="container-pessoas"
+                        <div class="container-dropdown "  id="container-pessoas"
                             style="display:<?= ($usuario_selecionado != '') ? 'flex' : 'none' ?>">
                             <div class="row-dropdown">
                                 <span>Selecione uma pessoa:</span>

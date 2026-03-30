@@ -96,57 +96,55 @@ if (!empty($mes_selecionado) && !empty($ano_selecionado)) {
                         <h1 class="title-container">Registro de Horario </h1>
                     </div>
                 </div>
-            </div>
-        </section>
-        <section class="home-section home-down">
-            <div class="section-container">
-                <div class="container-home container-down">
-                    <div class="container-dropdown">
-                        <div class="row-dropdown">
-                            <span>Selecione um periodo:</span>
-                            <form method="post">
-                                <span> Mês:</span>
-                                <select class="dropdown" name="mes" id="selectMes">
-                                    <?php
-                                    foreach ($meses as $numero => $nome_mes):
+                <div class="section-container">
+                    <div class="container-home container-down">
+                        <div class="container-dropdown">
+                            <div class="row-dropdown">
+                                <span>Selecione um periodo:</span>
+                                <form method="post">
+                                    <span> Mês:</span>
+                                    <select class="dropdown" name="mes" id="selectMes">
+                                        <?php
+                                        foreach ($meses as $numero => $nome_mes):
 
-                                        if ($mes_selecionado == "") {
-                                            $selected = ((int) $numero === (int) $mes_atual) ? 'selected' : '';
-                                        } else {
-                                            $selected = ((int) $numero === (int) $mes_selecionado) ? 'selected' : '';
-                                        }
+                                            if ($mes_selecionado == "") {
+                                                $selected = ((int) $numero === (int) $mes_atual) ? 'selected' : '';
+                                            } else {
+                                                $selected = ((int) $numero === (int) $mes_selecionado) ? 'selected' : '';
+                                            }
 
-                                        echo "<option data-mes='$numero' value='$numero' $selected> $nome_mes</option>";
+                                            echo "<option data-mes='$numero' value='$numero' $selected> $nome_mes</option>";
 
-                                    endforeach;
-                                    ?>
-                                </select>
+                                        endforeach;
+                                        ?>
+                                    </select>
 
-                                <span> Ano:</span>
-                                <select class="dropdown" name="ano" id="selectAno">
-                                    <?php
+                                    <span> Ano:</span>
+                                    <select class="dropdown" name="ano" id="selectAno">
+                                        <?php
 
-                                    for ($i = $ano_atual; $i >= $anolimite; $i--): ?>
-                                        <option value="<?= $i ?>" <?= ($ano_selecionado == $i) ? 'selected' : '' ?>><?= $i ?>
-                                        </option>
-                                    <?php endfor; ?>
-                                </select>
-                                <button class="btn-formulario btn-registrar" type="submit"
-                                    id="abrir-calendario">Carregar</button>
+                                        for ($i = $ano_atual; $i >= $anolimite; $i--): ?>
+                                            <option value="<?= $i ?>" <?= ($ano_selecionado == $i) ? 'selected' : '' ?>>
+                                                <?= $i ?>
+                                            </option>
+                                        <?php endfor; ?>
+                                    </select>
+                                    <button class="btn-formulario btn-registrar" type="submit"
+                                        id="abrir-calendario">Carregar</button>
 
-                            </form>
-                            <!--Botão de enviar PDF-->
-                            <div class="contaienr-pdf">
-                                <form action="./settings/conf_pdf.php" method="post" target="_blank">
-                                    <input type="hidden" name="mes_pdf" value="<?= $mes ?>">
-                                    <input type="hidden" name="ano_pdf" value="<?= $ano ?>">
-                                    <input class="btn-formulario" type="submit" value="Imprimir">
                                 </form>
+                                <!--Botão de enviar PDF-->
+                                <div class="contaienr-pdf">
+                                    <form action="./settings/conf_pdf.php" method="post" target="_blank">
+                                        <input type="hidden" name="mes_pdf" value="<?= $mes ?>">
+                                        <input type="hidden" name="ano_pdf" value="<?= $ano ?>">
+                                        <input class="btn-formulario" type="submit" value="Imprimir">
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
         <form action="./settings/conf_data.php" method="post">

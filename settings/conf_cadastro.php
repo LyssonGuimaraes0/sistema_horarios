@@ -17,19 +17,18 @@ $senha = $_REQUEST['senha'];
 //utilizanod o ternario para definir ou como false ou true a checkbox
 $permissao = isset($_REQUEST['permissao']) ? "administrador" : "usuario";
 
-//Valida caso o cpf Já exista no banco de dados
+//Valida caso o cpf e email Já exista no banco de dados
 
-$cpf_valid = $conn->prepare("SELECT cpf FROM usuario");
-$cpf_valid->execute();
-$result = $cpf_valid->get_result();
+$query = $conn->prepare("SELECT email,cpf FROM usuario");
+$query->execute();
+$result = $query->get_result();
 //utilizar fetch_all para mais de uma informação em um array
-$result_cpf = $result->fetch_all(MYSQLI_NUM);
-var_dump($result_cpf);
+$resultado = $result->fetch_all(MYSQLI_NUM);
 
 //Verifica se dentro do array de cpf possui o digitado
-for ($i = 0; $i < count($result_cpf); $i++) {
+for ($i = 0; $i < count($resultado); $i++) {
     //informa qual linha [$i] e qual coluna [0]
-    if ($result_cpf[$i][0] === $cpf) {
+    if ($resultado[$i][0] === $cpf || $resultado[$i][0] === $email) {
         $_SESSION['cadastro'] = "usuario ja cadastrado";
         header("location: ../adicionar_user.php");
         exit;
