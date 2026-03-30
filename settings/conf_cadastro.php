@@ -25,9 +25,6 @@ $result = $query->get_result();
 //utilizar fetch_all para mais de uma informação em um array
 $resultado = $result->fetch_all(MYSQLI_NUM);
 
-var_dump($resultado);
-
-return;
 
 //Verifica se dentro do array de cpf possui o digitado
 for ($i = 0; $i < count($resultado); $i++) {
