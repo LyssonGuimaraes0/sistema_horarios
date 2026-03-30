@@ -19,16 +19,20 @@ $permissao = isset($_REQUEST['permissao']) ? "administrador" : "usuario";
 
 //Valida caso o cpf e email Já exista no banco de dados
 
-$query = $conn->prepare("SELECT email,cpf FROM usuario");
+$query = $conn->prepare("SELECT cpf,email FROM usuario");
 $query->execute();
 $result = $query->get_result();
 //utilizar fetch_all para mais de uma informação em um array
 $resultado = $result->fetch_all(MYSQLI_NUM);
 
+var_dump($resultado);
+
+return;
+
 //Verifica se dentro do array de cpf possui o digitado
 for ($i = 0; $i < count($resultado); $i++) {
     //informa qual linha [$i] e qual coluna [0]
-    if ($resultado[$i][0] === $cpf || $resultado[$i][0] === $email) {
+    if ($resultado[$i][0] === $cpf || $resultado[$i][1] === $email) {
         $_SESSION['cadastro'] = "usuario ja cadastrado";
         header("location: ../adicionar_user.php");
         exit;
