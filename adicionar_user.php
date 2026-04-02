@@ -32,26 +32,29 @@ if (verificar_permissoes($dados_user) !== true) {
 
 
     <!-- Estrutura da Home -->
-    <section class="home-section">
-        <div class="section-container">
-            <div class="container-home">
-                <div class="container-welcome">
-                    <h2 class="title-container">Cadastro de novo Úsuario</h2>
+    <div class="main-content">
+        <section class="home-section">
+            <div class="section-container">
+                <div class="container-home">
+                    <div class="container-welcome">
+                        <h2 class="title-container">Cadastro de novo Úsuario</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Estrutura da Página de adicionar usuario -->
-    <?php include('./snippets/adicionar_user.html') ?>
+        <!-- Estrutura da Página de adicionar usuario -->
+        <?php include('./snippets/adicionar_user.html') ?>
 
-    <!-- Chamada Script-->
 
-    <?php include('./snippets/script.html') ?>
+        <!-- Chamada Script-->
+
+        <?php include('./snippets/script.html') ?>
+    </div>
     <script>
         //Coleta valor recebido em conf_cadastro.php é armazena
         <?php $cadastro = $_SESSION['cadastro'] ?? null;
-              $mensagem = $_SESSION['mensagem'] ?? null;
+        $mensagem = $_SESSION['mensagem'] ?? null;
         //Limpa valor anterior para novos cadastros!
         unset($_SESSION['cadastro']);
         unset($_SESSION['mensagem']);
@@ -60,7 +63,7 @@ if (verificar_permissoes($dados_user) !== true) {
         var codicao = <?php echo json_encode($cadastro); ?>;
         var mensagem = <?php echo json_encode($mensagem); ?>;
 
-        apresenta_modal(codicao,mensagem);
+        apresenta_modal(codicao, mensagem);
 
 
     </script>

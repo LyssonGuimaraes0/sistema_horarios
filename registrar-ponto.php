@@ -220,6 +220,7 @@ if (!empty($mes_selecionado) && !empty($ano_selecionado)) {
                                             ";
                                             echo "<div class='items-horarios input-colunm'>";
                                             echo "<span>Final de Semana</span>";
+
                                             echo "</div>";
                                             echo "</div>";
                                             echo "</div>";
@@ -312,7 +313,9 @@ if (!empty($mes_selecionado) && !empty($ano_selecionado)) {
                                                 echo "<div class='items-botoes'>";
 
                                                 if (!empty($registroDia['entrada']) && !empty($registroDia['saida_almoco']) && !empty($registroDia['volta_almoco']) && !empty($registroDia['saida'])) {
-                                                    echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
+                                                    //Gere o botão editar caso não for atestado
+                                                   echo ($status_dia == "Atestado") ? "" : 
+                                                   "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
                                                     echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
                                                     echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
                                                     echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_brasil')\"></i>";

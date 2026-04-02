@@ -97,10 +97,37 @@ $data_atual = $mes_atual['data_completa'];
         word-wrap: break-word;
     }
 
+
+
+    .container-meses {
+        width: 100%;
+    }
+
+    .periodo-span {
+        font-size: 12px;
+    }
+
+    .cabecalho-mes {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .row-data {
+        display: inline-block;
+        width: 120px;
+        margin: 5px 0;
+        text-align: center;
+    }
+
     /* Cabeçalho */
     h1 {
         font-size: 14px;
         margin: 5px 0;
+    }
+
+
+    .dado {
+        font-size: 12px;
     }
 
     /* Ajuste das colunas */
@@ -152,10 +179,10 @@ $data_atual = $mes_atual['data_completa'];
                         <h1>Folha de Ponto <?= "$nome_mes/$ano" ?></h1>
                     </div>
                 </th>
-                <th class="dado texto tabela">
+                <th class="dado texto tabela" style="vertical-align: middle; text-align: center;">
                     <div class="cabecalho-mes">
                         <div class="periodo">
-                            <span>Período</span>
+                            <span class="periodo-span">Período</span>
                         </div>
                         <div class="container-meses">
                             <div class="row-data">
@@ -189,14 +216,10 @@ $data_atual = $mes_atual['data_completa'];
         <!--Dados Usuario-->
         <table class="row-info-horario" class="row-info-horario" border="1">
             <tbody>
-                <td class="dado">Empregado:</td>
-                <td class="dado"><span><?= $dados_user['nome'] ?></span></td>
-                <td class="dado">Cargo:</td>
-                <td class="dado"><span><?=$cargo['cargo']?></span></td>
-                <td class="dado">Setor:</td>
-                <td class="dado"><span><?= $dados_user['setor'] ?></span></td>
-                <td class="dado">C. da folha de Ponto:</td>
-                <td class="dado"><span><?= $data_atual ?></span></td>
+                <td class="dado">Empregado: <?= $dados_user['nome'] ?> </td>
+                <td class="dado">Cargo: <?= $cargo['cargo'] ?> </td>
+                <td class="dado">Setor: <?= $dados_user['setor'] ?> </td>
+                <td class="dado">C. da folha de Ponto: <?= $data_atual ?> </td>
             </tbody>
         </table>
         <!--Tabela-->
@@ -303,23 +326,19 @@ $data_atual = $mes_atual['data_completa'];
 
                     echo "<tr>";
 
-                    if ($nomediaColuna1 === "Saturday" || $nomediaColuna1 === "Sunday" || $feriados[$data1] != null) {
+                    if ($nomediaColuna1 == "Saturday" || $nomediaColuna1 == "Sunday" || $feriados[$data1] != null || $statusColuna1 == "Atestado") {
 
                         echo "<td class='tabela_fs'>$data1</td>";
                         echo "<td class='tabela_fs'></td>";
                         echo "<td class='tabela_fs'></td>";
                         echo "<td class='tabela_fs'></td>";
                         echo "<td class='tabela_fs'></td>";
-                        echo "<td class='tabela_fs'>" . ($feriados[$data1] != null ? $feriados[$data1] : "Fim de Semana") . "</td>";
+                        if ($statusColuna1 == "Atestado") {
+                            echo "<td class='tabela_fs'>Atestado</td>";
+                        } else {
+                            echo "<td class='tabela_fs'>" . ($feriados[$data1] != null ? $feriados[$data1] : "Fim de Semana") . "</td>";
+                        }
 
-                    } elseif ($statusColuna1 === "Atestado") {
-
-                        echo "<td>$data1</td>";
-                        echo "<td>$entradaColuna1</td>";
-                        echo "<td>$saidaAlmocoColuna1</td>";
-                        echo "<td>$voltaAlmocoColuna1</td>";
-                        echo "<td>$saidaColuna1</td>";
-                        echo "<td class=''>Atestado</td>";
                     } else {
 
                         echo "<td>$data1</td>";
@@ -373,7 +392,7 @@ $nomePDF = "Folha_Ponto";
 $dompdf->stream("Folha_Ponto_$nome_mes" . "_" . " $ano.pdf", [
     "Attachment" => false // false = abre no navegador | true = baixa
 ]);
-exit; 
+exit;
 
 
 ?>

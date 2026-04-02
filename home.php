@@ -118,7 +118,7 @@ $ano_atual = $data['ano'];
                                             <?= $existeRegistro ? 'readonly' : '' ?>>
                                     </div>
                                     <div class="items-horarios">
-                                        <button type="submit" class="btn-calendario home-calendario">
+                                        <button type="submit" name='dia' value=<?= $dia ?> class="btn-calendario home-calendario">
                                             Enviar datas
                                         </button>
 
