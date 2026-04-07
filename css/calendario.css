@@ -26,6 +26,11 @@
     z-index: 2;
 }
 
+.item-horario {
+    display: flex;
+    gap: 10px;
+}
+
 .calendario-body {
     margin-top: 10px;
 }
@@ -98,6 +103,7 @@
     font-size: 10px;
     margin-left: 50px;
 }
+
 
 .input-colunm span {
     font-size: 14px;
@@ -176,4 +182,17 @@ input[readonly] {
 input[readonly]:focus {
     outline: none;
     box-shadow: none;
+}
+
+/*========================Ponto facultativo=====================*/
+
+.container-ponto-facultativo {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: var(--white-text);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 0px solid;
+  border-radius: 0px 0px 8px 8px;
 }

@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('conf_bd.php');
-include('conf_server.php');
+include ('conf_bd.php');
+include ('conf_server.php');
 $conn = conexao_banco();
 
 //Coleta data
@@ -14,6 +14,6 @@ $ano = $array_data[0];
 
 //Armazenamento no banco de dados
 
-$query = $connprepare
+$query = $conn->prepare('');
 
 ?>
