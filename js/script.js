@@ -252,7 +252,7 @@ function adicionar_justificativa(data) {
 
     ModalBackground = document.getElementById('modal-justificativa');
     var dataModificar = document.querySelector('#data_justificativa');
-    var inputDiasAtestados = document.querySelector('#input-dias-atestados');
+    var inputDiasAtestados = document.querySelector('#servidor-publico-dias-atestados');
     const inputOrigem = document.querySelector('#data-origem');
     const inputInicio = document.querySelector('#data-inicio');
     const inputFim = document.querySelector('#data-fim');
@@ -380,94 +380,8 @@ function apresenta_modal(condicao, mensagem,) {
 
 }
 
-// == Ponto Facultativo ====================================================
-
-// == Adicionar Input de ponto facultativo ====================================================
-
-let contador = 0;
-const divInputs = document.querySelector('.container-input')
-
-function adicionar_input() {
-
-    contador++;
-    const novaDivInputs = divInputs.cloneNode(true);
-
-    novaDivInputs.id = `container-inputs-${contador}`
-
-    //Cria o novos elementos e adicionar o contador ao arrays
-
-    //Calendarios de data
-    const calendarioInicio = novaDivInputs.querySelector('#horairo-inicio')
-    calendarioInicio.name = `inicio-ponto-facultativo[${contador}]`
-
-    const calendariosaida = novaDivInputs.querySelector('#horairo-fim')
-    calendariosaida.name = `fim-ponto-facultativo[${contador}]`
-
-    //Inputs de horario
-    const inputEntrada = novaDivInputs.querySelector('#input-entrada')
-    inputEntrada.name = `entrada[${contador}]`
-
-    const inputSaidaAlmoco = novaDivInputs.querySelector('#input-saida-almoco')
-    inputSaidaAlmoco.name = `saida_almoco[${contador}]`
-
-    const inputVoltaAlmoco = novaDivInputs.querySelector('#input-volta-almoco')
-    inputVoltaAlmoco.name = `volta_almoco[${contador}]`
-
-    const inputSaida = novaDivInputs.querySelector('#input-saida')
-    inputSaida.name = `saida[${contador}]`
-
-    //Configurações de botão para remoção do elemento
-
-    const bntRemover = document.createElement('button');
-    bntRemover.classList.add('btn-calendario', 'remover-div');
-    bntRemover.type = "button"
-    bntRemover.setAttribute('onclick', 'remover_input(this)')
-    bntRemover.name = `btn-remove-${contador}`
-
-    const icon = document.createElement('i');
-    icon.classList.add('fa-solid', 'fa-x')
-
-    bntRemover.appendChild(icon);
-
-    //Container para botão
-    const btnContainer = document.createElement('div')
-    btnContainer.classList.add('items-horarios')
-    btnContainer.style.display = "flex"
-    btnContainer.style.alignItems = "flex-end"
-    btnContainer.appendChild(bntRemover)
 
 
-    //Define a posição onde o elemento vai ficar
-    const itens = novaDivInputs.querySelectorAll('.items-horarios')
-    const ultimo = itens[itens.length - 1]
-
-    //configura inpunts e botão de remoção
-
-    const containerUpload = document.querySelector('.container-upload');
-    const botoesEnvio = containerUpload.querySelector('.items-botoes');
-
-    containerUpload.insertBefore(novaDivInputs, botoesEnvio);
-    ultimo.after(btnContainer)
-
-}
-
-//Remoção de botão
-function remover_input(btnRemover) {
-    const elementoName = btnRemover.name
-    //Coleta somente valor dos inputs
-    const index = elementoName.match(/btn-remove-(\d+)/);
-    console.log(index[1])
-
-    const containerSelecionado = document.querySelector(`#container-inputs-${index[1]}`).remove();
-}
-
-//Adicionar esculta para verificar caso o botão foi apertado para cria o elemento.
-
-const adicionarDiv = document.querySelector('.adicionar-div')
-
-adicionarDiv.addEventListener('click', function () {
-    adicionar_input();
-});
 
 
 
