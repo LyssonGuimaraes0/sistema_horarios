@@ -1,0 +1,104 @@
+<!--Formulario Para ponto facultativo-->
+
+<div class="container-home">
+    <form action="./settings/registrar_ponto_facultativo.php" method="post" enctype="multipart/form-data">
+        <div class="container-ponto-facultativo">
+            <div class="calendario-header">
+
+                <div class="calendario-titulo">
+                    <span>Configurações de Ponto Facultativo:</span>
+                </div>
+            </div>
+            <div class="container-upload">
+                <span>Selecione o data do Feriado</span>
+                <div class="item-horario item-ponto-facultativo">
+                    <div class="item-upload">
+                        <span>Data do Ponto Facultativo</span>
+                        <input type="date" class="horario-input" id="horairo-inicio" name="data-feriado" required>
+                    </div>
+                </div>
+                <div class="container-input">
+                    <div class="item-horario item-ponto-facultativo">
+                        <span>Selecione o tipo de funcionario</span>
+                        <select name="" id="selecao-tipo-funcionario" required>
+                            <option value="" disabled hidden selected>Selecione</option>
+                            <option value="Servidor Publico">Servidor Publico</option>
+                            <option value="Estagiario">Estagiario</option>
+                            <option value="Ambos">Ambos</option>
+                        </select>
+                    </div>
+                    <span>Selecione o periodo da compensação</span>
+                    <div class="item-horario item-ponto-facultativo">
+                        <div class="item-upload">
+                            <span>Data de Inicio</span>
+                            <input type="date" class="horario-input" id="horairo-inicio"
+                                name="inicio-ponto-facultativo[0]" required>
+                        </div>
+                        <div class="item-upload">
+                            <span>Data de Fim</span>
+                            <input type="date" class="horario-input" id="horairo-fim" name="fim-ponto-facultativo[0]"
+                                required>
+                        </div>
+                    </div>
+                    <div class="container-servidor-publico">
+                        <span>Servidor Público</span>
+                        <div class="item-horario item-ponto-facultativo">
+                            <div class="items-horarios">
+                                <span>Entrada</span>
+                                <input class="horario-input" maxlength="5" type="time" id="servidor-publico-entrada"
+                                    name="servidor-publico-entrada[0]" required>
+                            </div>
+                            <div class="items-horarios">
+                                <span>Intervalo inicio</span>
+                                <input class="horario-input" maxlength="5" type="time"
+                                    id="servidor-publico-saida-almoco" name="servidor-publico-saida_almoco[0]" required>
+                            </div>
+                            <div class="items-horarios">
+                                <span>Intervalo volta</span>
+                                <input class="horario-input" maxlength="5" type="time"
+                                    id="servidor-publico-volta-almoco" name="servidor-publico-volta_almoco[0]" required>
+                            </div>
+                            <div class="items-horarios">
+                                <span>Saida</span>
+                                <input class="horario-input" maxlength="5" type="time" id="servidor-publico-saida"
+                                    name="servidor-publico-saida[0]" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-estagiario">
+                        <span>Estágiario - Manhã</span>
+                        <div class="item-horario item-ponto-facultativo">
+                            <div class="items-horarios um-input">
+                                <span>Entrada</span>
+                                <input class="horario-input" maxlength="5" type="time" id="estagiario-manha-entrada"
+                                    name="estagiario-manha-entrada[0]" required>
+                            </div>
+                            <div class="items-horarios um-input">
+                                <span>Saida</span>
+                                <input class="horario-input" maxlength="5" type="time" id="estagiario-manha-saida"
+                                    name="estagiario-manha-saida[0]" required>
+                            </div>
+                        </div>
+                        <span>Estágiario - Tarde</span>
+                        <div class="item-horario item-ponto-facultativo">
+                            <div class="items-horarios um-input">
+                                <span>Entrada</span>
+                                <input class="horario-input" maxlength="5" type="time" id="estagiario-tarde-entrada"
+                                    name="estagiario-tarde-entrada[0]" required>
+                            </div>
+                            <div class="items-horarios um-input">
+                                <span>Saida</span>
+                                <input class="horario-input" maxlength="5" type="time" id="estagiario-tarde-saida"
+                                    name="estagiario-tarde-saida[0]" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="items-botoes">
+                    <button class="btn-calendario adicionar-div" type="button"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn-calendario" type="submit">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

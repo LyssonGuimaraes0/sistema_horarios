@@ -196,3 +196,31 @@ input[readonly]:focus {
   border: 0px solid;
   border-radius: 0px 0px 8px 8px;
 }
+
+.container-input{
+    border: 2px solid var(--primary-color);
+    border-top: 0px;
+    border-right:0px ;
+    border-bottom: 0px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+
+.item-ponto-facultativo{
+    margin: 10px 0;
+}
+
+.um-input{
+    display: flex;
+    flex-direction: column;
+}
+
+.container-servidor-publico{
+    display: none;
+}
+
+.container-estagiario{
+    display: none;
+}
+

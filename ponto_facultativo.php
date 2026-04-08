@@ -39,70 +39,13 @@ if (verificar_permissoes($dados_user) !== true) {
                         <h2 class="title-container">Ponto Facultativo</h2>
                     </div>
                 </div>
-                <!--Formulario Para ponto facultativo-->
 
-                <div class="container-home">
-                    <form action="./settings/registrar_ponto_facultativo.php" method="post"
-                        enctype="multipart/form-data">
-                        <div class="container-ponto-facultativo">
-                            <div class="calendario-header">
-
-                                <div class="calendario-titulo">
-                                    <span>Configurações de Ponto Facultativo:</span>
-                                </div>
-                            </div>
-                            <div class="container-upload">
-                                <div class="container-input">
-                                    <span>Selecione o data de compensação</span>
-                                    <div class="item-horario">
-                                        <div class="item-upload">
-                                            <span>Data de Inicio</span>
-                                            <input type="date" class="horario-input" id="horairo-inicio"
-                                                name="inicio-ponto-facultativo[0]" required>
-                                        </div>
-                                        <div class="item-upload">
-                                            <span>Data de Fim</span>
-                                            <input type="date" class="horario-input" id="horairo-fim"
-                                                name="fim-ponto-facultativo[0]" required>
-                                        </div>
-                                    </div>
-                                    <div class="item-horario ">
-                                        <div class="items-horarios">
-                                            <span>Entrada</span>
-                                            <input class="horario-input" maxlength="5" type="time" id="input-entrada"
-                                                name="entrada[0]" required>
-                                        </div>
-                                        <div class="items-horarios">
-                                            <span>Intervalo inicio</span>
-                                            <input class="horario-input" maxlength="5" type="time"
-                                                id="input-saida-almoco" name="saida_almoco[0]" required>
-                                        </div>
-                                        <div class="items-horarios">
-                                            <span>Intervalo volta</span>
-                                            <input class="horario-input" maxlength="5" type="time"
-                                                id="input-volta-almoco" name="volta_almoco[0]" required>
-                                        </div>
-                                        <div class="items-horarios">
-                                            <span>Saida</span>
-                                            <input class="horario-input" maxlength="5" type="time" id="input-saida"
-                                                name="saida[0]" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="items-botoes">
-                                    <button class="btn-calendario adicionar-div" type="button"><i
-                                            class="fa-solid fa-plus"></i></button>
-                                    <button class="btn-calendario" type="submit">Enviar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <!-- Página de ponto Facultativo -->
+                <?php include("./snippets/ponto_facultativo.html") ?>
 
             </div>
         </section>
     </div>
-
 
 
 
