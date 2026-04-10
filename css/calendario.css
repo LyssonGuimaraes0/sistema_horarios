@@ -184,9 +184,9 @@ input[readonly]:focus {
     box-shadow: none;
 }
 
-/*========================Ponto facultativo=====================*/
+/*========================Página Feriado=====================*/
 
-.container-ponto-facultativo {
+.container-feriado {
   position: relative;
   width: 100%;
   height: auto;
@@ -195,7 +195,17 @@ input[readonly]:focus {
   box-shadow: var(--shadow);
   border: 0px solid;
   border-radius: 0px 0px 8px 8px;
+  display: none;
 }
+/*Oculta Elementos da página de feriado e ponto facultativo*/
+#escolha-feriado{
+    display: none;
+}
+
+#escolha-ponto-facultativo{
+    display: none;
+}
+
 
 .container-input{
     border: 2px solid var(--primary-color);
