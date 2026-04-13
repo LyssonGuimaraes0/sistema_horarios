@@ -8,7 +8,7 @@
     </div>
     <form action="./settings/conf_feriado.php" method="post" enctype="multipart/form-data">
         <div class="container-upload">
-            <span>Selecione a data do Feriado</span>
+            <label class="label-feriado">Selecione a data do Feriado</label>
             <div class="item-horario item-ponto-facultativo">
                 <div class="item-upload">
                     <span>Nome do Feriado</span>
@@ -17,7 +17,9 @@
                     <input type="date" class="horario-input" id="adicionar-dataferiado" name="data-feriado" required>
                 </div>
             </div>
-            <button class="btn-calendario" type="submit">Enviar</button>
+            <div class="items-botoes botoes-feriado">
+                <button class="btn-calendario btn-feriado" type="submit">Enviar</button>
+            </div>
         </div>
     </form>
 </div>

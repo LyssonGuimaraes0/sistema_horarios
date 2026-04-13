@@ -14,10 +14,11 @@ $data = $_POST['data-feriado'];
 
 //quebra data ajusta para padrão do select
 
-$array_data = explode('-',$data);
+$array_data = explode('-', $data);
 var_dump($array_data);
 $dia_mes = "$array_data[2]/$array_data[1]";
 $ano = $array_data[0];
+
 
 //Verificar caso dados enviados já exista no banco
 
@@ -27,10 +28,8 @@ $query->execute();
 $result = $query->get_result();
 $row = $result->fetch_assoc();
 
-
-
 if ($row) {
-    $feriado_banco = $row['feriado'] ." - ".  $row['dia_mes'] . "/" . $row['ano'];
+    $feriado_banco = $row['feriado'] . " - " .  $row['dia_mes'] . "/" . $row['ano'];
     $query->close();
     $conn->close();
     $_SESSION['cadastro'] = "falha";
@@ -39,6 +38,23 @@ if ($row) {
     header("location: ../feriado.php");
 }
 
+//Envia para o banco de dados
 
+$query = $conn->prepare('INSERT INTO feriados(feriado,dia_mes,ano) VALUE (?,?,?)');
+$query->bind_param('sss', $nome_feriado, $dia_mes, $ano);
+if (!$query->execute()) {
+    $query->close();
+    $conn->close();
+    $_SESSION['cadastro'] = "falha";
+    $_SESSION['mensagem'] = "Data não conseguiu ser registrada <br> Tente novamente mais tarde!";
+    header("location: ../feriado.php");
+}
 
-?>
+$query->close();
+$conn->close();
+
+/* ================= SUCESSO ================= */
+$_SESSION['cadastro'] = "sucesso";
+$_SESSION['mensagem'] = "Feriado registrado com sucesso!";
+header("location: ../feriado.php");
+exit;

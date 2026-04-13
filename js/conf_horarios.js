@@ -5,20 +5,24 @@
 // == Ponto Facultativo ====================================================
 
 // == Verificar
-const inputHorarios = document.querySelectorAll('.horario-input[type="time"]');
-inputHorarios.forEach(input => {
-    input.addEventListener('input', function () {
-        const TipoInput = input.id;
-        //Reparte o em array(igual explode) pega os 2 primeiros e junta com - 
-        const Grupo = TipoInput.split('-').slice(0, 2).join('-');
+document.addEventListener('input', function (e) {
 
-        const InputsSelecionado = Array.from(inputHorarios).filter(i => i.id.includes(Grupo));
-        const indexCorreto = InputsSelecionado.indexOf(input);
+    if (!e.target.classList.contains('horario-input')) return;
 
-        Verificar_inputs(input, indexCorreto, InputsSelecionado);
+    const input = e.target;
 
+    // pega o grupo correto (manhã OU tarde)
+    const grupo = input.closest('.item-horario');
 
-    });
+    // pega só os inputs desse grupo
+    const inputsDoGrupo = Array.from(
+        grupo.querySelectorAll('.horario-input')
+    );
+
+    const indexCorreto = inputsDoGrupo.indexOf(input);
+
+    Verificar_inputs(input, indexCorreto, inputsDoGrupo);
+
 });
 
 
@@ -41,13 +45,12 @@ InputDataPontoFacultativo.addEventListener('input', function () {
     //Valida se ano é menor qua anoAtual
     if (Data[0] < AnoAtual || ListaFeriados[DataFormatada]) {
         validacao_campo(InputDataPontoFacultativo, true)
-        aviso.textContent = "Selecione uma data Valida"
         aviso.style.display = "block"
         InputDataPontoFacultativo.parentNode.insertBefore(
             aviso,
             InputDataPontoFacultativo
         )
-    } else {
+    }else {
         aviso.style.display = "none"
         validacao_campo(InputDataPontoFacultativo, false)
     }
@@ -75,25 +78,36 @@ document.addEventListener('input', function (e) {
     Verificar_inputs(input, index, inputs)
 })
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-})
 
 // == Adicionar Input de ponto facultativo ====================================================
 
-    let contador = 0;
-    const divInputs = document.querySelector('.container-input')
+let contador = 0;
 
-function adicionar_input() {
+
+function adicionar_input(btn) {
+
+
+    console.log("INICIO");
+
+    const containerUpload = btn.closest('.container-upload');
+    const botoesEnvio = containerUpload.querySelector('.items-botoes');
+
+    console.log("containerUpload:", containerUpload);
+    console.log("botoesEnvio:", botoesEnvio);
 
     contador++;
-    const novaDivInputs = divInputs.cloneNode(true);
 
+    const divInputs = document.querySelector('.container-input')
+    console.log("2 - container:", divInputs);
+
+    const novaDivInputs = divInputs.cloneNode(true);
     novaDivInputs.id = `container-inputs-${contador}`
+    console.log("3 - clonou", novaDivInputs);
 
     //Bloqueia containers Servidor e Funcionario
 
     const NovoSelecaoTipoFuncionario = novaDivInputs.querySelector('#selecao-tipo-funcionario')
+    console.log("4 - select:", NovoSelecaoTipoFuncionario);
     NovoSelecaoTipoFuncionario.id = `selecao-tipo-funcionario-[${contador}]`
     NovoSelecaoTipoFuncionario.name = `selecao-tipo-funcionario[${contador}]`;
 
@@ -161,15 +175,20 @@ function adicionar_input() {
     btnContainer.style.alignItems = "flex-end"
     btnContainer.appendChild(bntRemover)
 
-
-    //configura inpunts e botão de remoção
-
-    const containerUpload = document.querySelector('.container-upload');
-    const botoesEnvio = containerUpload.querySelector('.items-botoes');
-
     containerUpload.insertBefore(novaDivInputs, botoesEnvio);
-    NovoContainerEstagiario.after(btnContainer)
+
+    ///
+
+    /* containerUpload.insertBefore(novaDivInputs, botoesEnvio); */
+    /*     document.body.appendChild(novaDivInputs);
+        NovoContainerEstagiario.after(btnContainer)
+    
+        console.log("ADICIONADO:", novaDivInputs);
+        console.log("containerUpload:", containerUpload);
+        console.log("botoesEnvio:", botoesEnvio);
+        */
 }
+
 
 //Remoção de botão
 function remover_input(btnRemover) {
@@ -220,9 +239,10 @@ LiberaContainer(selecaoTipoFuncionario, containerServidorPublico, containerEstag
 const adicionarDiv = document.querySelector('.adicionar-div')
 
 adicionarDiv.addEventListener('click', function () {
-    adicionar_input()
+    adicionar_input(adicionarDiv)
+    console.log(document.querySelector('.adicionar-div'))
 });
 
-console.log(document.querySelector('.adicionar-div'))
+
 
 

@@ -1,0 +1,103 @@
+/* REMOVE visual antigo */
+.container-upload {
+    background: none;
+    padding: 0;
+}
+
+
+.container-upload>label,
+.container-upload>.item-horario {
+    display: block;
+}
+
+.label-feriado{
+    padding: 20px 20px 0 20px;
+    border-radius: 12px 12px 0 0;
+    font-weight: bold;
+}   
+
+.container-upload>.item-horario {
+    background: #fff;
+    padding: 0 20px 20px 20px;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.row-servidor{
+    width: 100%;
+    display: flex;
+}
+
+
+.container-input {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+}
+
+
+.container-servidor-publico {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border-left: 4px solid #3b82f6;
+}
+
+
+.container-estagiario {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border-left: 4px solid #22c55e;
+}
+
+
+
+.container-servidor-publico>span,
+.container-estagiario>span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.input-feriado{
+    width: 170px !important;
+}
+
+/* .items-horarios {
+    display: flex;
+    flex-direction: column;
+    width: 110px;
+} */
+
+.item-horario {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.dropdown-feriado {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.2s;
+}
+
+
+.botoes-feriado {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin: 20px 0;
+}
+
+.btn-feriado {
+    width: 150px;
+
+}

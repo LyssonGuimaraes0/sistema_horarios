@@ -99,9 +99,7 @@ function feriados($ano)
             //Armazena no banco
             $query->bind_param("sss", $nome_feriado, $dia_mes_feriado, $ano_selecionado);
             $query->execute();
-
         }
-
     }
 
     //Coleta todos dados do formulario
@@ -121,9 +119,81 @@ function feriados($ano)
     $query->close();
 
     return $lista_feriados;
-
 }
 
+//Coleta Ponto Facultativo e Horarios
+function ponto_facultativo($ano)
+{
+    $conn = conexao_banco();
+
+    $ano_selecionado = $ano;
+
+    $query = $conn->prepare("SELECT 
+    f.feriado,
+    f.dia_mes,
+    f.ano,
+    c.cargo,
+    p.data_inicio,
+    p.data_fim,
+    p.horario_compensacao_entrada_manha,
+    p.horario_compensacao_saida_manha,
+    p.horario_compensacao_entrada_tarde,
+    p.horario_compensacao_saida_tarde
+    FROM ponto_facultativo p
+    LEFT JOIN feriados f
+    ON p.id_feriado = f.id
+    LEFT JOIN cargo c 
+    ON p.id_cargo = c.id
+    WHERE f.ano = ?;");
+
+    $query->bind_param("s", $ano_selecionado);
+    $query->execute();
+    $result = $query->get_result();
+
+    $lista_datas = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $cargo = $row['cargo'];
+
+        $data_feriado = $row['dia_mes'] . "/" . $row['ano'];
+
+        if (!$row['data_inicio'] || !$row['data_fim']) {
+            continue;
+        }
+
+        //Coleta data inicio e fim
+        $data_inicio = new DateTime($row['data_inicio']);
+        $data_fim = new DateTime($row['data_fim']);
+
+        // Clona pra não alterar original
+        $fim_periodo = clone $data_fim;
+        $fim_periodo->modify('+1 day');
+
+        //Define periodo
+
+        $intervalo = new DateInterval("P1D");
+        $periodo = new DatePeriod($data_inicio, $intervalo, $fim_periodo);
+
+        //loop para adicionar a todas as datas
+        foreach ($periodo as $data) {
+            $data_formatada = $data->format('d/m/Y');
+
+
+            // NÃO separa manhã/tarde
+            $lista_datas[$data_formatada] = [
+                'nome_feriado' => $row['feriado'],
+                'data' => $data_feriado,
+                'entrada' => $row['horario_compensacao_entrada_manha'],
+                'saida_almoco' => $row['horario_compensacao_saida_manha'],
+                'volta_almoco' => $row['horario_compensacao_entrada_tarde'],
+                'saida' => $row['horario_compensacao_saida_tarde']
+            ];
+        }
+        $query->close();
+
+        return $lista_datas;
+    };
+}
 
 
 function verificar_sessao()
@@ -229,7 +299,6 @@ function horario_cargo()
     $conn->close();
 
     return $horarios_cargo;
-
 }
 
 //Verifica Permissoes do usuario
@@ -331,7 +400,8 @@ function coletar_user()
         FROM
         usuario u
         INNER JOIN cargo c ON u.cargo = c.id
-        ORDER BY nome ASC;');
+        ORDER BY nome ASC;'
+    );
     $query->execute();
     $result = $query->get_result();
     $usuarios_coletados = [];

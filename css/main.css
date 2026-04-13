@@ -5,6 +5,7 @@
 @import url("../css/formulario.css");
 @import url("../css/calendario.css");
 @import url("../css/anexa_frequencia.css");
+@import url("../css/feriado.css");
 
 
 :root {
@@ -18,7 +19,7 @@
     --light-text: #666;
     --white-text: #fff;
     --border-color: #e0e0e0;
-    --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -51,6 +52,11 @@ span{
     color: var(--light-text);
 }
 
+label {
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: var(--dark-text);
+}
 
 /*Container Principal que vai organizar a estrutura do site"*/
 

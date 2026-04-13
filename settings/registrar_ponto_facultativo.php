@@ -32,7 +32,6 @@ $qnts_elementos = count($data_inicio_ponto_facultativo);
 
 for ($i = 0; $i < $qnts_elementos; $i++) {
 
-
     $registro = [
         "data_inicio" => $data_inicio_ponto_facultativo[$i] ?? null,
         "data_fim" => $data_fim_ponto_facultativo[$i] ?? null,
@@ -59,7 +58,7 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
         );
     }
 
-    if ($registro['tipo'] == 'Servidor Público') {
+    if ($registro['tipo'] == 'Servidor Publico') {
         unset(
             $registro['estagiario_manha_entrada'],
             $registro['estagiario_manha_saida'],
@@ -69,7 +68,6 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
     }
 
     $dados[$data][] = $registro;
-
 }
 
 // Formata data para base de dados
@@ -78,6 +76,24 @@ $dia_mes = "$array_data[2]/$array_data[1]";
 $ano = $array_data[0];
 
 $nome_feriado_formatado = "Ponto Facultativo - $nome_feriado";
+
+//Validação se ferias existem na base de dados
+
+$query = $conn->prepare('SELECT feriado,dia_mes,ano FROM feriados WHERE dia_mes = ? AND ano = ? ');
+$query->bind_param('ss',$dia_mes, $ano);
+$query->execute();
+$result = $query->get_result();
+$row = $result->fetch_assoc();
+
+if ($row) {
+    $feriado_banco = $row['feriado'] . " - " .  $row['dia_mes'] . "/" . $row['ano'];
+    $query->close();
+    $conn->close();
+    $_SESSION['cadastro'] = "falha";
+    $_SESSION['mensagem'] = "Essa Data ja foi registrada!";
+    $_SESSION['data-encontrada'] = $feriado_banco;
+    header("location: ../feriado.php");
+}
 
 //Busca informações de cargos
 $query_cargo = $conn->prepare("SELECT id,cargo FROM cargo");
@@ -90,8 +106,9 @@ $mapa_cargos = [];
 foreach ($cargos as $cargo) {
     //Guarda id de cada cargo
     $mapa_cargos[$cargo['cargo']] = $cargo['id'];
-}
-;
+};
+
+
 
 
 
@@ -107,15 +124,14 @@ if (!$query_feriado->execute()) {
 
     $_SESSION['cadastro'] = "falha";
     $_SESSION['mensagem'] = "Ocorreu um erro ao tentar registrar os dados, <br> tente novamente mais tarde.";
-    header("location: ../ponto_facultativo.php");
+    header("location: ../feriado.php");
     exit;
 }
 //Coleta ID de feriados
 $id_feriado = $query_feriado->insert_id;
 
 //== Query para PPE e Servidores Publico ==
-$query_servidor_publico = $conn->prepare
-('INSERT INTO ponto_facultativo(
+$query_servidor_publico = $conn->prepare('INSERT INTO ponto_facultativo(
 id_feriado,
 id_cargo,
 data_inicio,
@@ -127,8 +143,7 @@ horario_compensacao_saida_tarde
 ) VALUES (?,?,?,?,?,?,?,?)');
 
 //== Query para Estagiarios  ==
-$query_estagiario = $conn->prepare
-('INSERT INTO ponto_facultativo(
+$query_estagiario = $conn->prepare('INSERT INTO ponto_facultativo(
 id_feriado,
 id_cargo,
 data_inicio,
@@ -144,9 +159,9 @@ horario_compensacao_saida_tarde
 for ($i = 0; $i < $qnts_elementos; $i++) {
 
     //verifica o tipo
-    if ($dados[$data][$i]['tipo'] == "Servidor Público") {
+    if ($dados[$data][$i]['tipo'] == "Servidor Publico") {
 
-        $cargos_selecionados = ['PPE', 'Servidor Público'];
+        $cargos_selecionados = ['PPE', 'Servidor Publico'];
 
         //Loop para altera id tanto PPE quanto Servidor
         foreach ($cargos_selecionados as $nome_cargo) {
@@ -161,8 +176,8 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
                 $dados[$data][$i]['data_inicio'],
                 $dados[$data][$i]['data_fim'],
                 $dados[$data][$i]['servidor_publico_entrada'],
-                $dados[$data][$i]['servidor_publico_volta_almoco'],
                 $dados[$data][$i]['servidor_publico_saida_almoco'],
+                $dados[$data][$i]['servidor_publico_volta_almoco'],
                 $dados[$data][$i]['servidor_publico_saida']
             );
 
@@ -171,12 +186,10 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
 
                 $_SESSION['cadastro'] = "falha";
                 $_SESSION['mensagem'] = "Ocorreu um erro ao tentar registrar os dados, <br> tente novamente mais tarde.";
-                header("location: ../ponto_facultativo.php");
+                header("location: ../feriado.php");
                 exit;
             }
         }
-
-
     } elseif ($dados[$data][$i]['tipo'] == "Estagiario") {
 
         $cargos_selecionados = ['Estagiario-Manha', 'Estagiario-Tarde'];
@@ -202,14 +215,13 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
 
                 $_SESSION['cadastro'] = "falha";
                 $_SESSION['mensagem'] = "Ocorreu um erro ao tentar registrar os dados, <br> tente novamente mais tarde.";
-                header("location: ../ponto_facultativo.php");
+                header("location: ../feriado.php");
                 exit;
             }
         }
-
     } elseif ($dados[$data][$i]['tipo'] == "Ambos") {
 
-        $cargos_selecionados = ['PPE', 'Servidor Público', 'Estagiario-Manha', 'Estagiario-Tarde'];
+        $cargos_selecionados = ['PPE', 'Servidor Publico', 'Estagiario-Manha', 'Estagiario-Tarde'];
 
         foreach ($cargos_selecionados as $nome_cargo) {
 
@@ -229,8 +241,15 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
                     $dados[$data][$i]['estagiario_tarde_saida']
                 );
 
-                $query_estagiario->execute();
 
+                if (!$query_estagiario->execute()) {
+                    $conn->close();
+
+                    $_SESSION['cadastro'] = "falha";
+                    $_SESSION['mensagem'] = "Ocorreu um erro ao tentar registrar os dados, <br> tente novamente mais tarde.";
+                    header("location: ../feriado.php");
+                    exit;
+                }
             } else {
                 $query_servidor_publico->bind_param(
                     'iissssss',
@@ -239,19 +258,15 @@ for ($i = 0; $i < $qnts_elementos; $i++) {
                     $dados[$data][$i]['data_inicio'],
                     $dados[$data][$i]['data_fim'],
                     $dados[$data][$i]['servidor_publico_entrada'],
-                    $dados[$data][$i]['servidor_publico_volta_almoco'],
                     $dados[$data][$i]['servidor_publico_saida_almoco'],
+                    $dados[$data][$i]['servidor_publico_volta_almoco'],
                     $dados[$data][$i]['servidor_publico_saida']
                 );
                 $query_servidor_publico->execute();
             }
-
         }
-
     }
-
-}
-;
+};
 
 $query_servidor_publico->close();
 $query_estagiario->close();
@@ -260,13 +275,4 @@ $conn->close();
 //Reenvia para Página de inicio
 $_SESSION['cadastro'] = "sucesso";
 $_SESSION['mensagem'] = "Horarios foram registrados com sucesso!";
-header("location: ../ponto_facultativo.php");
-
-
-
-
-
-
-
-
-
+header("location: ../feriado.php");

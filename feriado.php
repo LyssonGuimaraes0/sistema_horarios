@@ -31,6 +31,7 @@ if (verificar_permissoes($dados_user) !== true) {
 
 <body>
 
+
     <!-- Estrutura Modal-->
     <?php include('./snippets/modal.html'); ?>
 
@@ -76,7 +77,6 @@ if (verificar_permissoes($dados_user) !== true) {
     </div>
 
     <script>
-
         //Coletar feriados para apresentar na lista
 
         const ListaFeriados = <?php echo json_encode($feriados) ?>;
@@ -85,7 +85,7 @@ if (verificar_permissoes($dados_user) !== true) {
         //Armazenar feriados do ano no select de escolhas
         function nome_feriados(ListaNomes) {
             const selectNomes = document.querySelector('#nome-feriado')
-            
+
 
             //Filtra os que se repentem Para não Aparecer
             const NomesFormatados = Object.fromEntries(
@@ -130,9 +130,12 @@ if (verificar_permissoes($dados_user) !== true) {
         var mensagem = <?php echo json_encode($mensagem); ?>;
         var data = <?php echo json_encode($data); ?>;
 
-        var mensagemFormatada = `${mensagem}<br> ${data}`
-
-        apresenta_modal(codicao, mensagemFormatada);
+        if (data != null) {
+            var mensagemFormatada = `${mensagem}<br> ${data}`
+            apresenta_modal(codicao, mensagemFormatada);
+        } else {
+            apresenta_modal(codicao, mensagem);
+        }
     </script>
 
 
