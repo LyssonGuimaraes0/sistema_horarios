@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.45, for Win64 (x86_64)
 --
--- Host: 10.28.0.4    Database: bd_banco_de_horas
+-- Host: 127.0.0.1    Database: bd_banco_de_horas
 -- ------------------------------------------------------
--- Server version	8.0.41
+-- Server version	8.4.8
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,7 +39,7 @@ CREATE TABLE `cargo` (
 
 LOCK TABLES `cargo` WRITE;
 /*!40000 ALTER TABLE `cargo` DISABLE KEYS */;
-INSERT INTO `cargo` VALUES (1,'Servidor Público','08:30:00','12:00:00','13:30:00','18:00:00'),(2,'PPE','08:00:00','12:00:00','13:00:00','17:00:00'),(3,'Estágiario-Manha','08:30:00',NULL,NULL,'12:00:00'),(4,'Estágiario-Tarde','13:00:00',NULL,NULL,'17:30:00');
+INSERT INTO `cargo` VALUES (1,'Servidor Publico','08:30:00','12:00:00','13:30:00','18:00:00'),(2,'PPE','08:00:00','12:00:00','13:00:00','17:00:00'),(3,'Estagiario-Manha','08:30:00',NULL,NULL,'12:00:00'),(4,'Estagiario-Tarde','13:00:00',NULL,NULL,'17:30:00');
 /*!40000 ALTER TABLE `cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,8 +53,8 @@ DROP TABLE IF EXISTS `documento_justificativa`;
 CREATE TABLE `documento_justificativa` (
   `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
-  `caminho_justificativa` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `descricao_motivo` text COLLATE utf8mb4_general_ci,
+  `caminho_justificativa` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descricao_motivo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
   `data_upload` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,7 +87,7 @@ CREATE TABLE `feriados` (
   `dia_mes` char(5) DEFAULT NULL,
   `ano` char(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE `feriados` (
 
 LOCK TABLES `feriados` WRITE;
 /*!40000 ALTER TABLE `feriados` DISABLE KEYS */;
-INSERT INTO `feriados` VALUES (1,'Confraternização Universal','01/01','2026'),(2,'Carnaval','16/02','2026'),(3,'Carnaval','17/02','2026'),(4,'Quarta-feira de Cinzas','18/02','2026'),(5,'Sexta-feira Santa','03/04','2026'),(6,'Tiradentes','21/04','2026'),(7,'Dia do Trabalhador','01/05','2026'),(8,'Corpus Christi','04/06','2026'),(9,'Independência do Brasil','07/09','2026'),(10,'Nossa Senhora Aparecida','12/10','2026'),(11,'Dia do Servidor Público','28/10','2026'),(12,'Finados','02/11','2026'),(13,'Proclamação da República','15/11','2026'),(14,'Dia Nacional de Zumbi e da Consciência Negra','20/11','2026'),(15,'Véspera de Natal','24/12','2026'),(16,'Natal','25/12','2026'),(17,'Véspera de Ano-Novo','31/12','2026');
+INSERT INTO `feriados` VALUES (1,'Confraternização Universal','01/01','2026'),(2,'Carnaval','16/02','2026'),(3,'Carnaval','17/02','2026'),(4,'Quarta-feira de Cinzas','18/02','2026'),(5,'Sexta-feira Santa','03/04','2026'),(6,'Tiradentes','21/04','2026'),(7,'Dia do Trabalhador','01/05','2026'),(8,'Corpus Christi','04/06','2026'),(9,'Independência do Brasil','07/09','2026'),(10,'Nossa Senhora Aparecida','12/10','2026'),(11,'Dia do Servidor Público','28/10','2026'),(12,'Finados','02/11','2026'),(13,'Proclamação da República','15/11','2026'),(14,'Dia Nacional de Zumbi e da Consciência Negra','20/11','2026'),(15,'Véspera de Natal','24/12','2026'),(16,'Natal','25/12','2026'),(17,'Véspera de Ano-Novo','31/12','2026'),(41,'Teste','08/04','2026'),(49,'Ponto Facultativo - Teste','07/04','2026');
 /*!40000 ALTER TABLE `feriados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,9 +112,9 @@ CREATE TABLE `folha_ponto_mensal` (
   `usuario_id` int NOT NULL,
   `mes` tinyint NOT NULL,
   `ano` smallint NOT NULL,
-  `caminho_folha_de_ponto` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `caminho_folha_de_ponto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `data_upload` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `observacao_fechamento` text COLLATE utf8mb4_general_ci,
+  `observacao_fechamento` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_folha_mes` (`usuario_id`,`mes`,`ano`),
   CONSTRAINT `folha_ponto_mensal_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`)
@@ -146,7 +146,7 @@ CREATE TABLE `ponto_diario` (
   `saida_almoco` time DEFAULT NULL,
   `volta_almoco` time DEFAULT NULL,
   `saida` time DEFAULT NULL,
-  `status_dia` varchar(50) COLLATE utf8mb4_general_ci DEFAULT 'Em Andamento',
+  `status_dia` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Em Andamento',
   `data_registro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_ponto_dia` (`usuario_id`,`data_completo`),
@@ -173,18 +173,20 @@ DROP TABLE IF EXISTS `ponto_facultativo`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ponto_facultativo` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_feriado` int DEFAULT NULL,
-  `id_cargo` int DEFAULT NULL,
-  `horario_compensasao_entrada` date DEFAULT NULL,
-  `horario_compensasao_saida_almoco` date DEFAULT NULL,
-  `horario_compensasao_entrada_almoco` date DEFAULT NULL,
-  `horario_compensasao_saida` date DEFAULT NULL,
+  `id_feriado` int NOT NULL,
+  `id_cargo` int NOT NULL,
+  `data_inicio` date DEFAULT NULL,
+  `data_fim` date DEFAULT NULL,
+  `horario_compensacao_entrada_manha` time DEFAULT NULL,
+  `horario_compensacao_saida_manha` time DEFAULT NULL,
+  `horario_compensacao_entrada_tarde` time DEFAULT NULL,
+  `horario_compensacao_saida_tarde` time DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_feriado` (`id_feriado`),
   KEY `id_cargo` (`id_cargo`),
   CONSTRAINT `ponto_facultativo_ibfk_1` FOREIGN KEY (`id_feriado`) REFERENCES `feriados` (`id`),
   CONSTRAINT `ponto_facultativo_ibfk_2` FOREIGN KEY (`id_cargo`) REFERENCES `cargo` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,6 +195,7 @@ CREATE TABLE `ponto_facultativo` (
 
 LOCK TABLES `ponto_facultativo` WRITE;
 /*!40000 ALTER TABLE `ponto_facultativo` DISABLE KEYS */;
+INSERT INTO `ponto_facultativo` VALUES (55,49,2,'2026-04-13','2026-04-17','08:00:00','12:00:00','13:00:00','18:00:00'),(56,49,1,'2026-04-13','2026-04-17','08:00:00','12:00:00','13:00:00','18:00:00'),(57,49,3,'2026-04-13','2026-04-17','08:00:00','14:00:00','12:00:00','18:00:00'),(58,49,4,'2026-04-13','2026-04-17','08:00:00','13:00:00','12:00:00','18:00:00');
 /*!40000 ALTER TABLE `ponto_facultativo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,13 +208,13 @@ DROP TABLE IF EXISTS `usuario`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `cpf` varchar(14) COLLATE utf8mb4_general_ci NOT NULL,
-  `setor` char(7) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `permissoes` enum('administrador','usuario') COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `username` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
-  `senha` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `nome` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `cpf` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `setor` char(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `permissoes` enum('administrador','usuario') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `senha` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `cargo` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf` (`cpf`),
@@ -239,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-02 17:13:01
+-- Dump completed on 2026-04-13  0:56:59
