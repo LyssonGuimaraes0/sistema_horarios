@@ -1,0 +1,130 @@
+.form {
+    width: 100%;
+    height: auto;
+    background-color: var(--segundaria-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    margin: 40px auto;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow);
+    position: relative;
+    height: 80vh;
+}
+
+
+
+.container-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.row-formulario{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.row-formulario .item-formulario {
+    flex: 1;
+}
+
+.input-login {
+    width: 100%;
+    padding: 10px;
+}
+
+
+
+.btn-formulario {
+    width: 80px;
+    padding: 4px;
+    background: var(--primary-color);
+    color: var(--segundaria-color);
+    border: 0 solid;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.5s ease, transform 0.5s ease, color 0.3s ease;
+    
+
+}
+
+.btn-formulario:hover {
+    background: color-mix(in srgb, var(--primary-color), black 20%);
+}
+
+.btn-formulario.btn-registrar {
+    margin-left: 50px;
+}
+
+
+
+.item-formulario {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* CRÍTICO */
+}
+
+th,
+td {
+    border: 1px solid #000;
+    padding: 3px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+.accordion {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #ccc;
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 12px;
+    background: #eee;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* SETINHA */
+.accordion-header::after {
+  content: '▶';
+  transition: transform 0.2s ease;
+}
+
+.accordion-item.active .accordion-header::after {
+  transform: rotate(90deg);
+}
+
+.accordion-content {
+    display: none;
+    padding: 12px;
+    background: #fff;
+}
+
+
+
+/* Ativo */
+.accordion-item.active .accordion-content {
+    display: block;
+}

@@ -3,50 +3,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 
-//verifica mes correspondente
 
-
-function mese_atual()
-{
-
-    // Pega dia, mês e ano
-    $dia = date("d");   // 01 a 31
-    $mes = date("m");   // 01 a 12
-    $ano = date("Y");   // Ex: 2025
-
-    //Nome do mes correspondente
-
-    $meses = [
-        "01" => 'Janeiro',
-        "02" => 'Fevereiro',
-        "03" => 'Março',
-        "04" => 'Abril',
-        "05" => 'Maio',
-        "06" => 'Junho',
-        "07" => 'Julho',
-        "08" => 'Agosto',
-        "09" => 'Setembro',
-        "10" => 'Outubro',
-        "11" => 'Novembro',
-        "12" => 'Dezembro'
-    ];
-
-    $mes_nome = $meses[$mes];
-
-    $ano_limite = 2026;
-
-    // Retorna como array associativo
-    return [
-        'dia' => $dia,
-        'mes_nome' => $mes_nome,
-        'mes' => $mes,
-        'ano' => $ano,
-        'data_completa' => "$dia/$mes/$ano",
-        'meses' => $meses,
-        'ano_limite' => $ano_limite
-
-    ];
-}
 
 //Coleta datas de feriados
 
@@ -216,27 +173,7 @@ function verificar_sessao()
 
 
 
-function time_out()
-{
-    //time out de logout por inatividade
-    $timeout_duration = 1300; //3600; // 60 minutos <- Ajusta caso necessário
 
-    if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout_duration)) {
-        // Destroi a sessão após o timeout
-        session_unset();
-        session_destroy();
-        if (defined('AJAX')) {
-            http_response_code(401);
-            echo json_encode(['status' => 'timeout']);
-            exit;
-        }
-        header("Location: ./index.php");
-        exit();
-    }
-
-    // Atualiza o tempo da última atividade
-    $_SESSION['LAST_ACTIVITY'] = time();
-}
 
 //Função de erro em login onde passa para o
 function error_login()
@@ -245,34 +182,7 @@ function error_login()
     unset($_SESSION['error_login']);
 }
 
-//Coleta dados do usuario
 
-function dados_user()
-{
-
-    $conn = conexao_banco();
-
-    $usuario_id = $_SESSION['user_id'];
-
-    $query = $conn->prepare("SELECT u.id, 
-    u.nome,
-    u.cpf,
-    u.setor,
-    u.cargo,
-    u.permissoes,
-    u.username,
-    u.email
-    FROM usuario u WHERE u.id = ?;");
-
-    $query->bind_param("s", $usuario_id);
-
-    $query->execute();
-    $resultado = $query->get_result();
-    $dados_usuario = $resultado->fetch_assoc();
-    $conn->close();
-
-    return $dados_usuario;
-}
 
 //Coleta horarios de cargo
 
@@ -415,20 +325,4 @@ function coletar_user()
     return $usuarios_coletados;
 }
 
-//Limpar variaveis de sessão caso outra pagina seja acessada
 
-function limparFiltros()
-{
-    if (basename($_SERVER['PHP_SELF']) !== 'buscar_usuario.php') {
-        unset(
-            $_SESSION['usuario_selecionado'],
-            $_SESSION['setor_selecionado'],
-            $_SESSION['ano_selecionado'],
-            $_SESSION['formulario_exibido'],
-            $_SESSION['ano_selecionado'],
-            $_SESSION['mes_selecionado'],
-            $_SESSION['exibir_formulario_anexo']
-
-        );
-    }
-}
