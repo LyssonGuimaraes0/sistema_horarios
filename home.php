@@ -2,6 +2,8 @@
 <html lang="pt_BR">
 <!-- Cabeçalho comum incluído -->
 <?php
+error_reporting(E_ALL & ~E_WARNING);
+ini_set('display_errors', 0);
 session_start();
 include('./settings/conf_bd.php');
 include('./settings/conf_server.php');
@@ -17,6 +19,9 @@ $datas_registradas = horas_registradas($dados_user['id']);
 $data = mese_atual();
 $mes_atual = $data['mes'];
 $ano_atual = $data['ano'];
+$data_completa = $data['data_completa'];
+$feriados = feriados($ano_atual);
+$horario_cargo = horario_cargo();
 
 ?>
 <?php include('./snippets/head.html'); ?>
@@ -47,7 +52,7 @@ $ano_atual = $data['ano'];
                 <div class="container-home">
                     <div class="container-welcome welcome-horario">
                         <div class="titulo-container">
-                            <h2 class="title-container">Data Atual: <?= $data_completa = $data['data_completa']; ?></h2>
+                            <h2 class="title-container">Data Atual: <?= $data_completa ?></h2>
                         </div>
                         <div class="inputs-container">
                             <form action="./settings/conf_data.php" method="post">
@@ -70,60 +75,144 @@ $ano_atual = $data['ano'];
                                     <div class="items-horarios">
                                         <?php
 
+
+
                                         if ($nome_dia_ingles === "Sunday" || $nome_dia_ingles === "Saturday") {
 
                                             echo "<div>
                                                     <span>Final de Semana</span>
                                                     </div>";
+
+                                        } elseif ($feriados[$data_completa] != null) {
+                                            echo "<div>
+                                                    <span>$feriados[$data_completa]</span>
+                                                    </div>";
+
                                         } else {
 
+                                            //Campos de entrada de dados para dias, adiciona readonly caso ja exista registro e adiciona botão de edição
+                                            if ($status_dia === "Atestado") {
+                                                echo "<span>Atestado</span>";
+                                            } elseif (!empty($ponto_facultativo[$data_completa])) {
+                                                echo "<span>Horario de Compensação(" . $ponto_facultativo[$data_completa]['nome_feriado'] . ")</span>";
+                                            }
+                                            //Define o bloqueio dos elementos e os valore presentes nos inputs
+                                            $horario_entrada = (!empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '');
+                                            $horario_saida_almoco = (!empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '');
+                                            $horario_volta_almoco = (!empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '');
+                                            $horario_saida = (!empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '');
+
+                                            $ro_entrada = !empty($horario_entrada) ? "readonly" : "";
+                                            $ro_saida_almoco = !empty($horario_saida_almoco) ? "readonly" : "";
+                                            $ro_volta_almoco = !empty($horario_volta_almoco) ? "readonly" : "";
+                                            $ro_saida = !empty($horario_saida) ? "readonly" : "";
+
+                                            if ($horario_cargo['cargo'] == "Estagiario-Manha" || $horario_cargo['cargo'] == "Estagiario-Tarde") {
+                                                if (!empty($ponto_facultativo[$data_completa])) {
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Entrada</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . (($horario_cargo['cargo'] == "Estagiario-Manha") ? substr($ponto_facultativo[$data_completa]['entrada'], 0, 5) : substr($ponto_facultativo[$data_completa]['saida_almoco'], 0, 5)) . "' $ro_entrada>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Saida</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . (($horario_cargo['cargo'] == "Estagiario-Manha") ? substr($ponto_facultativo[$data_completa]['volta_almoco'], 0, 5) : substr($ponto_facultativo[$data_completa]['saida'], 0, 5)) . "' $ro_saida>";
+                                                    echo "</div>";
+                                                } else {
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Entrada</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . (($horario_saida != "") ? $horario_saida : substr($horario_cargo['cargo_entrada'], 0, 5)) . "' $ro_entrada>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Saida</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . (($horario_saida != "") ? $horario_saida : substr($horario_cargo['cargo_saida'], 0, 5)) . "' $ro_saida>";
+                                                    echo "</div>";
+                                                }
+
+                                                echo "<div class='items-botoes'>";
+
+                                                if (!empty($registroDia['entrada']) && !empty($registroDia['saida'])) {
+                                                    echo "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar'
+                                                onclick=\"editar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'
+                                                id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none'
+                                                id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-trash-can botao-calendario'
+                                                onclick=\"remover_horario('$data_str','$data_completa')\"></i>";
+                                                } else {
+                                                    echo "<button type='submit' class='btn-calendario' name='dia'
+                                                value='$dia'>Confirmar</button>";
+                                                    echo "<i class='fa-solid fa-file-alt botao-calendario'
+                                                onclick=\"adicionar_justificativa('$data_str')\"></i>";
+
+                                                }
+                                            } else {
+                                                if (!empty($ponto_facultativo[$data_completa])) {
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Entrada</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . substr($ponto_facultativo[$data_completa]['entrada'], 0, 5) . "' $ro_entrada>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Intervalo inicio</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida_pf[$dia]' value='" . substr($ponto_facultativo[$data_completa]['saida_almoco'], 0, 5) . "' $ro_saida_almoco>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Intervalo volta</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada_pf[$dia]' value='" . substr($ponto_facultativo[$data_completa]['volta_almoco'], 0, 5) . "' $ro_volta_almoco>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Saida</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . substr($ponto_facultativo[$data_completa]['saida'], 0, 5) . "' $ro_saida>";
+                                                    echo "</div>";
+                                                } else {
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Entrada</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada[$dia]' value='" . (($horario_entrada != "") ? $horario_entrada : substr($horario_cargo['cargo_entrada'], 0, 5)) . "' $ro_entrada>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Intervalo inicio</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida_pf[$dia]' value='" . (($horario_saida_almoco != "") ? $horario_saida_almoco : substr($horario_cargo['cargo_saida_almoco'], 0, 5)) . "' $ro_saida_almoco>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Intervalo volta</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='entrada_pf[$dia]' value='" . (($horario_volta_almoco != "") ? $horario_volta_almoco : substr($horario_cargo['cargo_volta_almoco'], 0, 5)) . "' $ro_volta_almoco>";
+                                                    echo "</div>";
+
+                                                    echo "<div class='items-horarios input-colunm'>";
+                                                    echo "<span>Saida</span>";
+                                                    echo "<input class='horario-input' maxlength='5' type='time' name='saida[$dia]' value='" . (($horario_saida != "") ? $horario_saida : substr($horario_cargo['cargo_saida'], 0, 5)) . "' $ro_saida>";
+                                                    echo "</div>";
+                                                }
+
+                                                echo "<div class='items-botoes'>";
+
+                                                if (!empty($registroDia['entrada']) && !empty($registroDia['saida_almoco']) && !empty($registroDia['volta_almoco']) && !empty($registroDia['saida'])) {
+                                                    //Gere o botão editar caso não for atestado
+                                                    echo ($status_dia == "Atestado") ? "" :
+                                                        "<i class='fa-solid fa-pen-to-square botao-calendario' id='btn-editar' onclick=\"editar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-check btn-confirmar botao-calendario d-none'id='btn-confirmar' onclick=\"confirmar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-xmark btn-cancelar botao-calendario d-none' id='btn-cancelar' onclick=\"cancelar_horario(this)\"></i>";
+                                                    echo "<i class='fa-solid fa-trash-can botao-calendario' onclick=\"remover_horario('$data_str','$data_completa')\"></i>";
+                                                } else {
+                                                    echo "<button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>";
+                                                    echo "<i class='fa-solid fa-file-alt botao-calendario' onclick=\"adicionar_justificativa('$data_str')\"></i>";
+                                                }
+
+
+                                            }
+                                        }
+
+
                                         ?>
-                                            <input
-                                                class="horario-input"
-                                                maxlength="5"
-                                                type="time"
-                                                name="entrada[<?= $dia ?>]"
-                                                value="<?= !empty($registroDia['entrada']) ? substr($registroDia['entrada'], 0, 5) : '' ?>"
-                                                <?= $existeRegistro ? 'readonly' : '' ?>>
-                                    </div>
-
-                                    <div class="items-horarios">
-                                        <input
-                                            class="horario-input"
-                                            maxlength="5"
-                                            type="time"
-                                            name="saida_pf[<?= $dia ?>]"
-                                            value="<?= !empty($registroDia['saida_almoco']) ? substr($registroDia['saida_almoco'], 0, 5) : '' ?>"
-                                            <?= $existeRegistro ? 'readonly' : '' ?>>
-
-                                    </div>
-
-                                    <div class="items-horarios">
-                                        <input
-                                            class="horario-input"
-                                            maxlength="5"
-                                            type="time"
-                                            name="entrada_pf[<?= $dia ?>]"
-                                            value="<?= !empty($registroDia['volta_almoco']) ? substr($registroDia['volta_almoco'], 0, 5) : '' ?>"
-                                            <?= $existeRegistro ? 'readonly' : '' ?>>
-                                    </div>
-
-                                    <div class="items-horarios">
-                                        <input
-                                            class="horario-input"
-                                            maxlength="5"
-                                            type="time"
-                                            name="saida[<?= $dia ?>]"
-                                            value="<?= !empty($registroDia['saida']) ? substr($registroDia['saida'], 0, 5) : '' ?>"
-                                            <?= $existeRegistro ? 'readonly' : '' ?>>
-                                    </div>
-                                    <div class="items-horarios">
-                                        <button type="submit" name='dia' value=<?= $dia ?> class="btn-calendario home-calendario">
-                                            Enviar datas
-                                        </button>
 
 
-                                    <?php } ?>
                                     </div>
 
                                 </div>
@@ -137,7 +226,7 @@ $ano_atual = $data['ano'];
                 <div class="container-card">
                     <div class="card-info">
                         <?php
-                        $registros =  $datas_registradas;
+                        $registros = $datas_registradas;
                         $total_mes = 0;
                         foreach ($registros as $data => $registro) {
                             [$ano_data, $mes_data, $dia_data] = explode("-", $data);
@@ -159,7 +248,7 @@ $ano_atual = $data['ano'];
                             [$ano_data, $mes_data, $dia_data] = explode("-", $data);
 
                             $data_status = $registro['status_dia'];
-                            if ($mes_data == $mes_atual  && $ano_data === $ano_atual) {
+                            if ($mes_data == $mes_atual && $ano_data === $ano_atual) {
                                 $total_completo++;
                             }
                         }
@@ -201,14 +290,16 @@ $ano_atual = $data['ano'];
                         <i class="fa-solid fa-clock card-icon"></i>
                         <span class="title-container">Registrar Ponto</span>
                         <p>Registre seu horário de entrada e saída</p>
-                        <div class="btn-container"><a href="registrar-ponto.php"><button button class="btn-cards">Ir para Folha de Ponto</button></a>
+                        <div class="btn-container"><a href="registrar-ponto.php"><button button class="btn-cards">Ir
+                                    para Folha de Ponto</button></a>
                         </div>
                     </div>
                     <div class="card-inferior">
                         <i class="fa-solid fa-clock card-icon"></i>
                         <span class="title-container">Administrar Horarios</span>
                         <p>Verifique os seu horarios do mês já registrados</p>
-                        <div class="btn-container"><input class="btn-cards" type="submit" value="Ir para Justificativas">
+                        <div class="btn-container"><input class="btn-cards" type="submit"
+                                value="Ir para Justificativas">
                         </div>
                     </div>
                     <div class="card-inferior">
@@ -216,7 +307,8 @@ $ano_atual = $data['ano'];
                         <span class="title-container">Anexar Frequencia</span>
                         <p>Anexe sua frequencia nos seus registros</p>
                         <div class="btn-container">
-                            <a href="./anexar_frequencia.php"><button class="btn-cards">Ir para Anexar Frequencia</button></a>
+                            <a href="./anexar_frequencia.php"><button class="btn-cards">Ir para Anexar
+                                    Frequencia</button></a>
                         </div>
                     </div>
                 </div>

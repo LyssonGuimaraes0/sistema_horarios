@@ -240,7 +240,6 @@ const adicionarDiv = document.querySelector('.adicionar-div')
 
 adicionarDiv.addEventListener('click', function () {
     adicionar_input(adicionarDiv)
-    console.log(document.querySelector('.adicionar-div'))
 });
 
 

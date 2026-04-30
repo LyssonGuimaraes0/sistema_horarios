@@ -39,17 +39,18 @@ function validacao_campo(input, resposta) {
 
 }
 
+//Fecha modal
+function fechar_modal() {
+    document.querySelectorAll('.modal-background').forEach(modal => {
+        modal.style.display = 'none';
+    });
+}
+
 
 //Apresentação de Modail
 
 function apresenta_modal(condicao, mensagem,) {
 
-    //Fecha modal
-    function fechar_modal() {
-        document.querySelectorAll('.modal-background').forEach(modal => {
-            modal.style.display = 'none';
-        });
-    }
 
     var TituloModal = document.createElement('span');
     var DescricaoModal = document.createElement('p');

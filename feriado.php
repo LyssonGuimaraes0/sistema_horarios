@@ -52,8 +52,8 @@ if (verificar_permissoes($dados_user) !== true) {
                         <span>Selecione a tarefa:</span>
                         <select class="dropdown" id="dropdown-feriado" style="width:215px;">
                             <option value="" select hidden>Selecione</option>
-                            <option value="feriado">Adicionar Feriado</option>
-                            <option value="ponto-facultativo">Adicionar Ponto Facultativo</option>
+                            <option value="feriado">Gerenciar Feriado</option>
+                            <option value="ponto-facultativo">Gerenciar Ponto Facultativo</option>
                         </select>
                     </div>
                 </div>
@@ -85,29 +85,37 @@ if (verificar_permissoes($dados_user) !== true) {
         //Armazenar feriados do ano no select de escolhas
         function nome_feriados(ListaNomes) {
             const selectNomes = document.querySelector('#nome-feriado')
+            const ulNomes = document.querySelector('#lista-feriados')
+
+            //Ajusta datas para verificação
+            function converterData(dataBR) {
+                const [dia, mes, ano] = dataBR.split("/");
+                return new Date(`${ano}-${mes}-${dia}`);
+            }
+
+            const arrayDatas = Object.entries(ListaNomes);
+            //Organiza lista de Feriados
+            arrayDatas.sort((a, b) => converterData(a[0]) - converterData(b[0]))
+
+            arrayDatas.forEach(([data, nome]) => {
+
+                //Cria elemento para lista em Feriados
+                const liItem = document.createElement('li')
+                liItem.innerText = `${nome} - ${data}`
+                ulNomes.appendChild(liItem);
 
 
-            //Filtra os que se repentem Para não Aparecer
-            const NomesFormatados = Object.fromEntries(
-                //Loop onde verificar o valor se e se o indice são iguais, se n for a função retira
-                Object.entries(ListaNomes).filter(([_, value], index, ArrayFeriado) =>
-                    ArrayFeriado.findIndex(([, v]) => v === value) === index
-                )
-            )
-
-
-            Object.entries(NomesFormatados).forEach(([data, nome]) => {
-
-                //Se tem essa padrão pula
+                //Remove para datas registradas com ponto facultativo
                 if (nome.includes("Ponto Facultativo")) {
                     return
                 }
 
+                //Cria elemento para select em Ponto Facultativo
                 const opcao = document.createElement('option')
                 opcao.value = nome
-                opcao.text = nome
-
+                opcao.text = `${nome} - ${data}`
                 selectNomes.appendChild(opcao);
+
             });
 
 

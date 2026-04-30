@@ -6,9 +6,22 @@
             <span>Adicionar Feriado:</span>
         </div>
     </div>
+    <!--Accordion Feriados-->
+    <div class="container-upload">
+        <div class="accordion">
+            <div class="accordion-item">
+                <div class="accordion-header">Verificar Feriados do Ano</div>
+                <div class="accordion-content">
+                    <ul class="lista-feriados" id="lista-feriados" style="margin-left: 10px;"></ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Formulario Feriado-->
     <form action="./settings/conf_feriado.php" method="post" enctype="multipart/form-data">
         <div class="container-upload">
-            <label class="label-feriado">Selecione a data do Feriado</label>
+            <label class="label-feriado">Adicione nome e data para adicionar um Feriado</label>
             <div class="item-horario item-ponto-facultativo">
                 <div class="item-upload">
                     <span>Nome do Feriado</span>
@@ -18,7 +31,7 @@
                 </div>
             </div>
             <div class="items-botoes botoes-feriado">
-                <button class="btn-calendario btn-feriado" type="submit">Enviar</button>
+                <button class="btn-calendario btn-feriado" type="submit">Adicionar</button>
             </div>
         </div>
     </form>

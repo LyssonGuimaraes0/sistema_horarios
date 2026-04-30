@@ -104,7 +104,9 @@ function feriados($ano)
 
     //Coleta todos dados do formulario
 
-    $query = $conn->prepare("SELECT feriado,dia_mes,ano FROM feriados WHERE ano = ?");
+    $query = $conn->prepare("SELECT feriado,dia_mes,ano 
+    FROM feriados 
+    WHERE ano = ?");
     $query->bind_param("s", $ano_selecionado);
     $query->execute();
     $result = $query->get_result();
@@ -192,7 +194,8 @@ function ponto_facultativo($ano)
         $query->close();
 
         return $lista_datas;
-    };
+    }
+    ;
 }
 
 

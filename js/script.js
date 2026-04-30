@@ -81,10 +81,12 @@ itensMenu.forEach(li => {
 
 const AccordionBnts = document.querySelectorAll('.accordion-header');
 
+
 AccordionBnts.forEach(accordionBtn => {
 
     accordionBtn.addEventListener('click', () => {
         const item = accordionBtn.parentElement;
+        console.log(item);
 
         item.classList.toggle('active');
     });
@@ -197,12 +199,53 @@ function salvarHorario(dados) {
 }
 
 
+
+//Função de oculta calendario ate o usuario clica no btn
+
+function abrircalendario() {
+
+    const ContainerCalendario = document.querySelector('.calendario-container');
+
+    ContainerCalendario.style.display = "block";
+}
+
+
+//Subistituir Elementos em Página Feriado
+
+const SelecionarFeriado = document.querySelector('#dropdown-feriado')
+const ContainerOculto = document.querySelector('.container-feriado')
+const ContainerFeriado = document.querySelector('#escolha-feriado')
+const ContainerPontoFacultativo = document.querySelector('#escolha-ponto-facultativo')
+
+//Libera Baseado no dropdown
+SelecionarFeriado.addEventListener('change', function () {
+    let SelectValor = SelecionarFeriado.value
+
+    console.log(ContainerOculto)
+    ContainerOculto.style.display = "block"
+
+    if (SelectValor == "feriado") {
+        ContainerPontoFacultativo.style.display = "none"
+        ContainerFeriado.style.display = "block"
+        return
+    }
+
+    if (SelectValor == "ponto-facultativo") {
+        ContainerFeriado.style.display = "none"
+        ContainerPontoFacultativo.style.display = "block"
+        return
+    }
+
+})
+
 // == Adicionar Justificativa ====================================================
 function adicionar_justificativa(data) {
 
+    var inputDiasAtestados = document.querySelector('#input-dias-atestados');
+    console.log(inputDiasAtestados)
+
     ModalBackground = document.getElementById('modal-justificativa');
     var dataModificar = document.querySelector('#data_justificativa');
-    var inputDiasAtestados = document.querySelector('#servidor-publico-dias-atestados');
     const inputOrigem = document.querySelector('#data-origem');
     const inputInicio = document.querySelector('#data-inicio');
     const inputFim = document.querySelector('#data-fim');
@@ -245,45 +288,6 @@ function adicionar_justificativa(data) {
     ModalBackground.style.display = "block";
 
 }
-
-
-//Função de oculta calendario ate o usuario clica no btn
-
-function abrircalendario() {
-
-    const ContainerCalendario = document.querySelector('.calendario-container');
-
-    ContainerCalendario.style.display = "block";
-}
-
-
-//Subistituir Elementos em Página Feriado
-
-const SelecionarFeriado = document.querySelector('#dropdown-feriado')
-const ContainerOculto = document.querySelector('.container-feriado')
-const ContainerFeriado = document.querySelector('#escolha-feriado')
-const ContainerPontoFacultativo = document.querySelector('#escolha-ponto-facultativo')
-
-//Libera Baseado no dropdown
-SelecionarFeriado.addEventListener('change', function () {
-    let SelectValor = SelecionarFeriado.value
-
-    console.log(ContainerOculto)
-    ContainerOculto.style.display = "block"
-
-    if (SelectValor == "feriado") {
-        ContainerPontoFacultativo.style.display = "none"
-        ContainerFeriado.style.display = "block"
-        return
-    }
-
-    if (SelectValor == "ponto-facultativo") {
-        ContainerFeriado.style.display = "none"
-        ContainerPontoFacultativo.style.display = "block"
-        return
-    }
-
-})
 
 
 
