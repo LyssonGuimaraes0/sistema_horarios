@@ -1,0 +1,17 @@
+{
+    "name": "alyssonguimaraes/sistema-de-horarios-mvc",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alysson Andrade",
+            "email": "alyssonandrade186@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

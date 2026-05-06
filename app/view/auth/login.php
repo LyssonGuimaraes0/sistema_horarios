@@ -1,5 +1,9 @@
 
-<section class="login-section">
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <?php include_once COMPONENTS_PATH . "/head.php";?>
+<body>
+    <section class="login-section">
     <div class="section-container">
         <div class="container-login">
             <form action="./index.php" method="post" class="login-form">
@@ -11,5 +15,10 @@
             </form>
         </div>
     </div>
-
 </section>
+</body>
+</html>
+
+
+
+

@@ -1,5 +1,11 @@
-<?php 
+<?php
 
+require_once '../vendor/autoload.php';
+require_once '../router/router.php';
+
+// Carrega o .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 error_reporting(E_ALL & ~E_WARNING);
 
@@ -13,10 +19,8 @@ define('CONFIG_PATH', BASE_PATH . '/config');
 // subpastas
 define('CONTROLLER_PATH', APP_PATH . '/controllers');
 define('MODEL_PATH', APP_PATH . '/models');
-define('VIEW_PATH', APP_PATH . '/views');
-define('HELPER_PATH', BASE_PATH . '/helpers');
+define('VIEW_PATH', APP_PATH . '/view');
+define('COMPONENTS_PATH', VIEW_PATH . '/components');
+define('HELPER_PATH', APP_PATH . '/helpers');
 
 
-
-
-?>

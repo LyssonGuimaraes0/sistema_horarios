@@ -1,49 +1,26 @@
-<?php 
+<?php
 
-require_once dirname(__DIR__) . '/settings/config.php';
+require_once '../settings/config.php';
 
+//Realiza tratamento de URL da página
+$base = "/projetos_pessoais/sistema-de-horarios-mvc";
 
-require CONTROLLER_PATH .'/LoginController.php';
-require HELPER_PATH . '/SessionHelper.php';
-require HELPER_PATH . '/ModalHelper.php';
+$uri = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
+$request = $_SERVER['REQUEST_METHOD'];
 
-iniciar_sessao();
+ $uri = str_replace($base, '', $uri);
 
-$resposta = VerificarRespostaModal();
+//=========================================
 
-//Verifica login do Usuario
-login();
+$match = matchRoute($uri, $router[$request]);
 
-?>
+if (!$match) {
+    http_response_code(404);
+    echo "Rota não encontrada";
+    exit;
+}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<!-- Cabeçalho comum incluído -->
-<?php include('../settings/conf_server.php'); ?>
-<!--Verifica caso teve erro no Login-->
-<?php 
+[$action, $params] = $match;
 
-
-?>
-<?php include('../includes/head.php'); ?>
-
-<body>
-    <main>
-        <!-- Pagina Login -->
-        <?php include('../includes/login.html'); ?>
-
-        <?php include('../includes/modal.html'); ?>
-        <!-- Chamada Script-->
-
-        <?php include('../includes/script.html'); ?>
-    </main>
-    <script>
-        //Configuração de Tela de erro ao tenta realizar Login
-            var error_login = <?php echo json_encode($resposta['codigo']); ?>;
-            var mensagem = <?php echo json_encode($resposta['mensagem']); ?>;
-            apresenta_modal(error_login,mensagem);
-    </script>
-
-</body>
-
-</html>
+// 👇 AQUI ACONTECE A MÁGICA
+$action(...$params);
