@@ -2,6 +2,11 @@
 
 require_once '../settings/config.php';
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+
 //Realiza tratamento de URL da página
 $base = "/projetos_pessoais/sistema-de-horarios-mvc";
 

@@ -6,7 +6,7 @@
     <section class="login-section">
     <div class="section-container">
         <div class="container-login">
-            <form action="./index.php" method="post" class="login-form">
+            <form method="post" class="login-form" id="form-login">
                 <h1>Sistema de Frequencia</h1>
                 <input type="text" placeholder="usuario" name="usuario" class="input-login"  required>
                 <input type="password" placeholder="Senha" name="password" class="input-login"  required>
@@ -16,6 +16,8 @@
         </div>
     </div>
 </section>
+
+<script type="module" src="public/assets/js/page/login.js"></script>
 </body>
 </html>
 
