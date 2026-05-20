@@ -1,5 +1,5 @@
 /*Container da Página de Login*/
-.container-login{
+.container-login {
     width: 500px;
     height: 500px;
     background-color: white;
@@ -12,20 +12,47 @@
     box-shadow: var(--shadow);
     position: relative;
 }
+
 /*Formulario para login*/
-.login-form{
+.login-form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
+.header-login {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.body-login {
+    width: 100%;
+    margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+}
+
+.body-login label {
+    text-align: start;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+
 /*Inputs de Login da Página*/
-.input-login{
+.input-login {
     width: 80%;
     height: 40px;
-    margin: 10px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 0 10px;
@@ -34,7 +61,7 @@
 }
 
 /*Botão de Login*/
-.btn-login{
+.btn-login {
     width: 50%;
     height: 35px;
     border: 2px solid var(--primary-color);
@@ -48,14 +75,23 @@
     margin-top: 20px;
 }
 
-.btn-login:hover{
+.btn-login:hover {
     transform: scale(1.05);
 }
 
 /*Botão esqueceu a senha*/
 
-.btn-esqueceu-senha{
+.btn-esqueceu-senha {
     color: blue;
     margin-top: 20px;
     cursor: pointer;
+}
+
+/*Mensagem de Erro*/
+
+.error-mensagem {
+    visibility: hidden;
+    display: block;
+    min-height: 15px;
+    color: var(--cor-vermelha);
 }

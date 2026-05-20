@@ -3,7 +3,7 @@
 function loadRouter(string $type, string $controller, string $action, array $params = [])
 {
     try {
-        $controllerNameSpace = "App\\controller\\{$type}\\{$controller}";   
+        $controllerNameSpace = "App\\controller\\{$type}\\{$controller}";
 
         if (!class_exists($controllerNameSpace)) {
             throw new Exception("Error Processing Request");
@@ -71,15 +71,23 @@ function api($controller, $action)
 
 $router = [
     'GET' => [
-        '/' => web('AuthController', 'index'),
+        '/' => web('LoginController', 'index'),
+        '/user/dashboard' => web('DashboardController', 'index'),
+        '/forgotpassword' => web('ForgotPasswordController', 'index'),
 
         //Api
         '/api/v1/users/{id}' => api('UserApiController', 'show'),
 
     ],
     'POST' => [
-        //API
-        '/api/v1/auth/login' => api('auth\AuthApiController', 'login')
+        //Rota de login de usuario
+        '/api/auth/login' => api('auth\AuthApiController', 'login')
+
+    ],
+
+    'PATCH' => [
+        //Rota para alterar senha do Usuario
+        '/api/auth/forgotpassword' => api('auth\AuthApiController', 'login')
     ]
 
 ];

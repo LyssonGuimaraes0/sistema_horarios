@@ -6,6 +6,7 @@
 @import url("../css/calendario.css");
 @import url("../css/anexa_frequencia.css");
 @import url("../css/feriado.css");
+@import url("../css/animation.css");
 
 
 :root {
@@ -20,6 +21,10 @@
     --white-text: #fff;
     --border-color: #e0e0e0;
     --shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+
+    /*Colors*/
+
+    --cor-vermelha: red;
 }
 
 * {
@@ -164,5 +169,6 @@ label {
 .btn-upload::file-selector-button:hover {
     background: #0056b3;
 }
+
 
 

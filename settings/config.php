@@ -7,7 +7,9 @@ require_once '../router/router.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-error_reporting(E_ALL & ~E_WARNING);
+require_once 'cors.php';
+
+/* error_reporting(E_ALL & ~E_WARNING); */
 
 // raiz do projeto 
 define('BASE_PATH', dirname(__DIR__));

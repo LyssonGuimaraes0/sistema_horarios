@@ -2,9 +2,9 @@
 
 namespace App\controller\web;
 
-class AuthController{
+class LoginController{
     public function index(){
-        require_once VIEW_PATH . "/auth/login.php";
+        require_once VIEW_PATH . "/login.php";
     }
 }
 

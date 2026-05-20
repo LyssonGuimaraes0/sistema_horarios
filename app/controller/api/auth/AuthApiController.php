@@ -7,29 +7,36 @@ use App\service\user\AuthUserService;
 
 class AuthApiController extends ApiController
 {
+
+    private $authUserService;
+
+    public function __construct()
+    {
+        $this->authUserService = new AuthUserService();
+    }
+
+    //Função de Login do Usuario
     public function login()
     {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $username = $data['username'];
+        $username = preg_replace('/[^a-z0-9_-]/', '', $data['username']);
         $password = $data['password'];
 
-        $AuthUserService = new AuthUserService;
 
-        $consultDate = $AuthUserService->AuthUser($username,$password);
+        $response = $this->authUserService->login($username, $password);
 
-        var_dump($consultDate);
-        exit;
+        //Verifica se a resposta falhou
+        if ($response['success'] == false) {
+            $this->error('Email ou senha invalido!', 401);
+            return;
+        }
 
-/*         $dados = [
-            'user' => $data['username'],
-            'password' => $data['password']
-        ]; */
-
-
-
+        //Retorna sucesso caso consiga logar
+        return $this->success('');
 
     }
+
 }
 
 
