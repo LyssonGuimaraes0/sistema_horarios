@@ -74,15 +74,19 @@
 }
 
 .items-botoes {
-    margin-top: 30px;
+    margin-top: 10px;
     width: 200px;
     display: flex;
-    justify-content: space-evenly
+    justify-content: space-evenly;
+    align-self: center;
+    align-items: center;
 }
 
 .items-horarios {
+    display: flex;
     margin-top: 7px;
 }
+
 
 /*Input do calendario*/
 
@@ -107,7 +111,7 @@
 
 .input-colunm span {
     font-size: 14px;
-    color: var(--primary-color);
+    color: var(--segundaria-color);
     margin-bottom: 2px;
 }
 

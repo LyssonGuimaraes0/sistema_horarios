@@ -19,7 +19,7 @@ class DashboardController
     {
         //Passa pela verificação de COOKIES
         $user = $this->authMiddleware->handle();
-
+        
         require_once VIEW_PATH . "/dashboard.php";
     }
 }
