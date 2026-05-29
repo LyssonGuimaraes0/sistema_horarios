@@ -18,7 +18,7 @@
             <div class="section-container">
                 <div class="container-home">
                     <div class="container-welcome">
-                        <h2 class="title-container">Bem vindo! </h2>
+                        <h2 class="title-container" id="home-nameUser">Bem vindo! </h2>
                     </div>
                 </div>
                 <div class="container-home">
@@ -142,7 +142,7 @@
         </section>
     </div>
 
-    <script type="module" src="public/assets/js/page/dashboard.js"></script>
+    <script type="module" src=<?= SCRIPT_URL . "/page/dashboard.js"?>></script>
 
 </body>
 

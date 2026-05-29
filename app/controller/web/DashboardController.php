@@ -2,23 +2,23 @@
 
 namespace App\controller\web;
 
-use App\middleware\AuthMiddleware;
+use App\middleware\WebAuthMiddleware;
 use App\helpers\PermissionHelper;
 
 class DashboardController
 {
 
-    private $authMiddleware;
+    private $webAuthMiddleware;
 
     public function __construct()
     {
-        $this->authMiddleware = new AuthMiddleware;
+        $this->webAuthMiddleware = new WebAuthMiddleware;
     }
 
     public function index()
     {
         //Passa pela verificação de COOKIES
-        $user = $this->authMiddleware->handle();
+        $user = $this->webAuthMiddleware->handle();
         
         require_once VIEW_PATH . "/dashboard.php";
     }

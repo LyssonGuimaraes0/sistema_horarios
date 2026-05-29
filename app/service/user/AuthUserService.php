@@ -76,7 +76,7 @@ class AuthUserService
 
     //Ação para deslogar usuario
 
-        public function logout()
+    public function logout()
     {
         // Remove Access Token
         setcookie(

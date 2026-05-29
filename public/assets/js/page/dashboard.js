@@ -1,5 +1,22 @@
 import { request } from "../service/ajax.js";
-import { getFormData } from "../utils/form.js";
-import { delay } from "../utils/delay.js";
 
 //Coleta de dados do usuario
+const homeNomeUser = document.querySelector('#home-nameUser')
+try {
+    let response
+    response = await request('http://localhost/projetos_pessoais/sistema-de-horarios-mvc/api/user')
+
+    if (!response || response.success != true) {
+        throw new Error(response?.error);
+    }
+
+    //Apresenta dados de Usuario
+    homeNomeUser.textContent += response.data.nome
+
+} catch (error) {
+    console.log("Erro de comunicação")
+}
+
+
+
+

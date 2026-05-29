@@ -58,7 +58,6 @@ function matchRoute($uri, $routes)
 }
 
 
-
 function web($controller, $action)
 {
     return fn(...$params) => loadRouter('web', $controller, $action, $params);
@@ -75,8 +74,8 @@ $router = [
         '/user/dashboard' => web('DashboardController', 'index'),
         '/forgotpassword' => web('ForgotPasswordController', 'index'),
 
-        //Api
-        '/api/v1/users/{id}' => api('UserApiController', 'show'),
+        //Rotas Para Buscar dados de usuario
+        '/api/user' => api('UserApiController', 'show'),
 
     ],
     'POST' => [
