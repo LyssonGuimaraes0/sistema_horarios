@@ -25,4 +25,8 @@ define('VIEW_PATH', APP_PATH . '/view');
 define('COMPONENTS_PATH', VIEW_PATH . '/components');
 define('HELPER_PATH', APP_PATH . '/helpers');
 
+//Caminho URL
+define('BASE_URL', '/projetos_pessoais/sistema-de-horarios-mvc');
+define('SCRIPT_URL', BASE_URL . "/public" .  '/assets/js');
+
 

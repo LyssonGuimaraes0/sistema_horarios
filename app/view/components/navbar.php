@@ -93,10 +93,12 @@ use App\helpers\PermissionHelper;
         <!--------------------------------->
 
         <li class="nav-link">
-            <a href="./settings/logout.php">
+            <a id="btn-logout">
                 <i class="fa-solid fa-house-chimney-window"></i>
                 <span class="menu-text">Sair</span>
             </a>
         </li>
     </ul>
 </aside>
+
+<script type="module" src= <?= SCRIPT_URL . "/utils/logout.js" ?>></script>

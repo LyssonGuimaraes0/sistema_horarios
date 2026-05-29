@@ -73,6 +73,10 @@
     justify-content: center;
 }
 
+.nav-link a{
+    cursor: pointer;
+}
+
 
 .nav-link.active a {
     background-color: var(--light-grey);

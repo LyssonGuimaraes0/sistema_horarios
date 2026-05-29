@@ -11,7 +11,7 @@ class AuthMiddleware extends JwtService
     {
         if (!isset($_COOKIE['access_token'])) {
             header(
-                'Location: ../'
+                'Location:'. BASE_URL
             );
 
             exit;
@@ -23,7 +23,7 @@ class AuthMiddleware extends JwtService
 
         if (!$user) {
             header(
-                'Location: ../'
+                'Location:' . BASE_URL
             );
 
             exit;

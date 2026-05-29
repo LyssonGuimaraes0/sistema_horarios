@@ -4,15 +4,18 @@ namespace App\controller\api\auth;
 
 use App\controller\api\ApiController;
 use App\service\user\AuthUserService;
+use App\middleware\AuthMiddleware;
 
 class AuthApiController extends ApiController
 {
 
     private $authUserService;
+    private $authMiddleware;
 
     public function __construct()
     {
         $this->authUserService = new AuthUserService();
+        $this->authMiddleware = new AuthMiddleware;
     }
 
     //Função de Login do Usuario
@@ -37,11 +40,18 @@ class AuthApiController extends ApiController
 
     }
 
+    public function logout()
+    {
+        $response = $this->authUserService->logout();
+
+        if ($response['success'] != true) {
+            return $this->error('', 401);
+        }
+        $this->authMiddleware->handle();
+        return $this->success('');
+    }
+
 }
-
-
-
-
 
 
 ?>

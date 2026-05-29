@@ -81,7 +81,8 @@ $router = [
     ],
     'POST' => [
         //Rota de login de usuario
-        '/api/auth/login' => api('auth\AuthApiController', 'login')
+        '/api/auth/login' => api('auth\AuthApiController', 'login'),
+        '/api/auth/logout' => api('auth\AuthApiController', 'logout')
 
     ],
 
