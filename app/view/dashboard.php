@@ -11,6 +11,9 @@
     <!--NavBar-->
     <?php include_once COMPONENTS_PATH . "/navbar.php"; ?>
 
+    <!--Modal-->
+    <?php include_once COMPONENTS_PATH . "/modal.php"; ?>
+
     <!-- Estrutura da Home -->
 
     <div class="main-content">
@@ -117,7 +120,7 @@
                             <i class="fa-solid fa-clock card-icon"></i>
                             <span class="title-container">Registrar Ponto</span>
                             <p>Registre seu horário de entrada e saída</p>
-                            <div class="btn-container"><a href="registrar-ponto.php"><button button class="btn-cards">Ir
+                            <div class="btn-container"><button id="btn-teste" class="btn-cards">Ir
                                         para Folha de Ponto</button></a>
                             </div>
                         </div>

@@ -1,4 +1,5 @@
 import { request } from "../service/ajax.js";
+import { apresentarModal } from "../utils/modal.js";
 
 //Coleta de dados do usuario
 const homeNomeUser = document.querySelector('#home-nameUser')
@@ -16,6 +17,7 @@ try {
 } catch (error) {
     console.log("Erro de comunicação")
 }
+
 
 
 

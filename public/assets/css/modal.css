@@ -10,7 +10,7 @@
     /* abaixo da modal */
     backdrop-filter: none;
     align-items: center;
-    display: none;
+    display: flex;
 }
 
 
