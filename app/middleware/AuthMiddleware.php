@@ -17,8 +17,7 @@ private $jwtService;
     public function handle()
     {
         if (!isset($_COOKIE['access_token'])) {
-            
-            
+            $this->error("Token não encontrado");
             exit;
         }
 
@@ -27,9 +26,6 @@ private $jwtService;
         );
 
         if (!$user) {
-            header(
-                'Location:' . BASE_URL
-            );
             $this->error("Token não encontrado");
             exit;
         }
