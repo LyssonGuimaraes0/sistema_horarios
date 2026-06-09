@@ -3,6 +3,9 @@
 require_once '../vendor/autoload.php';
 require_once '../router/router.php';
 
+//Configurações de Datas do Servidor
+date_default_timezone_set('America/Sao_Paulo');
+
 // Carrega o .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();

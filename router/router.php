@@ -74,8 +74,16 @@ $router = [
         '/user/dashboard' => web('DashboardController', 'index'),
         '/forgotpassword' => web('ForgotPasswordController', 'index'),
 
+        //Rota para página de registra horario
+        '/user/attendance' => web('AttendanceController', 'index'),
+
         //Rotas Para Buscar dados de usuario
         '/api/user' => api('UserApiController', 'show'),
+
+        //Rota para buscar Meses Validos
+        '/api/attendance/available-periods'  => api('AttendanceController', 'availablePeriods'),
+
+
 
     ],
     'POST' => [
@@ -83,7 +91,7 @@ $router = [
         '/api/auth/login' => api('auth\AuthApiController', 'login'),
         '/api/auth/logout' => api('auth\AuthApiController', 'logout'),
 
-        //Rota De registro de horarios
+        //Rota De registro de horarios no banco de dados
         '/api/user/attendance' => api('AttendanceController', 'create')
 
     ],
