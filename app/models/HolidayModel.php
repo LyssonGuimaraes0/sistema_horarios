@@ -6,6 +6,7 @@ use PDO;
 
 class HolidayModel
 {
+    //Verificar se existe registro do ano Atual
     public function existsYear(int $year): bool
     {
         $pdo = Database::connect();
@@ -23,6 +24,8 @@ class HolidayModel
 
         return (int) $result['total'] > 0;
     }
+
+    //Cria registro de feriado
 
     public function create(array $data): void
     {
@@ -43,6 +46,45 @@ class HolidayModel
 
         $stmt->execute();
     }
+
+    //Busca registros de feriados do ano
+
+    public function getHolidays(int $year): array
+    {
+        $pdo = Database::connect();
+
+        $sql = "SELECT feriado,
+        data_completa 
+        FROM feriados
+        WHERE YEAR(data_completa) = :year";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':year', $year, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Verifica se data é feriado
+    public function existsDate(string $date): bool
+    {
+        $pdo = Database::connect();
+
+        $sql = "
+        SELECT EXISTS(
+            SELECT 1
+            FROM feriados
+            WHERE data_completa = :date
+        )
+    ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':date', $date);
+        $stmt->execute();
+
+        return (bool) $stmt->fetchColumn();
+    }
+
 }
 
 

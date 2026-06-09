@@ -83,6 +83,8 @@ $router = [
         //Rota para buscar Meses Validos
         '/api/attendance/available-periods'  => api('AttendanceController', 'availablePeriods'),
 
+        //Rota busca de horarios registrados
+        '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
 
 
     ],
@@ -92,7 +94,7 @@ $router = [
         '/api/auth/logout' => api('auth\AuthApiController', 'logout'),
 
         //Rota De registro de horarios no banco de dados
-        '/api/user/attendance' => api('AttendanceController', 'create')
+        '/api/user/attendance' => api('AttendanceController', 'create'),
 
     ],
 

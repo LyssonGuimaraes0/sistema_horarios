@@ -27,5 +27,8 @@ if (!$match) {
 
 [$action, $params] = $match;
 
+
+
 // 👇 AQUI ACONTECE A MÁGICA
-$action(...$params);
+$action(...array_values($params));
+

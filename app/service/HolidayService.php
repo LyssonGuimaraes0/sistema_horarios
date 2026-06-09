@@ -53,7 +53,24 @@ class HolidayService
         $feriados = json_decode($resposta, true);
 
         return $feriados;
-        
+
+    }
+
+    public function getListHolidays(int $year): array
+    {
+        $holidays = $this->holidayModel->getHolidays($year);
+
+        return array_column(
+            $holidays,
+            'feriado',
+            'data_completa'
+        );
+    }
+
+    //Verifica se a data é feriado
+    public function isHoliday(string $date): bool
+    {
+        return $this->holidayModel->existsDate($date);
     }
 }
 
