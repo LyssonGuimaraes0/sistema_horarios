@@ -45,7 +45,7 @@ class AttendanceController extends ApiController
     {
         $allDate = $this->attendanceService->getAttendace($year, $month);
 
-
+        return  $this->success($allDate);
     }
 
 
