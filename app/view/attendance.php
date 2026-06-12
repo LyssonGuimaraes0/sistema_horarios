@@ -66,7 +66,7 @@
                     <!--Folha de horario--->
                     <div class="calendario-body" >
                         <form id="attendance-form">
-                            <!--NavBar-->
+                            <!--Cards-->
                             <?php include_once COMPONENTS_PATH . "/card-attendance.php"; ?>
                         </form>
                     </div>

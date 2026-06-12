@@ -3,6 +3,7 @@ import { apresentarModal } from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
+import { createCardList } from "../utils/card.js";
 
 //Carrega Meses e ano validos
 let years;
@@ -36,39 +37,76 @@ const btnMes = document.querySelector('#abrir-calendario')
 const containerCalendario = document.querySelector('#calendario-form')
 const templateIpunt = document.querySelector('#input-Horarios')
 
+//Container de cards de calendairo
+const containerForm = document.querySelector('#attendance-form')
+
+let response;
+
 btnMes.addEventListener('click', async function () {
+    console.log('click agr')
+
+    if (containerForm.innerHTML.trim() != "") {
+        containerForm.innerHTML = "";
+        showLoading(containerCalendario);
+    }
+
 
     //Coleta dados de Selecionados pelo usuario
     let valorMes = parseInt(selectMes.value, 10);
     let valorAno = parseInt(selectAno.value, 10);
 
-    console.log(valorMes)
-    console.log(valorAno)
-
     //Buscar meses selecionado pelo usuario
     try {
-        let response
         response = await request(`../api/attendance/calendar/${valorAno}/${valorMes}`)
 
         if (!response || response.success != true) {
             throw new Error(response?.error);
         }
 
-        //Separa variaveis de ano e mes
-        console.log(response)
-
     } catch (error) {
         console.log("Erro de comunicação")
     }
 
 
-
+    //Cria cards para cada dado
     //Libera container
     containerCalendario.style.display = "block";
     //Toca animação
     showLoading(containerCalendario);
-    await delay(1000);
+
+    //Cria card para cada elemento
+
+    await delay(900)
+
+
+    response.data.forEach(item => {
+            
+            //
+            const dadosData = 
+                {
+                    date: item[0].date,
+                    weekName: item[0].weekName,
+                    weekend : item[0].weekend,
+                    holiday : item.feriado
+                }
+    
+            const card = createCardList(templateIpunt, dadosData)
+    
+            containerForm.appendChild(card)
+    
+        }); 
+
     hideLoading(containerCalendario)
+
+
+    /*  response.data.forEach(item => {
+                console.log(item[0].date);
+                console.log(item[0].weekName);
+                console.log(item[0].weekend); 
+                console.log(item.feriado);
+                console.log(item.attendance);
+            }); */
+
 
 
 

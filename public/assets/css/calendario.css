@@ -115,7 +115,7 @@
 
 .input-colunm span {
     font-size: 14px;
-    color: var( --dark-text);
+    color: var(--dark-text);
     margin-bottom: 2px;
 }
 
@@ -148,8 +148,8 @@
 
 .circule-data span {
     position: relative;
-    top: 18px;
-    left: 23px;
+    top: 19px;
+    left: 17.5px;
     color: var(--white-text);
     font-size: 20px;
     font-weight: bold;
