@@ -94,6 +94,7 @@ class AttendanceService
         $AllAttendaceMonth = [];
 
         foreach ($allDateMonth as $day) {
+            $foundAttendance = false;
             foreach ($attendaceUser as $attendance) {
                 if ($day['date'] === $attendance['data_completo']) {
                     $AllAttendaceMonth[] = [
@@ -106,15 +107,18 @@ class AttendanceService
                             "saida" => $attendance['saida'],
                         ]
                     ];
+                    $foundAttendance = true;
                     break;
                 }
             }
 
-            $AllAttendaceMonth[] = [
-                $day,
-                "feriado" => ($this->holidayService->isHoliday($day['date']) ? $holidayName[$day['date']] : false),
-                "attendance" => null
-            ];
+            if (!$foundAttendance) {
+                $AllAttendaceMonth[] = [
+                    $day,
+                    "feriado" => ($this->holidayService->isHoliday($day['date']) ? $holidayName[$day['date']] : false),
+                    "attendance" => null
+                ];
+            }
 
         }
 

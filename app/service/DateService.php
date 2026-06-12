@@ -91,7 +91,7 @@ class DateService
 
             //Verifica se é final de semana
             $weekDay = date('N', strtotime($dataAtual));
-            $isWeekend = ($weekDay > 4) ? true : false;
+            $isWeekend = ($weekDay > 5) ? true : false;
 
             //Coleta nome do mes
             $listWeek = $this->getListNameWeek();
