@@ -33,7 +33,7 @@ class AttendanceController extends ApiController
     }
 
     //Coleta mês validos baseado no mes atual
-    public function availablePeriods(): array
+    public function availablePeriods()
     {
         $availableDate = $this->attendanceService->getAvailableMonths();
 
@@ -43,7 +43,10 @@ class AttendanceController extends ApiController
 
     public function getCalendar(int $year, int $month)
     {
-        $allDate = $this->attendanceService->getAttendace($year, $month);
+        //Buscar dados de usuario
+        $user = $this->authMiddleware->handle();
+
+        $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
         return  $this->success($allDate);
     }

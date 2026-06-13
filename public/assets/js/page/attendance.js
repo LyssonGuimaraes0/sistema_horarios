@@ -43,17 +43,18 @@ const containerForm = document.querySelector('#attendance-form')
 let response;
 
 btnMes.addEventListener('click', async function () {
-    console.log('click agr')
 
     if (containerForm.innerHTML.trim() != "") {
         containerForm.innerHTML = "";
         showLoading(containerCalendario);
     }
 
-
     //Coleta dados de Selecionados pelo usuario
     let valorMes = parseInt(selectMes.value, 10);
     let valorAno = parseInt(selectAno.value, 10);
+
+    //Pega nome do mes
+    let nomeMes = selectMes.querySelector(`option[value="${valorMes}"]`).textContent
 
     //Buscar meses selecionado pelo usuario
     try {
@@ -76,41 +77,68 @@ btnMes.addEventListener('click', async function () {
 
     //Cria card para cada elemento
 
-    await delay(900)
-
+    await delay(850)
 
     response.data.forEach(item => {
-            
-            //
-            const dadosData = 
-                {
-                    date: item[0].date,
-                    weekName: item[0].weekName,
-                    weekend : item[0].weekend,
-                    holiday : item.feriado
-                }
-    
-            const card = createCardList(templateIpunt, dadosData)
-    
-            containerForm.appendChild(card)
-    
-        }); 
+        //Organização de variavel
+        const dadosData =
+        {
+            month: nomeMes,
+            year: valorAno,
+            date: item[0].date,
+            weekName: item[0].weekName,
+            weekend: item[0].weekend,
+            holiday: item.feriado,
+            attendance: item.attendance
+        }
+
+        const card = createCardList(templateIpunt, dadosData)
+
+        containerForm.appendChild(card)
+
+    });
 
     hideLoading(containerCalendario)
-
-
-    /*  response.data.forEach(item => {
-                console.log(item[0].date);
-                console.log(item[0].weekName);
-                console.log(item[0].weekend); 
-                console.log(item.feriado);
-                console.log(item.attendance);
-            }); */
-
-
-
-
 })
+
+//Valida Cliques de botões gerados
+
+containerForm.addEventListener('click', async (e) => {
+
+    const btn = e.target.closest('.botao-calendario, .btn-calendario');
+    if (!btn) return;
+
+    const card = btn.closest('.container-horarios');
+    const action = btn.dataset.action;
+
+    switch (action) {
+        case 'edit':
+            console.log('Editar', card.dataset.date);
+            break;
+
+        case 'delete':
+            //Apresenta modal Para remover horario
+            const resultado = await apresentarModal(
+                'modal-default',
+                'alerta',
+                `Deseja Excluir o registro de ${card.dataset.date}`
+            );
+
+            if (resultado) {
+                //Coleta resultado solicitar limpeza
+                
+            } else {
+                
+            }
+
+            break;
+
+        case 'confirm':
+            console.log('Confirmar', card.dataset.date);
+            break;
+    }
+});
+/* apresentarModal(modal, condicao = null, mensagem = null) */
 
 
 

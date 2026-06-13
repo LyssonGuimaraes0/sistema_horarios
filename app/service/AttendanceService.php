@@ -71,7 +71,7 @@ class AttendanceService
         ];
     }
 
-    public function getAttendace(int $year, int $month): array
+    public function getAttendace(int $year, int $month, int $id): array
     {
         //Busca todas datas do mes
         $allDateMonth = $this->dateService->getAllDateOfMonth($year, $month);
@@ -84,7 +84,7 @@ class AttendanceService
 
         //Busca horarios registrados pelo usuario
         $attendaceUser = $this->attendanceModel->getAttendance(
-            $id = 1,
+            $id,
             $allDateMonth[$arrayStart]['date'],
             $allDateMonth[$arrayEnd]['date']
         );
