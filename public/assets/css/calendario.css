@@ -10,6 +10,10 @@
 
 }
 
+#calendario-form {
+    display: none;
+}
+
 .calendario-header {
     width: 100%;
     height: 85px;
@@ -69,20 +73,24 @@
     display: flex;
     width: 100%;
     margin: 10px auto;
-    gap: 20px;
+    gap: 15px;
 
 }
 
 .items-botoes {
-    margin-top: 30px;
+    margin-top: 10px;
     width: 200px;
     display: flex;
-    justify-content: space-evenly
+    justify-content: space-evenly;
+    align-self: center;
+    align-items: center;
 }
 
 .items-horarios {
+    display: flex;
     margin-top: 7px;
 }
+
 
 /*Input do calendario*/
 
@@ -107,8 +115,14 @@
 
 .input-colunm span {
     font-size: 14px;
-    color: var(--primary-color);
+    color: var(--dark-text);
     margin-bottom: 2px;
+}
+
+.container-circulo {
+    width: 78px;
+    height: auto;
+    padding: 5px;
 }
 
 .circule-data {
@@ -119,14 +133,23 @@
     border-radius: 30px;
 }
 
-.circule-dia{
+.header-data {
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    justify-content: center;
+    height: auto;
+    padding: 10px;
+}
+
+.circule-dia {
     background: color-mix(in srgb, var(--primary-color), black 25%);
 }
 
 .circule-data span {
     position: relative;
-    top: 17px;
-    left: 18px;
+    top: 19px;
+    left: 17.5px;
     color: var(--white-text);
     font-size: 20px;
     font-weight: bold;
@@ -135,7 +158,7 @@
 
 .linha-vertical {
     width: 2px;
-    height: 60px;
+    height: auto;
     background: var(--primary-color);
 
 }
@@ -145,7 +168,7 @@
     border-bottom: 1px solid #ddd;
 }
 
-.linha-dia.proximo-dia{
+.linha-dia.proximo-dia {
     opacity: 50%;
     pointer-events: none;
 }
@@ -156,7 +179,7 @@
     cursor: pointer;
 }
 
-.d-none{
+.d-none {
     display: none;
 }
 
@@ -187,50 +210,50 @@ input[readonly]:focus {
 /*========================Página Feriado=====================*/
 
 .container-feriado {
-  position: relative;
-  width: 100%;
-  height: auto;
-  background-color: var(--white-text);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 0px solid;
-  border-radius: 0px 0px 8px 8px;
-  display: none;
+    position: relative;
+    width: 100%;
+    height: auto;
+    background-color: var(--white-text);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 0px solid;
+    border-radius: 0px 0px 8px 8px;
+    display: none;
 }
+
 /*Oculta Elementos da página de feriado e ponto facultativo*/
-#escolha-feriado{
+#escolha-feriado {
     display: none;
 }
 
-#escolha-ponto-facultativo{
+#escolha-ponto-facultativo {
     display: none;
 }
 
 
-.container-input{
+.container-input {
     border: 2px solid var(--primary-color);
     border-top: 0px;
-    border-right:0px ;
+    border-right: 0px;
     border-bottom: 0px;
     margin-bottom: 20px;
     padding-left: 20px;
 }
 
 
-.item-ponto-facultativo{
+.item-ponto-facultativo {
     margin: 10px 0;
 }
 
-.um-input{
+.um-input {
     display: flex;
     flex-direction: column;
 }
 
-.container-servidor-publico{
+.container-servidor-publico {
     display: none;
 }
 
-.container-estagiario{
+.container-estagiario {
     display: none;
 }
-

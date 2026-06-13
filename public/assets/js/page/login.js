@@ -33,6 +33,7 @@ formLogin.addEventListener('submit', async (event) => {
     try {
         response = await request('http://localhost/projetos_pessoais/sistema-de-horarios-mvc/api/auth/login', {
             method: 'POST',
+            credentials: 'include',
             body: {
                 username: dados.usuario,
                 password: dados.password

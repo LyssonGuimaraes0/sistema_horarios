@@ -3,6 +3,9 @@
 require_once '../vendor/autoload.php';
 require_once '../router/router.php';
 
+//Configurações de Datas do Servidor
+date_default_timezone_set('America/Sao_Paulo');
+
 // Carrega o .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
@@ -24,5 +27,9 @@ define('MODEL_PATH', APP_PATH . '/models');
 define('VIEW_PATH', APP_PATH . '/view');
 define('COMPONENTS_PATH', VIEW_PATH . '/components');
 define('HELPER_PATH', APP_PATH . '/helpers');
+
+//Caminho URL
+define('BASE_URL', '/projetos_pessoais/sistema-de-horarios-mvc');
+define('SCRIPT_URL', BASE_URL . "/public" .  '/assets/js');
 
 

@@ -23,7 +23,7 @@ class JwtService
             'email' => $user['email'],
             'cargo' => $user['cargo'],
             'role' => $user['permissoes'],
-            'exp' => time() + 60 * 15
+            'exp' => time() + 60 * 1500
         ];
 
         return JWT::encode(

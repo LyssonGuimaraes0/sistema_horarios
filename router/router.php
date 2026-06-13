@@ -58,7 +58,6 @@ function matchRoute($uri, $routes)
 }
 
 
-
 function web($controller, $action)
 {
     return fn(...$params) => loadRouter('web', $controller, $action, $params);
@@ -75,13 +74,27 @@ $router = [
         '/user/dashboard' => web('DashboardController', 'index'),
         '/forgotpassword' => web('ForgotPasswordController', 'index'),
 
-        //Api
-        '/api/v1/users/{id}' => api('UserApiController', 'show'),
+        //Rota para página de registra horario
+        '/user/attendance' => web('AttendanceController', 'index'),
+
+        //Rotas Para Buscar dados de usuario
+        '/api/user' => api('UserApiController', 'show'),
+
+        //Rota para buscar Meses Validos
+        '/api/attendance/available-periods'  => api('AttendanceController', 'availablePeriods'),
+
+        //Rota busca de horarios registrados
+        '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
+
 
     ],
     'POST' => [
         //Rota de login de usuario
-        '/api/auth/login' => api('auth\AuthApiController', 'login')
+        '/api/auth/login' => api('auth\AuthApiController', 'login'),
+        '/api/auth/logout' => api('auth\AuthApiController', 'logout'),
+
+        //Rota De registro de horarios no banco de dados
+        '/api/user/attendance' => api('AttendanceController', 'create'),
 
     ],
 

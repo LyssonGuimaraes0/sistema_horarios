@@ -14,7 +14,7 @@ use App\helpers\PermissionHelper;
 
     <ul class="sidebar-menu">
         <li class="nav-link">
-            <a href="./home.php">
+            <a href="./dashboard">
                 <i class="fa-solid fa-table-columns"></i>
                 <span class="menu-text">HomePage</span>
             </a>
@@ -28,7 +28,7 @@ use App\helpers\PermissionHelper;
         ): ?>
 
             <li class="nav-link">
-                <a href="./registrar-ponto.php">
+                <a href="./attendance">
                     <i class="fa-solid fa-clock card-icon"></i>
                     <span class="menu-text">Registrar Ponto</span>
                 </a>
@@ -93,10 +93,12 @@ use App\helpers\PermissionHelper;
         <!--------------------------------->
 
         <li class="nav-link">
-            <a href="./settings/logout.php">
+            <a id="btn-logout">
                 <i class="fa-solid fa-house-chimney-window"></i>
                 <span class="menu-text">Sair</span>
             </a>
         </li>
     </ul>
 </aside>
+
+<script type="module" src= <?= SCRIPT_URL . "/utils/logout.js" ?>></script>

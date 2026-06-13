@@ -2,30 +2,31 @@
 
 namespace App\middleware;
 
+use App\controller\api\ApiController;
 use App\service\jwt\JwtService;
 
-class AuthMiddleware extends JwtService
+class AuthMiddleware extends ApiController
 {
+
+private $jwtService;
+
+    public function __construct(){
+        $this->jwtService = New JwtService;
+    }
 
     public function handle()
     {
         if (!isset($_COOKIE['access_token'])) {
-            header(
-                'Location: ../'
-            );
-
+            $this->error("Token não encontrado");
             exit;
         }
 
-        $user = $this->validate(
+        $user = $this->jwtService->validate(
             $_COOKIE['access_token']
         );
 
         if (!$user) {
-            header(
-                'Location: ../'
-            );
-
+            $this->error("Token não encontrado");
             exit;
         }
 
