@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 
 //Realiza tratamento de URL da página
-$base = "/projetos_pessoais/sistema-de-horarios-mvc";
+$base = $_ENV['RAIZ_URL'];
 
 $uri = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
 $request = $_SERVER['REQUEST_METHOD'];

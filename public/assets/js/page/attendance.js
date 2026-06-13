@@ -10,7 +10,7 @@ let years;
 let months
 try {
     let response
-    response = await request('../api/attendance/available-periods')
+    response = await request(`${urlBase}/api/attendance/available-periods`)
 
     if (!response || response.success != true) {
         throw new Error(response?.error);
@@ -57,7 +57,7 @@ btnMes.addEventListener('click', async function () {
 
     //Buscar meses selecionado pelo usuario
     try {
-        response = await request(`../api/attendance/calendar/${valorAno}/${valorMes}`)
+        response = await request(`${urlBase}/api/attendance/calendar/${valorAno}/${valorMes}`)
 
         if (!response || response.success != true) {
             throw new Error(response?.error);

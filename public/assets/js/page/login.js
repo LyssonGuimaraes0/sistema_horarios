@@ -27,11 +27,12 @@ formLogin.addEventListener('submit', async (event) => {
 
     //Coleta dados do formulario
     const dados = getFormData(event.target);
+
     let response
 
     //Chamada da API para AuthLoginController
     try {
-        response = await request('http://localhost/projetos_pessoais/sistema-de-horarios-mvc/api/auth/login', {
+        response = await request(`${urlBase}/api/auth/login`, {
             method: 'POST',
             credentials: 'include',
             body: {
@@ -41,9 +42,11 @@ formLogin.addEventListener('submit', async (event) => {
 
         });
 
+
         if (!response || response.success != true) {
             throw new Error(response?.error);
         }
+
 
         //Login conseguiu ser cadastrado
         window.location.href = "./user/dashboard";
@@ -51,6 +54,7 @@ formLogin.addEventListener('submit', async (event) => {
     } catch (error) {
         mngsError.textContent = "Email ou Senha incorreta! Tente Novamente"
         mngsError.style.visibility = 'visible'
+        console.error(error);
     } finally {
         animationLoading.style.display = 'none';
         if (btnLogin.lastChild && btnLogin.lastChild.nodeType === Node.TEXT_NODE) {
