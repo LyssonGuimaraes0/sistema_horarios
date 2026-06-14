@@ -14,7 +14,7 @@ use App\helpers\PermissionHelper;
 
     <ul class="sidebar-menu">
         <li class="nav-link">
-            <a href="./dashboard">
+            <a href=<?= BASE_URL  . "/user/dashboard"?>>
                 <i class="fa-solid fa-table-columns"></i>
                 <span class="menu-text">HomePage</span>
             </a>
@@ -28,7 +28,7 @@ use App\helpers\PermissionHelper;
         ): ?>
 
             <li class="nav-link">
-                <a href="./attendance">
+                <a href=<?= BASE_URL  . "/user/attendance"?>>
                     <i class="fa-solid fa-clock card-icon"></i>
                     <span class="menu-text">Registrar Ponto</span>
                 </a>
@@ -82,7 +82,7 @@ use App\helpers\PermissionHelper;
             </li>
 
             <li class="nav-link">
-                <a href="./adicionar_user.php">
+                <a href=<?= BASE_URL  . "/user/create"?>>
                     <i class="fa-solid fa-user-plus"></i>
                     <span class="menu-text">Novo Usuario</span>
                 </a>
