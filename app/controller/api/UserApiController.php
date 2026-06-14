@@ -1,6 +1,7 @@
 <?php
 
 namespace App\controller\api;
+
 use App\service\user\AuthUserService;
 use App\service\user\UserService;
 use App\controller\api\ApiController;
@@ -39,9 +40,24 @@ class UserApiController extends ApiController
         } catch (Exception) {
             return $this->error('Dados não encontrado', 404);
         }
+    }
 
+    public function create()
+    {
+        try {
+
+            //Coleta id do usuario Logado
+            /* $user = $this->authMiddleware->handle(); */
+
+            $dados = json_decode(file_get_contents('php://input'),true);
+
+            $this->userService->createUser($dados);
+
+            
+
+            var_dump($dados);
+        } catch (Exception) {
+            return $this->error('Usuario não pode ser cadastrado', 404);
+        }
     }
 }
-
-
-?>

@@ -44,8 +44,8 @@
                                 <!--Botão de enviar PDF-->
                                 <div class="contaienr-pdf">
                                     <form action="./settings/conf_pdf.php" method="post" target="_blank">
-                                        <input type="hidden" name="mes_pdf" value="<?= $mes ?>">
-                                        <input type="hidden" name="ano_pdf" value="<?= $ano ?>">
+                                        <input type="hidden" name="mes_pdf" value="">
+                                        <input type="hidden" name="ano_pdf" value="">
                                         <input class="btn-formulario" type="submit" value="Imprimir">
                                     </form>
                                 </div>

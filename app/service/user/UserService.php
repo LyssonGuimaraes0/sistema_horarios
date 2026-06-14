@@ -13,7 +13,6 @@ class UserService
     public function __construct()
     {
         $this->userModal = new UserModal;
-
     }
 
     public function getDashboardUser($id)
@@ -30,10 +29,18 @@ class UserService
         ];
     }
 
+
+    public function createUser($dados)
+    {
+        //Dados Usuario
+        /* $modalUser = $this->userModal->findUserById($id); */
+
+        if (!isset($modalUser)) {
+            return null;
+        }
+
+        return [
+            'nome' => $modalUser['nome']
+        ];
+    }
 }
-
-
-
-
-
-?>
