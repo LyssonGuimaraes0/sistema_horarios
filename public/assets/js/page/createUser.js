@@ -80,10 +80,31 @@ formCreateUser.addEventListener('submit', async (event) => {
     const dados = getFormData(event.target);
 
     //Seta dados de checkbox
-    dados.permissao = checkboxAdmin.checked ? true : false;
+    dados.permissoes = checkboxAdmin.checked ? true : false;
     delete dados["senha-confirmar"]
 
-    console.log(dados);
+    try {
+
+        let response;
+
+        response = await request(`${urlBase}/api/user/create`, {
+            method: "POST",
+            credentials: 'include',
+            body: { ...dados }
+        });
+
+        if (!response || response.success != true) {
+            // Tenta pegar .error, se não existir tenta .message, se não existir assume o padrão
+            throw new Error(response?.message || "Erro interno no servidor");
+        }
+
+        await apresentarModal("modal-default", "sucesso", response.data);
+
+    } catch (error) {
+        //Apresenta Modal de erro!
+        await apresentarModal("modal-default", "falha", error.message);
+
+    }
 
 
 })

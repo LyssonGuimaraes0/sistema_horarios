@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="row-formulario">
                                         <label >Úsuario tem permissões de Administrador?</label>
-                                        <input type="checkbox" name="permissao" id="checkbox">
+                                        <input type="checkbox" name="permissoes" id="checkbox">
                                     </div>
                                     <div class="item-formulario"><input type="submit" value="Criar usuario" class="btn-login">
                                     </div>

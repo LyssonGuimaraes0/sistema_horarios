@@ -8,7 +8,7 @@ use PDO;
 
 class UserModal
 {
-    //Buscar dados Usuario
+    //Buscar dados Usuario pelo ID
 
     public function findUserById($id)
     {
@@ -35,6 +35,24 @@ class UserModal
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Verifica se Usuario existe pelo CPF
+
+    public function checkCpfExists($cpf): bool
+    {
+        $pdo = Database::connect();
+
+        $sql = "SELECT COUNT(*) as total FROM usuario WHERE cpf = :cpf";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':cpf', $cpf, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Retorna true se o total for maior que 0, se não, retorna false
+        return $resultado['total'] > 0;
+    }
+
     public function createUsuario($dados)
     {
         try {
@@ -56,13 +74,17 @@ class UserModal
             $stmt->bindValue(':senha', $dados['senha'], PDO::PARAM_STR);
             $stmt->bindValue(':cargo', $dados['cargo'], PDO::PARAM_INT);
 
-            if (!$stmt->execute()) {
-                throw new Exception('Erro ao armazena ao banco de dados');
-            }
+            $stmt->execute();
 
             return true;
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        } catch (\PDOException $e) {
+            if ($e->getCode() == 23000) {
+                throw new Exception("Erro: Usuário, CPF ou Email já cadastrado no sistema.");
+            }
+
+            // Se for outro erro de banco (coluna errada, tabela inexistente)
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
+
     }
 }
