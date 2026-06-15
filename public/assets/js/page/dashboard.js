@@ -5,7 +5,7 @@ import { apresentarModal } from "../utils/modal.js";
 const homeNomeUser = document.querySelector('#home-nameUser')
 try {
     let response
-    response = await request('http://localhost/projetos_pessoais/sistema-de-horarios-mvc/api/user')
+    response = await request(`${urlBase}/api/user`)
 
     if (!response || response.success != true) {
         throw new Error(response?.error);

@@ -17,12 +17,12 @@
             </div>
             <div class="items-horarios input-colunm">
                 <span>Saida Almoco</span>
-                <input class="horario-input" maxlength="5" type="time" name="saida" value="">
+                <input class="horario-input" maxlength="5" type="time" name="saida_almoco" value="">
             </div>
 
             <div class="items-horarios input-colunm">
                 <span>Entrada Almoco</span>
-                <input class="horario-input" maxlength="5" type="time" name="entrada" value="">
+                <input class="horario-input" maxlength="5" type="time" name="volta_almoco" value="">
             </div>
 
             <div class="items-horarios input-colunm">
@@ -31,13 +31,8 @@
             </div>
 
             <div class="items-botoes">
-                <i class="fa-solid fa-pen-to-square botao-calendario" id="btn-editar"
-                    onclick="editar_horario(this)"></i>
-                <i class="fa-solid fa-check btn-confirmar botao-calendario d-none" id="btn-confirmar"
-                    onclick="confirmar_horario(this)"></i>
-                <i class="fa-solid fa-xmark btn-cancelar botao-calendario d-none" id="btn-cancelar"
-                    onclick="cancelar_horario(this)"></i>
-                <i class="fa-solid fa-trash-can botao-calendario" onclick="remover_horario()"></i>
+                <button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>
+                <i class='fa-solid fa-file-alt botao-calendario'></i>
             </div>
         </div>
     </div>

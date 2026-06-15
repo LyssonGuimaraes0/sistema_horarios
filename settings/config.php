@@ -29,7 +29,7 @@ define('COMPONENTS_PATH', VIEW_PATH . '/components');
 define('HELPER_PATH', APP_PATH . '/helpers');
 
 //Caminho URL
-define('BASE_URL', '/projetos_pessoais/sistema-de-horarios-mvc');
+define('BASE_URL', $_ENV['RAIZ_URL']);
 define('SCRIPT_URL', BASE_URL . "/public" .  '/assets/js');
 
 

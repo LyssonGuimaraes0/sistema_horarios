@@ -77,6 +77,9 @@ $router = [
         //Rota para página de registra horario
         '/user/attendance' => web('AttendanceController', 'index'),
 
+        //Rota para página de criação de usuario
+        '/user/create' => web('UserController', 'index'),
+
         //Rotas Para Buscar dados de usuario
         '/api/user' => api('UserApiController', 'show'),
 
@@ -85,6 +88,8 @@ $router = [
 
         //Rota busca de horarios registrados
         '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
+
+        
 
 
     ],
@@ -95,6 +100,9 @@ $router = [
 
         //Rota De registro de horarios no banco de dados
         '/api/user/attendance' => api('AttendanceController', 'create'),
+
+         //Rota De registro de horarios no banco de dados
+        '/api/user/create' => api('UserApiController', 'create'),
 
     ],
 
