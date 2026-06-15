@@ -61,7 +61,7 @@ use App\helpers\PermissionHelper;
 
         <?php if (PermissionHelper::isAdmin($user) || PermissionHelper::isCoordenador($user)): ?>
             <li class="nav-link">
-                <a href="./buscar_usuario.php">
+                <a href=<?= BASE_URL  . "/user/management"?>>
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <span class="menu-text">Buscar usuario</span>
                 </a>

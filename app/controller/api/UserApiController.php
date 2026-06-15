@@ -73,4 +73,67 @@ class UserApiController extends ApiController
             return $this->error($e->getMessage(), 200);
         }
     }
+
+    //Coletar setores 
+
+    public function getSectors()
+    {
+        try {
+
+            //Coleta id do usuario Logado
+            $user = $this->authMiddleware->handle();
+
+            //Verificar se tem permissão de admin
+            if (!PermissionHelper::isAdmin($user)) {
+                throw new Exception("Usuario não tem permissão", 401);
+            }
+
+            $setores = $this->userService->getSectors();
+
+            return $this->success($setores, 200);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 404);
+        }
+    }
+    public function getUsersBySector()
+    {
+
+        //Coleta id do usuario Logado
+        $user = $this->authMiddleware->handle();
+
+        //Verificar se tem permissão de admin
+        if (!PermissionHelper::isAdmin($user)) {
+            throw new Exception("Usuario não tem permissão", 401);
+        }
+
+        $setor = filter_input(INPUT_GET, 'setor', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        try {
+
+            $UsersSetores = $this->userService->getUsersBySector($setor);
+
+            if (!isset($UsersSetores)) {
+                throw new Exception("Sem registros encontrados", 404);
+            }
+
+            return $this->success($UsersSetores, 200);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 404);
+        }
+    }
 }

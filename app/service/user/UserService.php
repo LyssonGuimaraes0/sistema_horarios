@@ -29,13 +29,35 @@ class UserService
         ];
     }
 
+    //Buscar setores de usuarios cadastrados
+
+    public function getSectors()
+    {
+        return $this->userModal->getSectors();
+    }
+
+    //Coleta nome de usuarios do setor
+    public function getUsersBySector(string $setor)
+    {
+        $dados = $this->userModal->getUsersBySector($setor);
+
+        $result = [];
+        foreach ($dados as $dado){
+            $result[] = [
+                "id" => $dado['id'],
+                "name" => $dado['nome']
+            ];
+        }
+        return $result;
+        }
+    
 
     public function createUser($dados)
     {
 
         //Verifica se CPF já esta registrado
         $cpfModel = $this->userModal->checkCpfExists($dados['cpf']);
-        
+
         if ($cpfModel === true) {
             throw new Exception("Usuario já esta registrado", 400);
         }
@@ -45,7 +67,7 @@ class UserService
         $dados['senha'] = $hash;
 
         //Definir permissão do usuario
-        $dados['permissoes'] = ($dados['permissoes'] === true) ? "administrador" : "usuario" ;
+        $dados['permissoes'] = ($dados['permissoes'] === true) ? "administrador" : "usuario";
 
         //Creação de dados de usuario
         $modalUser = $this->userModal->createUsuario($dados);

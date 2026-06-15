@@ -6,3 +6,17 @@ export function delay(ms) {
 }
 
 //=================//
+
+// Função Debounce usando o conceito de Promise cancelável
+export function debouncePromise(ms) {
+    let timeoutId;
+    
+    return () => {
+        // Toda vez que for chamada, cancela a promessa anterior
+        clearTimeout(timeoutId);
+        
+        return new Promise(resolve => {
+            timeoutId = setTimeout(resolve, ms);
+        });
+    };
+}

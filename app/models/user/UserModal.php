@@ -21,7 +21,7 @@ class UserModal
         u.cpf,
         u.setor,
         u.permissoes,
-        c.cargo
+        c.cargo,
         FROM usuario AS u
         INNER JOIN cargo AS c ON u.cargo = c.id
         WHERE u.id = :id 
@@ -83,6 +83,50 @@ class UserModal
             }
 
             // Se for outro erro de banco (coluna errada, tabela inexistente)
+            throw new Exception("Erro no banco de dados: " . $e->getMessage());
+        }
+
+    }
+
+    //Seleciona setores
+
+    public function getSectors()
+    {
+        $pdo = Database::connect();
+
+        $sql = "SELECT DISTINCT
+        setor
+        FROM usuario 
+        ORDER BY setor ASC";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute();
+
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_column($resultado, 'setor');
+    }
+
+    //Seleciona nome do usuarios de setor 
+    public function getUsersBySector($setor)
+    {
+        try {
+            $pdo = Database::connect();
+
+            $sql = "SELECT
+        id,
+        nome
+        FROM usuario
+        WHERE setor = :setor 
+        ORDER BY nome ASC";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':setor', $setor, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
             throw new Exception("Erro no banco de dados: " . $e->getMessage());
         }
 

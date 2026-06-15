@@ -1,7 +1,5 @@
 import { request } from "../service/ajax.js";
 import { apresentarModal } from "../utils/modal.js";
-import { showLoading, hideLoading } from "../utils/loading.js";
-import { delay } from "../utils/delay.js";
 import { getFormData } from "../utils/form.js";
 import { formatTextToCPF, formatTextToString, formatTextToStringWithNumber } from "../utils/format.js";
 

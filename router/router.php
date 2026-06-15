@@ -78,10 +78,19 @@ $router = [
         '/user/attendance' => web('AttendanceController', 'index'),
 
         //Rota para página de criação de usuario
-        '/user/create' => web('UserController', 'index'),
+        '/user/create' => web('UserController', 'create'),
+
+        //Rota para página de gerenciamento de usuarios
+        '/user/management' => web('UserController', 'management'),
 
         //Rotas Para Buscar dados de usuario
         '/api/user' => api('UserApiController', 'show'),
+
+        //Rota de retorno de setores
+        '/api/user/sectors' => api('UserApiController', 'getSectors'),
+
+        //Rota de retorno de Usuarios Por setor
+        '/api/user/sector/users' => api('UserApiController', 'getUsersBySector'),
 
         //Rota para buscar Meses Validos
         '/api/attendance/available-periods'  => api('AttendanceController', 'availablePeriods'),
@@ -90,8 +99,6 @@ $router = [
         '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
 
         
-
-
     ],
     'POST' => [
         //Rota de login de usuario

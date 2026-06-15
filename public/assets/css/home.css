@@ -76,6 +76,10 @@
     margin-top: 25px;
 }
 
+#container-pessoas{
+    display: none;
+}
+
 .title-container {
     margin-left: 20px;
 

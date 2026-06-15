@@ -17,7 +17,6 @@ try {
     }
 
     //Separa variaveis de ano e mes
-    console.log(response)
     years = response.data.years;
     months = response.data.months;
 
