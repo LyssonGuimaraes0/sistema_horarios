@@ -1,7 +1,31 @@
+/*Container de overlay de animação*/
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(219, 218, 218, 1);
+}
+
+.hidden {
+    display: none;
+}
+
+
 /*Animação de Carregamento*/
 
 .loading {
     display: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 150px;
+    text-align: center;
 }
 
 .loading span {
@@ -13,6 +37,26 @@
     animation: bounce 0.6s cubic-bezier(0.6, 0.1, 1, 0.4);
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+/* Novo: Estilização do texto para forçar ele a ir para baixo */
+.loading-text {
+    width: 115%;
+    margin: 8px 0 0 0;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #333;
+
+}
+
+.loading-text::after {
+    content: '';
+    /* Começa vazio */
+    display: inline-block;
+    width: 20px;
+    /* Espaço reservado para os pontos não empurrarem o layout */
+    text-align: left;
+    animation: pontinhos 1.5s steps(4) infinite;
 }
 
 .loading span:nth-child(1) {
@@ -27,6 +71,7 @@
     animation-delay: 0.3s;
 }
 
+
 @keyframes bounce {
     from {
         transform: translateY(0);
@@ -36,4 +81,27 @@
         transform: translateY(7px);
     }
 
+}
+
+/* Keyframes dos pontos: 0, 1, 2 e 3 pontinhos */
+@keyframes pontinhos {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
 }

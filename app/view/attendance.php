@@ -58,6 +58,7 @@
             <div class="section-container">
                 <!--Calendario Oculto-->
                 <div class="container-calendario calendario-container" id="calendario-form">
+                    <div class="loading-overlay hidden"></div>
                     <div class="calendario-header">
                         <div class="calendario-titulo">
                             <span>Folha de Ponto</span>
