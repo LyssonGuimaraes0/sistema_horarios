@@ -9,6 +9,7 @@
 /*Conatiner Principal*/
 .container-home {
     padding-top: 10px;
+
 }
 
 .container-down {
@@ -77,6 +78,10 @@
 }
 
 #container-pessoas{
+    display: none;
+}
+
+#container-user-dados{
     display: none;
 }
 

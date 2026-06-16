@@ -117,13 +117,13 @@ class UserApiController extends ApiController
 
         try {
 
-            $UsersSetores = $this->userService->getUsersBySector($setor);
+            $UsersDetails = $this->userService->getUsersBySector($setor);
 
-            if (!isset($UsersSetores)) {
+            if (!isset($UsersDetails)) {
                 throw new Exception("Sem registros encontrados", 404);
             }
 
-            return $this->success($UsersSetores, 200);
+            return $this->success($UsersDetails, 200);
 
         } catch (Exception $e) {
 
@@ -136,4 +136,37 @@ class UserApiController extends ApiController
             return $this->error($e->getMessage(), 404);
         }
     }
+
+    //Busca Dados de usuario
+    public function getUserDetails()
+    {
+
+        //Coleta id do usuario Logado
+        $user = $this->authMiddleware->handle();
+
+        //Verificar se tem permissão de admin
+        if (!PermissionHelper::isAdmin($user)) {
+            throw new Exception("Usuario não tem permissão", 401);
+        } 
+
+        $user_id = (int) filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+     try {
+
+            $UsersDetails = $this->userService->getUserbyID($user_id);
+
+            return $this->success($UsersDetails, 200);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 404);
+        } 
+    }
+
 }

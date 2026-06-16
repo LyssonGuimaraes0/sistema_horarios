@@ -21,7 +21,7 @@
             <div class="section-container">
                 <div class="container-home">
                     <div class="container-welcome welcome-white">
-                        <h1 class="title-container">Buscar usuario </h1>
+                        <h1 class="title-container">Gerenciar Usuarios</h1>
                     </div>
                 </div>
                 <div class="container-home container-down">
@@ -39,12 +39,78 @@
                             <span>Selecione uma pessoa:</span>
                             <select class="dropdown" name="pessoa-seletor" id="dropdown-pessoas"></select>
                             <option value="" selected hidden>Selecione o usuario</option>
-                            <button class="btn-formulario btn-registrar" type="submit">Buscar</button>
+                            <button class="btn-formulario btn-registrar" id="btn-search-user">Buscar</button>
                         </div>
                     </div>
                 </div>
+
                 <!-- Container de dados do usuario -->
 
+                <div class="container-home" id="container-user-dados">
+                    <div class="container-calendario calendario-container">
+                        <div class="loading-overlay hidden"></div>
+                        <div class="calendario-header">
+                            <div class="calendario-titulo">
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="calendario-body">
+                            <span>Dados do Perfil:</span>
+                            <table>
+                                <thead>
+                                    <th>Email:</th>
+                                    <th>CPF</th>
+                                    <th>Cargo</th>
+                                    <th>Permissões</th>
+                                    <th>Nome de acesso</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-item='email'></td>
+                                        <td data-item='cpf'></td>
+                                        <td data-item='cargo'></td>
+                                        <td data-item='permissoes'></td>
+                                        <td data-item='username'></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!--Accordion-->
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <button class="accordion-header">Folha de Ponto mensal</button>
+                                    <div class="accordion-content">
+                                        <div class="row-dropdown">
+                                            <span>Selecione o Ano:</span>
+                                            <select class="dropdown" name="ano-seletor" id="select-folha-ponto">
+                                            </select>
+                                            <button class="btn-formulario btn-registrar"
+                                                id="search-folha-mensal">Buscar</button>
+                                        </div>
+
+                                        <!--Tabela de Folha Mensal-->
+                                        <table id="tabela-folha-mensal">
+                                            <thead>
+                                                <th>Mes/Ano:</th>
+                                                <th>Verificar Arquivo</th>
+                                            </thead>
+                                            <!--Template td-->
+                                            <template id="template-tr-folha-mensal">
+                                                <tr>
+                                                    <td data-folha="month"></td>
+                                                    <td data-folha="file"></td>
+                                                </tr>
+                                            </template>
+                                            <tbody id="container-td">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>

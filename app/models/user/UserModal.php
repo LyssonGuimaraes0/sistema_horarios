@@ -21,7 +21,7 @@ class UserModal
         u.cpf,
         u.setor,
         u.permissoes,
-        c.cargo,
+        c.cargo
         FROM usuario AS u
         INNER JOIN cargo AS c ON u.cargo = c.id
         WHERE u.id = :id 

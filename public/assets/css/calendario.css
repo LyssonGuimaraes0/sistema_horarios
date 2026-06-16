@@ -13,6 +13,9 @@
 #calendario-form {
     display: none;
 }
+#tabela-folha-mensal{
+    display: none;
+}
 
 .calendario-header {
     width: 100%;

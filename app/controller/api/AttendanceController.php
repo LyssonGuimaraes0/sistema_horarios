@@ -3,6 +3,7 @@
 namespace App\controller\api;
 use App\middleware\AuthMiddleware;
 use App\service\AttendanceService;
+use App\helpers\PermissionHelper;
 use Exception;
 
 
@@ -48,7 +49,39 @@ class AttendanceController extends ApiController
 
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
-        return  $this->success($allDate);
+        return $this->success($allDate);
+    }
+
+    //Busca folha de Ponto Mesal por Ano
+    public function getUserTimesheet(int $id)
+    {
+
+        //Coleta id do usuario Logado
+        $user = $this->authMiddleware->handle();
+
+        //Verificar se tem permissão de admin
+        if (!PermissionHelper::isAdmin($user)) {
+            throw new Exception("Usuario não tem permissão", 401);
+        }
+
+        $year = (int) filter_input(INPUT_GET, 'year', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        try {
+
+            $allTimesSheets = $this->attendanceService->getTimesheets($year, $id);
+
+            return $this->success($allTimesSheets, 200);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 500);
+        }
     }
 
 

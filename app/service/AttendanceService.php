@@ -39,7 +39,7 @@ class AttendanceService
         $horarios = $dados['registro']['horario'];
 
         //Enviar horarios do usuario
-        $modalAttendance = $this->attendanceModel->create($id, $data, $horarios);
+        /* $modalAttendance = $this->attendanceModel->create($id, $data, $horarios); */
 
     }
 
@@ -71,6 +71,7 @@ class AttendanceService
         ];
     }
 
+    //Obter registros de horarios por mes e ano
     public function getAttendace(int $year, int $month, int $id): array
     {
         //Busca todas datas do mes
@@ -123,6 +124,39 @@ class AttendanceService
         }
 
         return $AllAttendaceMonth;
+
+    }
+    //Obter folha mensal por ano
+    public function getTimesheets(int $year, int $id)
+    {
+
+        //Busca Registros de folha de ponto
+        $allTimesSheets = $this->attendanceModel->getTimesheetsbyYear($id, $year);
+
+        //array de nomes de meses
+        $nameMonth = $this->dateService->getListNameMonth();
+        $curretYear = $this->dateService->getCurrentYear();
+
+        $AllMonths = ($curretYear === $year) ? 
+        $this->dateService->getCurrentMonth() : 12 ;
+
+        $formatTimesSheets = [];
+
+        for ($month = $AllMonths ; $month >= 1; $month--) {
+            if (isset($allTimesSheets[$month])) {
+                $formatTimesSheets[] = [
+                    'month' => $nameMonth[$month],
+                    'file' => $allTimesSheets[$month]
+                ];
+            } else {
+                $formatTimesSheets[] = [
+                    'month' => $nameMonth[$month],
+                    'file' => null
+                ];
+            }
+        }
+
+        return $formatTimesSheets;
 
     }
 

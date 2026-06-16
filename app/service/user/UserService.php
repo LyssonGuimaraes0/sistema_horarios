@@ -29,6 +29,20 @@ class UserService
         ];
     }
 
+    //Obter dados de usuario pelo id
+
+    public function getUserbyID(int $id)
+    {
+            //Dados Usuario
+            $modalUser = $this->userModal->findUserById($id);
+
+            if ($modalUser === false) {
+                throw new Exception("Usuario não foi encontrado", 404);
+            }
+
+            return $modalUser;
+    }
+
     //Buscar setores de usuarios cadastrados
 
     public function getSectors()
@@ -42,15 +56,15 @@ class UserService
         $dados = $this->userModal->getUsersBySector($setor);
 
         $result = [];
-        foreach ($dados as $dado){
+        foreach ($dados as $dado) {
             $result[] = [
                 "id" => $dado['id'],
                 "name" => $dado['nome']
             ];
         }
         return $result;
-        }
-    
+    }
+
 
     public function createUser($dados)
     {

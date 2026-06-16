@@ -63,7 +63,7 @@ use App\helpers\PermissionHelper;
             <li class="nav-link">
                 <a href=<?= BASE_URL  . "/user/management"?>>
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <span class="menu-text">Buscar usuario</span>
+                    <span class="menu-text">Gerenciar Usuarios</span>
                 </a>
             </li>
         <?php endif; ?>

@@ -92,13 +92,19 @@ $router = [
         //Rota de retorno de Usuarios Por setor
         '/api/user/sector/users' => api('UserApiController', 'getUsersBySector'),
 
+        //Rota de retorno de detalhes de usuario
+        '/api/user/details' => api('UserApiController', 'getUserDetails'),
+
+        //Rota de Folhas mensal de usuario por ano
+        '/api/user/{id}/timesheets' => api('AttendanceController', 'getUserTimesheet'),
+
         //Rota para buscar Meses Validos
-        '/api/attendance/available-periods'  => api('AttendanceController', 'availablePeriods'),
+        '/api/attendance/available-periods' => api('AttendanceController', 'availablePeriods'),
 
         //Rota busca de horarios registrados
         '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
 
-        
+
     ],
     'POST' => [
         //Rota de login de usuario
@@ -108,7 +114,7 @@ $router = [
         //Rota De registro de horarios no banco de dados
         '/api/user/attendance' => api('AttendanceController', 'create'),
 
-         //Rota De registro de horarios no banco de dados
+        //Rota De registro de horarios no banco de dados
         '/api/user/create' => api('UserApiController', 'create'),
 
     ],
