@@ -43,64 +43,84 @@ const containerForm = document.querySelector('#attendance-form')
 
 let response;
 
+let carregando = false;
+
 btnMes.addEventListener('click', async function () {
 
-    if (containerForm.innerHTML.trim() != "") {
-        containerForm.innerHTML = "";
-    }
+    if (carregando) return;
 
-    //Coleta dados de Selecionados pelo usuario
-    let valorMes = parseInt(selectMes.value, 10);
-    let valorAno = parseInt(selectAno.value, 10);
+    carregando = true;
+    btnMes.disabled = true;
 
-    //Pega nome do mes
-    let nomeMes = selectMes.querySelector(`option[value="${valorMes}"]`).textContent
 
-    //Buscar meses selecionado pelo usuario
     try {
+
+
+
+        if (containerForm.innerHTML.trim() != "") {
+            containerForm.innerHTML = "";
+        }
+
+        //Coleta dados de Selecionados pelo usuario
+        let valorMes = parseInt(selectMes.value, 10);
+        let valorAno = parseInt(selectAno.value, 10);
+
+        //Pega nome do mes
+        let nomeMes = selectMes.querySelector(`option[value="${valorMes}"]`).textContent
+
+        //Buscar meses selecionado pelo usuario
+
         response = await request(`${urlBase}/api/attendance/calendar/${valorAno}/${valorMes}`)
 
         if (!response || response.success != true) {
             throw new Error(response?.error);
         }
 
+
+        //Cria cards para cada dado
+        //Libera container
+        containerCalendario.style.display = "block";
+        //Toca animação
+        showLoading();
+
+        //Cria card para cada elemento
+
+        await delay(850)
+
+        response.data.forEach(item => {
+            //Organização de variavel
+            const dadosData =
+            {
+                month: nomeMes,
+                year: valorAno,
+                date: item[0].date,
+                weekName: item[0].weekName,
+                weekend: item[0].weekend,
+                holiday: item.feriado,
+                attendance: item.attendance
+            }
+
+            const card = createCardList(templateIpunt, dadosData)
+
+            containerForm.appendChild(card)
+
+        });
+
+        await delay(1500);
+        hideLoading();
+
+
     } catch (error) {
         console.log("Erro de comunicação")
+        //Para a execução
+        return;
+
+    } finally {
+        carregando = false;
+        btnMes.disabled = false;
     }
 
 
-    //Cria cards para cada dado
-    //Libera container
-    containerCalendario.style.display = "block";
-    //Toca animação
-    showLoading();
-
-    //Cria card para cada elemento
-
-    await delay(850)
-
-    response.data.forEach(item => {
-        //Organização de variavel
-        const dadosData =
-        {
-            month: nomeMes,
-            year: valorAno,
-            date: item[0].date,
-            weekName: item[0].weekName,
-            weekend: item[0].weekend,
-            holiday: item.feriado,
-            attendance: item.attendance
-        }
-
-        const card = createCardList(templateIpunt, dadosData)
-
-        containerForm.appendChild(card)
-
-    });
-
-    await setTimeout(() => {
-        hideLoading();
-    }, 1500);
 })
 
 //Valida inputs de calendario

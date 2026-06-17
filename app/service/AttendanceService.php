@@ -29,6 +29,13 @@ class AttendanceService
 
       //Cria Verificação de Horarios existente Conflict 409
 
+      //Verifica se os array de horarios esta vazio
+      foreach($dados['attendance'] as $horario){
+        if (!isset($horario) || $horario == "") {
+            throw new \Exception("Horarios em falta");
+        }
+      }
+
 
       return $this->attendanceModel->create($id,$dados['date'],$dados['status'],$dados['attendance']);
     }
