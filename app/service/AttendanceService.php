@@ -23,24 +23,14 @@ class AttendanceService
 
     }
 
-    //Adição de novo horario ao banco de dados
-    public function createAttendance($id, $dadosJson)
+    //Registra novo horario ao banco de dados
+    public function createAttendance($id, $dados)
     {
-        $modalUser = $this->userModal->findUserById($id);
-        if (!isset($modalUser)) {
-            return null;
-        }
 
-        //Converte para array
-        $dados = json_decode($dadosJson, true);
+      //Cria Verificação de Horarios existente Conflict 409
 
-        // Acessando os valores diretamente:
-        $data = $dados['registro']['data'];
-        $horarios = $dados['registro']['horario'];
 
-        //Enviar horarios do usuario
-        /* $modalAttendance = $this->attendanceModel->create($id, $data, $horarios); */
-
+      return $this->attendanceModel->create($id,$dados['date'],$dados['status'],$dados['attendance']);
     }
 
     public function getAvailableMonths($limitYear = 2025): array

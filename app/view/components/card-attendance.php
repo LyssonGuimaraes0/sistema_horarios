@@ -13,26 +13,26 @@
             </div>
             <div class="items-horarios input-colunm">
                 <span>Entrada</span>
-                <input class="horario-input" maxlength="5" type="time" name="entrada" value="">
+                <input class="horario-input" step="60" type="time" name="entrada">
             </div>
             <div class="items-horarios input-colunm">
                 <span>Saida Almoco</span>
-                <input class="horario-input" maxlength="5" type="time" name="saida_almoco" value="">
+                <input class="horario-input" step="60" type="time" name="saida_almoco" >
             </div>
 
             <div class="items-horarios input-colunm">
                 <span>Entrada Almoco</span>
-                <input class="horario-input" maxlength="5" type="time" name="volta_almoco" value="">
+                <input class="horario-input" step="60" type="time" name="volta_almoco" >
             </div>
 
             <div class="items-horarios input-colunm">
                 <span>Saida</span>
-                <input class="horario-input" maxlength="5" type="time" name="saida" value="">
+                <input class="horario-input" step="60" type="time" name="saida" >
             </div>
 
             <div class="items-botoes">
-                <button type='submit' class='btn-calendario' name='dia' value='$dia'>Confirmar</button>
-                <i class='fa-solid fa-file-alt botao-calendario'></i>
+                <button type='submit' class='btn-calendario' name='dia' data-action="submit" >Confirmar</button>
+                <i class='fa-solid fa-file-alt botao-calendario' data-action="certificate"></i>
             </div>
         </div>
     </div>

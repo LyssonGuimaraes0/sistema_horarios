@@ -3,7 +3,8 @@ import { apresentarModal } from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
-import { createCardList } from "../utils/card.js";
+import { createCardList, createButtonsCalendar } from "../utils/card.js";
+import { verificarInputs } from "../utils/verifyInput.js";
 
 //Carrega Meses e ano validos
 let years;
@@ -45,7 +46,6 @@ btnMes.addEventListener('click', async function () {
 
     if (containerForm.innerHTML.trim() != "") {
         containerForm.innerHTML = "";
-        showLoading(containerCalendario);
     }
 
     //Coleta dados de Selecionados pelo usuario
@@ -72,7 +72,7 @@ btnMes.addEventListener('click', async function () {
     //Libera container
     containerCalendario.style.display = "block";
     //Toca animação
-    showLoading(containerCalendario);
+    showLoading();
 
     //Cria card para cada elemento
 
@@ -97,25 +97,103 @@ btnMes.addEventListener('click', async function () {
 
     });
 
-    hideLoading(containerCalendario)
+    await setTimeout(() => {
+        hideLoading();
+    }, 1500);
 })
 
-//Valida Cliques de botões gerados
+//Valida inputs de calendario
+
+document.addEventListener('input', function (e) {
+    //Retorna caso não seja inputs de horario
+    if (!e.target.classList.contains('horario-input')) return;
+
+    const input = e.target;
+    // pega todos inputs da div correta
+    const containerInputs = input.closest('.container-horarios');
+
+    //Coleta inputs do container correto e converte para array
+    const allinputs = Array.from(containerInputs.querySelectorAll('.horario-input'));
+
+    const indexAllInputs = allinputs.indexOf(input);
+
+    verificarInputs(input, indexAllInputs, allinputs)
+
+});
+
+
+//Valida Cliques de botões gerados no formulario
 
 containerForm.addEventListener('click', async (e) => {
-
+    e.preventDefault()
     const btn = e.target.closest('.botao-calendario, .btn-calendario');
     if (!btn) return;
 
     const card = btn.closest('.container-horarios');
     const action = btn.dataset.action;
-
+    let attendanceData = {}
+    let inputsattendance = {};
+    //Casos possiveis com botões presente no calendario
     switch (action) {
+        //Enviar dados de formulario
+        
+        case 'submit':
+
+            //Coleta dados dos inputs
+            const inputs = card.querySelectorAll('.horario-input')
+            inputs.forEach(input => {
+                //Armazena valores em objs
+                inputsattendance[input.name] = input.value;
+            });
+
+            //Monta objeto de Horarios
+            attendanceData = {
+                date: card.dataset.date,
+                status: "Completo",
+                attendance: inputsattendance
+            }
+
+            //Enviar dados para o Backend
+            try {
+                response = await request(`${urlBase}/api/user/attendance/create`, {
+                    method: "POST",
+                    credentials: 'include',
+                    body: { ...attendanceData }
+                })
+
+                if (!response || response.success != true) {
+                    throw new Error(response?.error);
+                }
+
+                console.log(response);
+
+                //Aplica estilos de cards com editados
+
+                inputs.forEach(input => {
+                    input.setAttribute("readonly", "true")
+                });
+
+                //Altera botões do container btn
+                createButtonsCalendar(card.querySelector('.items-botoes'));
+
+            } catch (error) {
+                console.log("Erro de comunicação")
+            }
+
+            break;
+
+        //Editar dados de formulario    
         case 'edit':
             console.log('Editar', card.dataset.date);
             break;
 
+        //Adicionar atestado por periodo
+        case 'certificate':
+            console.log('Certificate', card.dataset.date);
+            break;
+
         case 'delete':
+
             //Apresenta modal Para remover horario
             const resultado = await apresentarModal(
                 'modal-default',
@@ -125,9 +203,9 @@ containerForm.addEventListener('click', async (e) => {
 
             if (resultado) {
                 //Coleta resultado solicitar limpeza
-                
+
             } else {
-                
+
             }
 
             break;
@@ -137,7 +215,7 @@ containerForm.addEventListener('click', async (e) => {
             break;
     }
 });
-/* apresentarModal(modal, condicao = null, mensagem = null) */
+
 
 
 

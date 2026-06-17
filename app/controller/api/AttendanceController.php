@@ -23,13 +23,27 @@ class AttendanceController extends ApiController
 
     public function create()
     {
-        //Valida Token de acesso
-        /*$user = $this->authMiddleware->handle(); */
+        try {
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle(); 
 
-        //Enviar Horarios do usuario
-        $dadosJson = file_get_contents('php://input');
+            $dados = json_decode(file_get_contents('php://input'), true);
 
-        $this->attendanceService->createAttendance($id = 1, $dadosJson);
+            //Enviar Horarios do usuario
+            $this->attendanceService->createAttendance($user->id, $dados);
+
+             return $this->success("Registro Realizado com sucesso!",201);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 400);
+        }
 
     }
 

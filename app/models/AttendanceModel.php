@@ -8,34 +8,61 @@ class AttendanceModel
 {
 
     //Adição de novo horario ao banco de dados
-    public function create($id, $data, $horarios)
+    public function create($id, $data, $status, $horarios)
     {
-        $pdo = Database::connect();
+        try {
+            $pdo = Database::connect();
 
-        $sql = "INSERT INTO ponto_diario (
-        usuario_id, data_completo, ";
+            $pdo->beginTransaction();
 
-        foreach ($horarios as $horario => $valor) {
-            if ($horario == array_key_last($horarios)) {
-                $sql .= "$horario VALUE";
-            } else {
-                $sql .= "$horario, ";
+            $sql = "INSERT INTO ponto_diario (
+        usuario_id, data_completo, status_dia, ";
+
+            //Formata colunas e valores
+            foreach ($horarios as $horario => $valor) {
+                if ($horario == array_key_last($horarios)) {
+                    $sql .= "$horario) VALUE (";
+
+                    //Monta tabela sql completo baseado nos dados existentes
+                    foreach ($horarios as $horario => $valor) {
+                        if ($horario == array_key_first($horarios)) {
+                            $sql .= ":usuario_id, :data_completo, :status_dia,";
+                        }
+
+                        if ($horario == array_key_last($horarios)) {
+                            $sql .= ":$horario)";
+
+                        } else {
+
+                            $sql .= ":$horario, ";
+                        }
+                    }
+                } else {
+                    $sql .= "$horario, ";
+                }
             }
 
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':usuario_id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':data_completo', $data, PDO::PARAM_STR);
+            $stmt->bindValue(':status_dia', $status, PDO::PARAM_STR);
 
+            //Prepara dados de insert baseados nos arrays e
+            foreach ($horarios as $horario => $valor) {
+                $stmt->bindValue(":$horario", $valor, PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
+
+            $pdo->commit();
+
+            return;
+
+        } catch (\PDOException $e) {
+            //Caso de de erro limpa registro
+            $pdo->rollBack();
+            echo "Erro na execução: " . $e->getMessage();
         }
-
-        echo $sql;
-
-        return;
-
-
-        /* $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC); */
 
     }
 
@@ -86,7 +113,7 @@ class AttendanceModel
         $stmt->execute();
 
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         return array_column($resultados, 'caminho_folha_de_ponto', 'mes');
 
     }

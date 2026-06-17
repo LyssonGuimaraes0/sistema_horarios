@@ -112,7 +112,7 @@ $router = [
         '/api/auth/logout' => api('auth\AuthApiController', 'logout'),
 
         //Rota De registro de horarios no banco de dados
-        '/api/user/attendance' => api('AttendanceController', 'create'),
+        '/api/user/attendance/create' => api('AttendanceController', 'create'),
 
         //Rota De registro de horarios no banco de dados
         '/api/user/create' => api('UserApiController', 'create'),

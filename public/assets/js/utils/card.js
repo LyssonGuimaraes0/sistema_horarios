@@ -65,6 +65,7 @@ export function createCardList(template, dadosData) {
                 //Se possuir elementos altera os botões para botões de edição
                 if (input) {
                     input.value = valor;
+                    input.value = new Date(`1970-01-01 ${valor}`).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     input.setAttribute("readonly", "true");
 
                     //Limpa botões autal
