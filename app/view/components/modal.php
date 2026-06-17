@@ -1,3 +1,4 @@
+<!--Modal Default de avisos-->
 <template id="modal-default">
     <div class="modal-background">
         <div class="section-container">
@@ -14,6 +15,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</template>
+
+<!--Modal Toast-->
+<template id="modal-toast">
+    <div class="modal-toast">
+        <div class="container-text">
+            <p></p>
         </div>
     </div>
 </template>

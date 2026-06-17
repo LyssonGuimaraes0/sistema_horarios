@@ -116,7 +116,7 @@
     padding: 5px;
     font-size: 16px;
     color: var(--dark-text);
-    
+
 }
 
 .item-justificativa span {
@@ -144,4 +144,69 @@
 
 .aviso-justificativa small {
     color: red !important;
+}
+
+
+/*Modal Toast*/
+
+.modal-toast {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    min-width: 280px;
+    max-width: 400px;
+    padding: 14px 18px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    z-index: 3;
+    animation: toastIn 0.3s ease-out;
+}
+
+.modal-toast .container-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.modal-toast.success {
+    background-color: #22c55e;
+}
+
+.modal-toast.error {
+    background-color: #df2a2a;
+}
+
+/*Ocultar modal*/
+.modal-toast.hide {
+    animation: toastOut 0.3s ease-in forwards;
+}
+
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toastOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
 }

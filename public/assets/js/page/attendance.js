@@ -5,6 +5,7 @@ import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
 import { createCardList, createButtonsCalendar } from "../utils/card.js";
 import { verificarInputs } from "../utils/verifyInput.js";
+import { showModalToast } from "../utils/modal.js";
 
 //Carrega Meses e ano validos
 let years;
@@ -136,7 +137,7 @@ containerForm.addEventListener('click', async (e) => {
     //Casos possiveis com botões presente no calendario
     switch (action) {
         //Enviar dados de formulario
-        
+
         case 'submit':
 
             //Coleta dados dos inputs
@@ -161,11 +162,13 @@ containerForm.addEventListener('click', async (e) => {
                     body: { ...attendanceData }
                 })
 
-                if (!response || response.success != true) {
-                    throw new Error(response?.error);
+                if (!response?.success) {
+                    throw new Error(
+                        response.error ??
+                        response.message ??
+                        "Erro interno do servidor"
+                    );
                 }
-
-                console.log(response);
 
                 //Aplica estilos de cards com editados
 
@@ -176,9 +179,15 @@ containerForm.addEventListener('click', async (e) => {
                 //Altera botões do container btn
                 createButtonsCalendar(card.querySelector('.items-botoes'));
 
+                //Apresenta modal
+                showModalToast(response.data);
+
+
             } catch (error) {
-                console.log("Erro de comunicação")
+                showModalToast(error, "error");
             }
+
+
 
             break;
 
