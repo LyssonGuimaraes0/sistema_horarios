@@ -1,6 +1,7 @@
 <?php
 
 namespace App\controller\api;
+
 use App\middleware\AuthMiddleware;
 use App\service\AttendanceService;
 use App\helpers\PermissionHelper;
@@ -18,21 +19,48 @@ class AttendanceController extends ApiController
     {
         $this->authMiddleware = new AuthMiddleware;
         $this->attendanceService = new AttendanceService;
-
     }
 
     public function create()
     {
         try {
             //Valida Token de acesso
-            $user = $this->authMiddleware->handle(); 
+            $user = $this->authMiddleware->handle();
 
             $dados = json_decode(file_get_contents('php://input'), true);
 
             //Enviar Horarios do usuario
             $this->attendanceService->createAttendance($user->id, $dados);
 
-             return $this->success("Registro Realizado com sucesso!",201);
+            return $this->success("Registro Realizado com sucesso!", 201);
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 400);
+        }
+    }
+
+    //Deleta registro de registro de horario
+    public function delete()
+    {
+
+        try {
+
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle(); 
+
+            $dados = json_decode(file_get_contents('php://input'), true);
+            $date  = $dados['date'];
+
+            //Delete Horarios do usuario
+            $this->attendanceService->deleteAttendance($user->id, $date);
+
+            return $this->success("Registro deletado com sucesso!", 200);
 
         } catch (Exception $e) {
 
@@ -44,7 +72,6 @@ class AttendanceController extends ApiController
 
             return $this->error($e->getMessage(), 400);
         }
-
     }
 
     //Coleta mês validos baseado no mes atual
@@ -53,7 +80,6 @@ class AttendanceController extends ApiController
         $availableDate = $this->attendanceService->getAvailableMonths();
 
         return $this->success($availableDate);
-
     }
 
     public function getCalendar(int $year, int $month)
@@ -85,7 +111,6 @@ class AttendanceController extends ApiController
             $allTimesSheets = $this->attendanceService->getTimesheets($year, $id);
 
             return $this->success($allTimesSheets, 200);
-
         } catch (Exception $e) {
 
             $statusCode = $e->getCode();
@@ -97,13 +122,4 @@ class AttendanceController extends ApiController
             return $this->error($e->getMessage(), 500);
         }
     }
-
-
 }
-
-
-
-
-
-
-?>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\models;
+
 use App\database\Database;
 use PDO;
 
@@ -31,7 +32,6 @@ class AttendanceModel
 
                         if ($horario == array_key_last($horarios)) {
                             $sql .= ":$horario)";
-
                         } else {
 
                             $sql .= ":$horario, ";
@@ -57,14 +57,48 @@ class AttendanceModel
             $pdo->commit();
 
             return;
-
         } catch (\PDOException $e) {
             //Caso de de erro limpa registro
             $pdo->rollBack();
-            echo "Erro na execução: " . $e->getMessage();
+            return "Erro na execução: " . $e->getMessage();
         }
-
     }
+
+    //Deletar registro de horario
+    public function delete(int $id, string $date)
+    {
+        try {
+
+            $pdo = Database::connect();
+
+            $pdo->beginTransaction();
+
+            $sql = "DELETE FROM ponto_diario
+                WHERE usuario_id = :usuario_id
+                AND data_completo = :data_completo";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':usuario_id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':data_completo', $date, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() === 0) {
+                throw new \Exception('Registro não encontrado');
+            }
+
+            $pdo->commit();
+
+            return;
+        } catch (\PDOException $e) {
+            //Caso de de erro limpa registro
+            $pdo->rollBack();
+            return "Erro na execução: " . $e->getMessage();
+        }
+    }
+
+
+
 
     //Buscar registros de horarios
     public function getAttendance($id, $dateStart, $dateEnd)
@@ -91,7 +125,6 @@ class AttendanceModel
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
     //Buscar Folha de ponto Mensal
@@ -115,10 +148,5 @@ class AttendanceModel
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return array_column($resultados, 'caminho_folha_de_ponto', 'mes');
-
     }
-
 }
-
-
-?>

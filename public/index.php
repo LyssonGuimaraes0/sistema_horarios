@@ -10,10 +10,10 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 //Realiza tratamento de URL da página
 $base = $_ENV['RAIZ_URL'];
 
-$uri = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request = $_SERVER['REQUEST_METHOD'];
 
- $uri = str_replace($base, '', $uri);
+$uri = str_replace($base, '', $uri);
 
 //=========================================
 
@@ -31,4 +31,3 @@ if (!$match) {
 
 // 👇 AQUI ACONTECE A MÁGICA
 $action(...array_values($params));
-

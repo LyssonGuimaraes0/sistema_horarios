@@ -1,6 +1,7 @@
 <?php
 
 namespace App\service;
+
 use App\models\user\UserModal;
 use App\models\AttendanceModel;
 use App\service\DateService;
@@ -20,24 +21,30 @@ class AttendanceService
         $this->attendanceModel = new AttendanceModel;
         $this->dateService = new DateService;
         $this->holidayService = new HolidayService;
-
     }
 
     //Registra novo horario ao banco de dados
     public function createAttendance($id, $dados)
     {
 
-      //Cria Verificação de Horarios existente Conflict 409
+        //Cria Verificação de Horarios existente Conflict 409
 
-      //Verifica se os array de horarios esta vazio
-      foreach($dados['attendance'] as $horario){
-        if (!isset($horario) || $horario == "") {
-            throw new \Exception("Horarios em falta");
+        //Verifica se os array de horarios esta vazio
+        foreach ($dados['attendance'] as $horario) {
+            if (!isset($horario) || $horario == "") {
+                throw new \Exception("Horarios em falta");
+            }
         }
-      }
 
 
-      return $this->attendanceModel->create($id,$dados['date'],$dados['status'],$dados['attendance']);
+        return $this->attendanceModel->create($id, $dados['date'], $dados['status'], $dados['attendance']);
+    }
+
+
+    //Deleta horario
+    public function deleteAttendance($id, $date)
+    {
+        return $this->attendanceModel->delete($id, $date);
     }
 
     public function getAvailableMonths($limitYear = 2025): array
@@ -117,11 +124,9 @@ class AttendanceService
                     "attendance" => null
                 ];
             }
-
         }
 
         return $AllAttendaceMonth;
-
     }
     //Obter folha mensal por ano
     public function getTimesheets(int $year, int $id)
@@ -134,12 +139,12 @@ class AttendanceService
         $nameMonth = $this->dateService->getListNameMonth();
         $curretYear = $this->dateService->getCurrentYear();
 
-        $AllMonths = ($curretYear === $year) ? 
-        $this->dateService->getCurrentMonth() : 12 ;
+        $AllMonths = ($curretYear === $year) ?
+            $this->dateService->getCurrentMonth() : 12;
 
         $formatTimesSheets = [];
 
-        for ($month = $AllMonths ; $month >= 1; $month--) {
+        for ($month = $AllMonths; $month >= 1; $month--) {
             if (isset($allTimesSheets[$month])) {
                 $formatTimesSheets[] = [
                     'month' => $nameMonth[$month],
@@ -154,10 +159,5 @@ class AttendanceService
         }
 
         return $formatTimesSheets;
-
     }
-
 }
-
-
-?>

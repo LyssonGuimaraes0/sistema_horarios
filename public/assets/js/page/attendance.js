@@ -52,6 +52,11 @@ btnMes.addEventListener('click', async function () {
     carregando = true;
     btnMes.disabled = true;
 
+    //Libera container
+    containerCalendario.style.display = "block";
+    //Toca animação
+    showLoading();
+
 
     try {
 
@@ -76,12 +81,6 @@ btnMes.addEventListener('click', async function () {
             throw new Error(response?.error);
         }
 
-
-        //Cria cards para cada dado
-        //Libera container
-        containerCalendario.style.display = "block";
-        //Toca animação
-        showLoading();
 
         //Cria card para cada elemento
 
@@ -152,6 +151,10 @@ containerForm.addEventListener('click', async (e) => {
 
     const card = btn.closest('.container-horarios');
     const action = btn.dataset.action;
+
+    //Coleta todos os inputs do card
+    const inputs = card.querySelectorAll('.horario-input')
+
     let attendanceData = {}
     let inputsattendance = {};
     //Casos possiveis com botões presente no calendario
@@ -159,9 +162,6 @@ containerForm.addEventListener('click', async (e) => {
         //Enviar dados de formulario
 
         case 'submit':
-
-            //Coleta dados dos inputs
-            const inputs = card.querySelectorAll('.horario-input')
             inputs.forEach(input => {
                 //Armazena valores em objs
                 inputsattendance[input.name] = input.value;
@@ -207,8 +207,6 @@ containerForm.addEventListener('click', async (e) => {
                 showModalToast(error, "error");
             }
 
-
-
             break;
 
         //Editar dados de formulario    
@@ -230,11 +228,40 @@ containerForm.addEventListener('click', async (e) => {
                 `Deseja Excluir o registro de ${card.dataset.date}`
             );
 
+            //Caso clique no botão execulta
             if (resultado) {
-                //Coleta resultado solicitar limpeza
 
-            } else {
+                //Seleciona rota de exclusão
+                try {
+                    response = await request(`${urlBase}/api/user/attendance/delete`, {
+                        method: "DELETE",
+                        credentials: 'include',
+                        body: {
+                            date: card.dataset.date
+                        }
+                    })
 
+                    if (!response?.success) {
+                        throw new Error(
+                            response.error ??
+                            response.message ??
+                            "Erro interno do servidor"
+                        );
+                    }
+
+                    //Apresenta modal
+                    showModalToast(response.data);
+
+                    //Remove estilos e dados
+                    inputs.forEach(input => {
+                        input.removeAttribute("readonly", "true")
+                        input.value = ""
+                    });
+
+
+                } catch (error) {
+                    showModalToast(error, "error");
+                }
             }
 
             break;

@@ -18,8 +18,6 @@ function loadRouter(string $type, string $controller, string $action, array $par
 
 
         $controllerInstance->$action(...$params);
-
-
     } catch (Exception $e) {
         echo $e->getMessage();
     }
@@ -111,10 +109,10 @@ $router = [
         '/api/auth/login' => api('auth\AuthApiController', 'login'),
         '/api/auth/logout' => api('auth\AuthApiController', 'logout'),
 
-        //Rota De registro de horarios no banco de dados
+        //Rota De registro de horarios
         '/api/user/attendance/create' => api('AttendanceController', 'create'),
 
-        //Rota De registro de horarios no banco de dados
+        //Rota De criação de usuario
         '/api/user/create' => api('UserApiController', 'create'),
 
     ],
@@ -122,6 +120,11 @@ $router = [
     'PATCH' => [
         //Rota para alterar senha do Usuario
         '/api/auth/forgotpassword' => api('auth\AuthApiController', 'login')
+    ],
+
+    'DELETE' => [
+        //Rota para deleta registro de horarios
+        '/api/user/attendance/delete' => api('AttendanceController', 'delete'),
     ]
 
 ];

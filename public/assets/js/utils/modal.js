@@ -9,9 +9,6 @@ export function showModalToast(mensagem, type = "sucess") {
     const text = clone.querySelector('.container-text p');
     text.textContent = mensagem;
 
-    console.log(mensagem)
-    console.log(type)
-
     modalToast.classList.add(type);
 
     document.body.appendChild(clone);

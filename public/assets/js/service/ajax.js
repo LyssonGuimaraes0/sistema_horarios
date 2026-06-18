@@ -3,8 +3,10 @@ export async function request(url, options = {}) {
     try {
         const response = await fetch(url, {
             method: options.method || 'GET',
+            credentials: options.credentials,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...options.headers
             },
             body: options.body ? JSON.stringify(options.body) : null
         });
