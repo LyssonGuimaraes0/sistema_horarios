@@ -46,16 +46,16 @@ class AttendanceController extends ApiController
     }
 
     //Deleta registro de registro de horario
-    public function delete()
+    public function deleteAttendance()
     {
 
         try {
 
             //Valida Token de acesso
-            $user = $this->authMiddleware->handle(); 
+            $user = $this->authMiddleware->handle();
 
             $dados = json_decode(file_get_contents('php://input'), true);
-            $date  = $dados['date'];
+            $date = $dados['date'];
 
             //Delete Horarios do usuario
             $this->attendanceService->deleteAttendance($user->id, $date);
@@ -72,6 +72,30 @@ class AttendanceController extends ApiController
 
             return $this->error($e->getMessage(), 400);
         }
+    }
+
+    //Deleta registro de registro de horario
+    public function updateAttendance()
+    {
+
+        try {
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle();
+
+            $dados = json_decode(file_get_contents('php://input'), true);
+
+            //Delete Horarios do usuario
+            $this->attendanceService->updateAttendance( $user->id, $dados);
+
+            return $this->success("Registro alterado com sucesso!", 200);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(), 400);
+        }
+
+
+
+
+
     }
 
     //Coleta mês validos baseado no mes atual

@@ -8,6 +8,7 @@
     align-items: center;
     z-index: 2;
     background: rgba(219, 218, 218, 1);
+    overflow: hidden;
 }
 
 .hidden {

@@ -2,7 +2,7 @@
 
 export function createCardList(template, dadosData) {
     const cloneCard = template.content.cloneNode(true);
-    
+
     const card = cloneCard.querySelector('.container-horarios');
     card.dataset.date = dadosData.date;
 
@@ -83,9 +83,30 @@ export function createCardList(template, dadosData) {
 
 }
 
-//Função de criação de botões de edição
 
+
+
+
+
+
+export function buttonSubmitCalendar(container) {
+    //Limpa container
+    container.innerHTML = ""
+
+    container.innerHTML = `
+        <button type='submit' class='btn-calendario' name='dia' data-action="submit" >Confirmar</button>
+
+        <i class='fa-solid fa-file-alt botao-calendario' data-action="certificate"></i>
+    `;
+
+    return container;
+}
+
+//Função de criação de botões de edição e delete
 export function createButtonsCalendar(container) {
+    //Limpa container
+    container.innerHTML = ""
+
     container.innerHTML = `
         <i class="fa-solid fa-pen-to-square botao-calendario"
           data-action="edit">
@@ -95,13 +116,29 @@ export function createButtonsCalendar(container) {
         data-action="delete"></i>
     `;
 
-    /*             <i class="fa-solid fa-check btn-confirmar botao-calendario d-none"
-               id="btn-confirmar">
-            </i>
+
+    return container;
+}
+
+//Função de alteração de botão de edição para confirmar e cancelar
+
+export function alterButtonsCalendar(container) {
+    //Limpa container
+    container.innerHTML = ""
+
+    container.innerHTML = `
+        <i class="fa-solid fa-check btn-confirmar botao-calendario"
+               data-action="confirm">
+        </i>
     
-            <i class="fa-solid fa-xmark btn-cancelar botao-calendario d-none"
-               id="btn-cancelar">
-            </i> */
+        <i class="fa-solid fa-xmark btn-cancelar botao-calendario"
+               data-action="cancel">
+        </i> 
+
+        <i class="fa-solid fa-trash-can botao-calendario"
+                data-action="delete">
+        </i>
+    `;
 
     return container;
 }

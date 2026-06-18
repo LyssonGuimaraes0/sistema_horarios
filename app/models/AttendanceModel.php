@@ -64,6 +64,51 @@ class AttendanceModel
         }
     }
 
+    //Atualizar horario 
+    public function updateAttendance($id, $data, $horarios)
+    {
+        try {
+            $pdo = Database::connect();
+
+            $pdo->beginTransaction();
+
+            $sql = "UPDATE ponto_diario SET ";
+
+            //Formata colunas e valores
+            foreach ($horarios as $horario => $valor) {
+                if ($horario == array_key_last($horarios)) {
+                    $sql .= "$horario = :$horario ";
+
+                } else {
+                    $sql .= "$horario = :$horario, ";
+                }
+            }
+
+            $sql .= "WHERE usuario_id = :usuario_id
+                    AND data_completo = :data_completo";
+
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':usuario_id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':data_completo', $data, PDO::PARAM_STR);
+
+            //Prepara dados de insert baseados nos arrays e
+            foreach ($horarios as $horario => $valor) {
+                $stmt->bindValue(":$horario", $valor, PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
+
+            $pdo->commit();
+
+            return;
+        } catch (\PDOException $e) {
+            //Caso de de erro limpa registro
+            $pdo->rollBack();
+            return "Erro na execução: " . $e->getMessage();
+        }
+    }
+
     //Deletar registro de horario
     public function delete(int $id, string $date)
     {

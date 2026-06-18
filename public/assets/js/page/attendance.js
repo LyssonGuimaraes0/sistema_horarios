@@ -3,7 +3,12 @@ import { apresentarModal } from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
-import { createCardList, createButtonsCalendar } from "../utils/card.js";
+import {
+    createCardList,
+    createButtonsCalendar,
+    alterButtonsCalendar,
+    buttonSubmitCalendar
+} from "../utils/card.js";
 import { verificarInputs } from "../utils/verifyInput.js";
 import { showModalToast } from "../utils/modal.js";
 
@@ -57,14 +62,13 @@ btnMes.addEventListener('click', async function () {
     //Toca animação
     showLoading();
 
-
     try {
-
-
 
         if (containerForm.innerHTML.trim() != "") {
             containerForm.innerHTML = "";
         }
+        //Bloqueia rolagem da página
+        containerCalendario.style.overflow = "hidden";
 
         //Coleta dados de Selecionados pelo usuario
         let valorMes = parseInt(selectMes.value, 10);
@@ -107,7 +111,8 @@ btnMes.addEventListener('click', async function () {
 
         await delay(1500);
         hideLoading();
-
+        //Libera rolagem depois de toca a animação
+        containerCalendario.style.overflow = "auto";
 
     } catch (error) {
         console.log("Erro de comunicação")
@@ -141,9 +146,14 @@ document.addEventListener('input', function (e) {
 
 });
 
+//Objeto de estado de inputs
+const state = {
+    editando: false,
+    dadosOriginais: {}
+};
+
 
 //Valida Cliques de botões gerados no formulario
-
 containerForm.addEventListener('click', async (e) => {
     e.preventDefault()
     const btn = e.target.closest('.botao-calendario, .btn-calendario');
@@ -157,9 +167,12 @@ containerForm.addEventListener('click', async (e) => {
 
     let attendanceData = {}
     let inputsattendance = {};
+
     //Casos possiveis com botões presente no calendario
     switch (action) {
         //Enviar dados de formulario
+
+        //===========Casos de Envio de formulario ==========  
 
         case 'submit':
             inputs.forEach(input => {
@@ -209,15 +222,110 @@ containerForm.addEventListener('click', async (e) => {
 
             break;
 
-        //Editar dados de formulario    
+        //==========================================================================
+
+        //================ Casos de edição de formulario já criado ==================  
+
         case 'edit':
-            console.log('Editar', card.dataset.date);
+            //Altera botões do calendario
+            const newBtns = alterButtonsCalendar(card.querySelector('.items-botoes'));
+
+            card.appendChild(newBtns)
+
+            state.editando = true;
+
+            //Remove bloqueio e armazena valores originais
+            inputs.forEach(input => {
+                state.dadosOriginais[input.name] = input.value;
+                input.removeAttribute("readonly", "true")
+            });
+
             break;
+
+
+        //Cancelar alteração de dados de formulario    
+        case 'cancel':
+
+            state.editando = false;
+
+            //Remove bloqueio e armazena valores originais
+            inputs.forEach(input => {
+                input.value = state.dadosOriginais[input.name];
+                input.setAttribute("readonly", "true")
+            });
+
+            //Reabilita botão de edição
+            const oldBtns = createButtonsCalendar(card.querySelector('.items-botoes'));
+
+            card.appendChild(oldBtns)
+
+            break;
+
+        //Confirmar dados alterado de formulario    
+        case 'confirm':
+
+            //Garante que so seja enviado
+            if (state.editando != true) return;
+
+            inputs.forEach(input => {
+                //Armazena valores em objs
+                inputsattendance[input.name] = input.value;
+            });
+
+            //Monta objeto de Horarios
+            attendanceData = {
+                date: card.dataset.date,
+                attendance: inputsattendance
+            }
+
+            try {
+                response = await request(`${urlBase}/api/user/attendance`, {
+                    method: "PATCH",
+                    credentials: 'include',
+                    body: { ...attendanceData }
+                })
+
+                if (!response?.success) {
+                    throw new Error(
+                        response.error ??
+                        response.message ??
+                        "Erro interno do servidor"
+                    );
+                }
+
+                //Aplica estilos de cards com editados
+
+                inputs.forEach(input => {
+                    input.setAttribute("readonly", "true")
+                });
+
+                //Altera botões do container btn
+                createButtonsCalendar(card.querySelector('.items-botoes'));
+
+                //Apresenta modal
+                showModalToast(response.data);
+
+
+            } catch (error) {
+                showModalToast(error, "error");
+            }
+
+            break;
+
+
+        //==========================================================================
+
+
+        //==================== Caso de adição de atestado ==========================  
 
         //Adicionar atestado por periodo
         case 'certificate':
             console.log('Certificate', card.dataset.date);
             break;
+
+        //==========================================================================
+
+        //==================== Caso de deleta de registro ==========================  
 
         case 'delete':
 
@@ -258,6 +366,11 @@ containerForm.addEventListener('click', async (e) => {
                         input.value = ""
                     });
 
+                    //Reabilita botão de submit
+                    const oldBtns = buttonSubmitCalendar(card.querySelector('.items-botoes'));
+
+                    card.appendChild(oldBtns)
+
 
                 } catch (error) {
                     showModalToast(error, "error");
@@ -266,9 +379,8 @@ containerForm.addEventListener('click', async (e) => {
 
             break;
 
-        case 'confirm':
-            console.log('Confirmar', card.dataset.date);
-            break;
+        //==========================================================================
+
     }
 });
 

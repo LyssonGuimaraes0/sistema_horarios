@@ -119,12 +119,17 @@ $router = [
 
     'PATCH' => [
         //Rota para alterar senha do Usuario
-        '/api/auth/forgotpassword' => api('auth\AuthApiController', 'login')
+        '/api/auth/forgotpassword' => api('auth\AuthApiController', 'login'),
+
+        //Altera um horario adicionado
+        '/api/user/attendance' => api('AttendanceController', 'updateAttendance'),
+
+
     ],
 
     'DELETE' => [
         //Rota para deleta registro de horarios
-        '/api/user/attendance/delete' => api('AttendanceController', 'delete'),
+        '/api/user/attendance/delete' => api('AttendanceController', 'deleteAttendance'),
     ]
 
 ];

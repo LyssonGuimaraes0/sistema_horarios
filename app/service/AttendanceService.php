@@ -40,6 +40,22 @@ class AttendanceService
         return $this->attendanceModel->create($id, $dados['date'], $dados['status'], $dados['attendance']);
     }
 
+    //Atualiza registro de horario
+
+    public function updateAttendance($id, $dados)
+    {
+
+        //Verifica se os array de horarios esta vazio
+        foreach ($dados['attendance'] as $horario) {
+            if (!isset($horario) || $horario == "") {
+                throw new \Exception("Horarios em falta");
+            }
+        }
+
+
+        return $this->attendanceModel->updateAttendance($id, $dados['date'], $dados['attendance']);
+    }
+
 
     //Deleta horario
     public function deleteAttendance($id, $date)

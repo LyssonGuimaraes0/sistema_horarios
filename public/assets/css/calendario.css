@@ -12,10 +12,13 @@
 
 #calendario-form {
     display: none;
+    overflow-x: hidden;
 }
 #tabela-folha-mensal{
     display: none;
 }
+
+
 
 .calendario-header {
     width: 100%;
@@ -180,10 +183,6 @@
 .botao-calendario {
     font-size: 20px;
     cursor: pointer;
-}
-
-.d-none {
-    display: none;
 }
 
 
