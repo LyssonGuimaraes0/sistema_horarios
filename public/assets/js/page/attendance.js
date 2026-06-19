@@ -1,5 +1,8 @@
 import { request } from "../service/ajax.js";
-import { apresentarModal } from "../utils/modal.js";
+import { apresentarModal,
+         showModalCertificate,
+         showModalToast   
+        } from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
@@ -10,7 +13,6 @@ import {
     buttonSubmitCalendar
 } from "../utils/card.js";
 import { verificarInputs } from "../utils/verifyInput.js";
-import { showModalToast } from "../utils/modal.js";
 
 //Carrega Meses e ano validos
 let years;
@@ -321,6 +323,8 @@ containerForm.addEventListener('click', async (e) => {
         //Adicionar atestado por periodo
         case 'certificate':
             console.log('Certificate', card.dataset.date);
+
+            showModalCertificate(card.dataset.date);
             break;
 
         //==========================================================================

@@ -1,3 +1,4 @@
+
 //Função modal Toast
 export function showModalToast(mensagem, type = "sucess") {
     const template = document.querySelector('#modal-toast')
@@ -20,6 +21,33 @@ export function showModalToast(mensagem, type = "sucess") {
             modalToast.remove();
        }, 300) 
     }, 1500);
+
+}
+
+
+//Função para apresentar Modal certificado
+export async function showModalCertificate(data) {
+    const template = document.querySelector('#modalCertificate');
+    const clone = template.content.cloneNode(true);
+
+    const modalCertificate = clone.querySelector('.modal-background');
+
+    function formatDateBr(data) {
+        return data.toLocaleDateString('pt-BR')
+    }
+    
+    //Manipulando datas
+    const dateAtual = new Date(data);
+
+    console.log(formatDateBr(dateAtual))
+
+    //Adicionar horario padrão aos os imputs
+
+    document.body.appendChild(clone);
+
+    return new Promise((resolve) => {
+        
+    })
 
 }
 
