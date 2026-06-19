@@ -16,10 +16,10 @@ export function showModalToast(mensagem, type = "sucess") {
 
     //Toca animação e elimina o toast
     setTimeout(() => {
-       modalToast.classList.add('hide');
-       setTimeout(()=>{
+        modalToast.classList.add('hide');
+        setTimeout(() => {
             modalToast.remove();
-       }, 300) 
+        }, 300)
     }, 1500);
 
 }
@@ -35,19 +35,94 @@ export async function showModalCertificate(data) {
     function formatDateBr(data) {
         return data.toLocaleDateString('pt-BR')
     }
-    
+
     //Manipulando datas
     const dateAtual = new Date(data);
 
-    console.log(formatDateBr(dateAtual))
+    //Aplicação de valores nos elementos 
+
+    const dataOrigem = modalCertificate.querySelector('#data-origem');
+    const dataInicio = modalCertificate.querySelector('#data-inicio');
+    const dataFim = modalCertificate.querySelector('#data-fim');
+
+    dataOrigem.value = formatDateBr(dateAtual)
+    dataInicio.value = formatDateBr(dateAtual)
+
+    //Por padrão define 1
+    let dataFimValue = new Date(dateAtual);
+    dataFimValue.setDate(dataFimValue.getDate() + 1);
+
+    dataFim.value = formatDateBr(dataFimValue)
+    let dataFormatada = dataFimValue.toISOString().split('T')[0];
+
+    modalCertificate.querySelector('#input-dias-atestados').addEventListener('change', function () {
+
+        const dias = Math.round(
+            Number(modalCertificate.querySelector('#input-dias-atestados').value)
+        );
+
+        dataFimValue = new Date(dateAtual)
+
+        //Altera baseado na quantidade de dias adicionado
+        dataFimValue.setDate(dataFimValue.getDate() + dias);
+
+        dataFormatada = dataFimValue.toISOString().split('T')[0];
+
+        dataFim.value = formatDateBr(dataFimValue)
+    })
+
+    const dropdown = modalCertificate.querySelector('.dropdown-justificativa')
+
+    const inputArquivo = modalCertificate.querySelector('.btn-upload');
 
     //Adicionar horario padrão aos os imputs
 
     document.body.appendChild(clone);
 
-    return new Promise((resolve) => {
-        
+    //Manipulação de botões
+    const btnConfirmar = modalCertificate.querySelector('.btn-confirmar');
+    const BtnCancelar = modalCertificate.querySelector('.btn-cancelar');
+
+    BtnCancelar.addEventListener('click', () => {
+        fecharModal();
+        modalCertificate.remove();
     })
+
+
+    //Configuração para devolver dados
+    return new Promise((resolve) => {
+        btnConfirmar.addEventListener('click', () => {
+
+            const arquivo = inputArquivo.files[0];
+
+            //Verifica select
+            if (dropdown.value == "") {
+                showModalToast("Selecione o motivo do atestado", "error")
+                return;
+            }
+
+            //Verifica arquivo 
+            if (!arquivo) {
+                showModalToast("Selecione um arquivo", "error")
+                return;
+            }
+
+
+
+            //Fecha modal e devolve dados
+            fecharModal();
+            modalCertificate.remove();
+
+            resolve({
+                dateStart: data,
+                dateEnd: dataFormatada,
+                [dropdown.name]: dropdown.value,
+                file: arquivo
+            })
+        })
+    })
+
+
 
 }
 

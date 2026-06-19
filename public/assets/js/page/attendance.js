@@ -322,9 +322,10 @@ containerForm.addEventListener('click', async (e) => {
 
         //Adicionar atestado por periodo
         case 'certificate':
-            console.log('Certificate', card.dataset.date);
 
-            showModalCertificate(card.dataset.date);
+            let resultadoCertificate = await showModalCertificate(card.dataset.date);
+
+            console.log(resultadoCertificate);
             break;
 
         //==========================================================================

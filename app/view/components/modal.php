@@ -25,7 +25,6 @@
         <div class="section-container">
             <div class="modal-container container-justificativa">
                 <div class="modal">
-                    <form action="./settings/conf_justificativa.php" method="post" enctype="multipart/form-data">
                         <div class="modal-cabecalho modal-justifi">
                             <div class="container-welcome">
                                 <h2 class="title-container">
@@ -64,7 +63,7 @@
     
                             <div class="item-justificativa">
                                 <span>Tipo de justificativa</span>
-                                <select name="tipo_documento" class="dropdown dropdown-justificativa" required>
+                                <select name="descricao_motivo" class="dropdown dropdown-justificativa" required>
                                     <option value="">Selecione o motivo da falta</option>
                                     <!-- Saúde -->
                                     <option value="consulta_medica">Consulta médica</option>
@@ -115,17 +114,15 @@
                             <div class="item-justificativa item-upload">
                                 <span>Adicione o Anexo correspondente:</span>
                                 <smalL>Arquivo permitido: PDF</small>
-                                <input class="btn-upload" type="file" name="justi_pdf" id="justi_pdf" required>
+                                <input class="btn-upload" type="file" name="justi_pdf"  accept=".pdf" required>
                             </div>
     
                         </div>
                         <input type="hidden" name="data" id="data_justificativa">
                         <div class="btn-modal ">
-                            <button type="submit" class="btn-confirmar btn-padrao">Confirmar</button>
-                            <button type="button" class="btn-padrao" onclick="fechar_modal()"
-                                class="btn-cancelar">Cancelar</button>
+                            <button type="button" class="btn-confirmar btn-padrao">Confirmar</button>
+                            <button type="button" class="btn-padrao btn-cancelar">Cancelar</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
