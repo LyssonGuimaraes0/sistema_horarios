@@ -14,7 +14,6 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request = $_SERVER['REQUEST_METHOD'];
 
 $uri = str_replace($base, '', $uri);
-
 //=========================================
 
 $match = matchRoute($uri, $router[$request]);

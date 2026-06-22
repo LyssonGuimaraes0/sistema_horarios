@@ -146,4 +146,36 @@ class AttendanceController extends ApiController
             return $this->error($e->getMessage(), 500);
         }
     }
+
+    // matheus function
+    public function createAttachment(){
+
+        try {
+            //Valida Token de acesso
+            //$user = $this->authMiddleware->handle();
+
+            $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
+
+            // upload anexo
+            $return = $this->attendanceService->uploadAttachment($user->id ?? 3, $dados);
+
+            if($return === true){
+                return $this->success("Registro Realizado com sucesso!", 201);
+            }else{
+                return $this->error("Erro ao realizar upload", 400);
+            }
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 400);
+        }
+
+    }
+
 }

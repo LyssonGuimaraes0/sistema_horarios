@@ -6,6 +6,7 @@ use App\models\user\UserModal;
 use App\models\AttendanceModel;
 use App\service\DateService;
 use App\service\HolidayService;
+use App\models\attachmentModel;
 
 
 class AttendanceService
@@ -14,11 +15,12 @@ class AttendanceService
     private $attendanceModel;
     private $dateService;
     private $holidayService;
-
+    private $attachmentModel;
     public function __construct()
     {
         $this->userModal = new UserModal;
         $this->attendanceModel = new AttendanceModel;
+        $this->attachmentModel = new attachmentModel;
         $this->dateService = new DateService;
         $this->holidayService = new HolidayService;
     }
@@ -176,4 +178,58 @@ class AttendanceService
 
         return $formatTimesSheets;
     }
+
+    public function uploadAttachment(int $id, $dados)
+    {
+
+        /* suposto array
+            '{
+                dateStart: "2026-06-05",
+                dateEnd: "2026-06-06",
+                descricao_motivo: "exames_medicos",
+                file: File(Obj da imagem) 
+            }'
+        */
+
+        try{
+
+            //Valida dados
+            if (!isset($dados['dateStart']) || !isset($dados['dateEnd']) || !isset($dados['descricao_motivo']) || !isset($_FILES['file'])) {
+                throw new \Exception("Dados incompletos - ". $dados['descricao_motivo']);
+            }else{
+
+                //caminho 
+                $caminho = __DIR__."/../../uploads/atestados/";
+
+                //nome arquivo
+                $nomeArquivo = uniqid() . "_" . basename($_FILES['file']['name']);
+
+                // patch
+                $path = $caminho . $nomeArquivo;
+
+                //Mover arquivo para pasta de uploads
+                if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
+                    throw new \Exception("Erro ao mover arquivo");
+                }
+
+                //Salvar dados no banco de dados
+                $this->attachmentModel->create(
+                    $id,
+                    $dados['dateStart'],
+                    $dados['dateEnd'],
+                    $dados['descricao_motivo'],
+                    '/uploads/' . $nomeArquivo
+                );
+
+                return true;
+
+            }
+
+        }
+        catch(\Exception $e){
+            throw new \Exception("Erro de validação: " . $e->getMessage(), 400);
+        }
+
+    }
+
 }

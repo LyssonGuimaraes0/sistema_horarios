@@ -115,6 +115,9 @@ $router = [
         //Rota De criação de usuario
         '/api/user/create' => api('UserApiController', 'create'),
 
+        // nova rota
+        '/api/user/createAttachment' => api('AttendanceController', 'createAttachment'),
+
     ],
 
     'PATCH' => [
