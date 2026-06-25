@@ -25,6 +25,18 @@ export function showModalToast(mensagem, type = "sucess") {
 }
 
 
+//Função modal Anexa frequencia
+export function showModalTimeSheet() {
+    const template = document.querySelector('#modal-anexo')
+    const clone = template.content.cloneNode(true);
+
+    const modalTimeSheet = clone.querySelector('.modal-background');
+
+    document.body.appendChild(clone);
+
+}
+
+
 //Função para apresentar Modal certificado
 export async function showModalCertificate(data) {
     const template = document.querySelector('#modalCertificate');
@@ -123,9 +135,6 @@ export async function showModalCertificate(data) {
             })
         })
     })
-
-
-
 }
 
 

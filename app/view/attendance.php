@@ -31,7 +31,6 @@
                                 <span>Selecione um periodo:</span>
                                 <div>
                                     <span> Mês:</span>
-
                                     <select class="dropdown" name="mes" id="selectMes">
                                     </select>
 
@@ -40,14 +39,6 @@
                                     </select>
 
                                     <button class="btn-formulario btn-registrar" id="abrir-calendario">Carregar</button>
-                                </div>
-                                <!--Botão de enviar PDF-->
-                                <div class="contaienr-pdf">
-                                    <form action="./settings/conf_pdf.php" method="post" target="_blank">
-                                        <input type="hidden" name="mes_pdf" value="">
-                                        <input type="hidden" name="ano_pdf" value="">
-                                        <input class="btn-formulario" type="submit" value="Imprimir">
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -63,9 +54,19 @@
                         <div class="calendario-titulo">
                             <span>Folha de Ponto</span>
                         </div>
+                        <div class="calendario-header-btns">
+                            <button class="btn-formulario-header" id="btn-anexar-frequencia">
+                                <i class="fa-solid fa-upload card-icon"></i>
+                                <span>Anexar Frequência</span>
+                            </button>
+                            <button class="btn-formulario-header" id="btn-gerar-frequencia">
+                                <i class="fa-solid fa-print card-icon"></i>
+                                <span>Gerar Frequencia</span>
+                            </button>
+                        </div>
                     </div>
                     <!--Folha de horario--->
-                    <div class="calendario-body" >
+                    <div class="calendario-body">
                         <form id="attendance-form">
                             <!--Cards-->
                             <?php include_once COMPONENTS_PATH . "/card-attendance.php"; ?>

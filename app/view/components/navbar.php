@@ -33,15 +33,7 @@ use App\helpers\PermissionHelper;
                     <span class="menu-text">Registrar Ponto</span>
                 </a>
             </li>
-
-            <li class="nav-link">
-                <a href="./anexar_frequencia.php">
-                    <i class="fa-solid fa-print card-icon"></i>
-                    <span class="menu-text">Anexar Frequência</span>
-                </a>
-            </li>
         <?php endif; ?>
-
         <!--------------------------------->
 
         <!--Verifica se os usuarios é Coordenador para Gerenciar Frequencias-->

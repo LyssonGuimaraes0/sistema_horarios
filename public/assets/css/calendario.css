@@ -14,7 +14,8 @@
     display: none;
     overflow-x: hidden;
 }
-#tabela-folha-mensal{
+
+#tabela-folha-mensal {
     display: none;
 }
 
@@ -22,18 +23,17 @@
 
 .calendario-header {
     width: 100%;
-    height: 85px;
     color: aliceblue;
     text-align: center;
     display: flex;
     justify-content: space-between;
     position: sticky;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 30px;
     top: 0;
     left: 0;
     background-color: var(--primary-color);
-    z-index: 2;
+    z-index: 1;
+    align-items: center;
 }
 
 .item-horario {
@@ -45,15 +45,39 @@
     margin-top: 10px;
 }
 
-.calendario-titulo {
-    margin-top: 27px;
+.calendario-header-btns {
+    display: flex;
+    width: 400px;
+    justify-content: space-around;
+    text-align: center;
+    align-items: center;
 }
 
-.calendario-header span {
+.btn-formulario-header {
+    background: var(--segundaria-color);
+    color: var(--primary-color);
+    width: 175px;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    align-items: center;
+    cursor: pointer;
+    /* Ajustado para transition: all para pegar todas as mudanças suavemente */
+    transition: all 0.3s ease;
+}
+
+.btn-formulario-header:hover {
+    background-color: color-mix(in srgb, var(--segundaria-color), black 10%);
+    /* Em vez de bold, um leve zoom que é 100% fluido */
+    transform: scale(1.05);
+}
+
+.calendario-titulo span {
     color: aliceblue;
     font-size: 24px;
-
 }
+
+
 
 .btn-calendario {
     width: 100px;

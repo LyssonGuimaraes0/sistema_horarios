@@ -35,7 +35,7 @@
     color: var(--primary-color);
 }
 
-.container-welcome.welcome-primary h1{
+.container-welcome.welcome-primary h1 {
     color: var(--white-text);
 }
 
@@ -56,7 +56,7 @@
     color: var(--dark-text) !important;
 }
 
-.home-calendario:hover{
+.home-calendario:hover {
     background: color-mix(in srgb, #14dd57, black 20%) !important;
     color: var(--white-text) !important;
 }
@@ -66,10 +66,12 @@
 }
 
 .container-dropdown {
-    width: 75%;
-    height: 5vh;
+    width: 100%;             /* Ocupa a largura total disponível da área de conteúdo */
+    max-width: 1100px;       /* Evita que fique esticado demais em telas gigantes */
+    height: auto;            /* Deixe o conteúdo definir a altura, nunca use vh aqui */
+    min-height: 55px;        /* Garante uma altura mínima elegante */
     background-color: white;
-    border-radius: 8px 8px 0px 0px;
+    border-radius: 8px;      /* Arredondado completo fica mais moderno */
     color: var(--dark-text);
     display: flex;
     align-items: center;
@@ -77,11 +79,11 @@
     margin-top: 25px;
 }
 
-#container-pessoas{
+#container-pessoas {
     display: none;
 }
 
-#container-user-dados{
+#container-user-dados {
     display: none;
 }
 
@@ -155,29 +157,33 @@
 }
 
 .dropdown {
-    width: 150px;
-    height: 28px;
-    margin: 15px;
+    width: 120px;                   /* Reduzido levemente de 150px para 120px para poupar espaço */
+    height: 30px;
+    margin: 0 5px;                  /* Margem limpa */
     background: white;
     border: 1px solid var(--primary-color);
     text-align: center;
     border-top: 0;
     border-right: 0;
     border-left: 0;
-
 }
+
+
 
 .row-dropdown {
     display: flex;
+    width: 100%;
     align-items: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    padding: 15px;
+    gap: 30px;                      /* Reduzido de 30px para 15px (ganha muito espaço) */
+    padding: 10px 20px;
+    flex-wrap: wrap;                /* Se a tela for REALMENTE pequena, ele quebra com elegância */
 }
 
 .row-dropdown span {
-    margin-left: 25px;
+    margin-left: 0;                 /* Removido o margin fixo que jogava o texto pro lado */
     color: var(--primary-color);
+    font-weight: 500;
+    white-space: nowrap;            /* Impede que o texto "Mês:" quebre em duas linhas */
 }
 
 .home-down {
@@ -186,4 +192,36 @@
 
 .home-up {
     padding-top: 0;
+}
+
+/* ==========================================================================
+   Responsividade para Telas Mobile (Abaixo de 768px)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .home-section {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .row-dropdown {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .row-dropdown > div:first-of-type {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .dropdown {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .btn-formulario {
+        width: 100%;
+        padding: 10px;
+    }
 }

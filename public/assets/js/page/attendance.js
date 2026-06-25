@@ -3,7 +3,8 @@ import { request } from "../service/ajax.js";
 import {
     apresentarModal,
     showModalCertificate,
-    showModalToast
+    showModalToast,
+    showModalTimeSheet
 } from "../utils/modal.js";
 
 import { createOptions } from "../utils/createoptions.js";
@@ -139,6 +140,18 @@ btnMes.addEventListener('click', async function () {
 
 
 })
+
+//Verificar clique em botão de anexar frequencia.
+
+const btnAnexarFrequencia = document.querySelector('#btn-anexar-frequencia');
+
+btnAnexarFrequencia.addEventListener('click', function() {
+    showModalTimeSheet();
+})
+
+
+
+
 
 //Valida inputs de calendario
 
