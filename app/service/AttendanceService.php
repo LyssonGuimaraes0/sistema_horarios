@@ -8,6 +8,10 @@ use App\models\AttendanceModel;
 use App\service\DateService;
 use App\service\HolidayService;
 use App\models\attachmentModel;
+use App\models\CargoModel;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
 
 class AttendanceService
@@ -95,7 +99,7 @@ class AttendanceService
     }
 
     //Obter registros de horarios por mes e ano
-    public function getAttendace(int $year, int $month, int $id): array
+    public function getAttendace($year, $month, $id)
     {
         //Busca todas datas do mes
         $allDateMonth = $this->dateService->getAllDateOfMonth($year, $month);
@@ -113,12 +117,31 @@ class AttendanceService
             $allDateMonth[$arrayEnd]['date']
         );
 
+        //Busca horarios de atestados do mes 
+        $allCertificate = $this->attachmentModel->getAttachment($id, $year, $month);
+
+        // Verifica se uma data está dentro de algum atestado
+        function findCertificate(string $date, array $certificates): ?array
+        {
+            foreach ($certificates as $certificate) {
+                if ($date >= $certificate['data_inicio'] && $date <= $certificate['data_fim']) {
+                    return [
+                        "data_inicio" => $certificate['data_inicio'],
+                        "data_fim" => $certificate['data_fim'],
+                    ];
+                }
+            }
+            return null;
+        }
 
         //Organizar os dados coletados
         $AllAttendaceMonth = [];
 
         foreach ($allDateMonth as $day) {
+
             $foundAttendance = false;
+            $certificate = findCertificate($day['date'], $allCertificate);
+
             foreach ($attendaceUser as $attendance) {
                 if ($day['date'] === $attendance['data_completo']) {
                     $AllAttendaceMonth[] = [
@@ -129,7 +152,8 @@ class AttendanceService
                             "saida_almoco" => $attendance['saida_almoco'],
                             "volta_almoco" => $attendance['volta_almoco'],
                             "saida" => $attendance['saida'],
-                        ]
+                        ],
+                        "certificate" => $certificate
                     ];
                     $foundAttendance = true;
                     break;
@@ -140,13 +164,15 @@ class AttendanceService
                 $AllAttendaceMonth[] = [
                     $day,
                     "feriado" => ($this->holidayService->isHoliday($day['date']) ? $holidayName[$day['date']] : false),
-                    "attendance" => null
+                    "attendance" => null,
+                    "certificate" => $certificate
                 ];
             }
         }
 
         return $AllAttendaceMonth;
     }
+
     //Obter folha mensal por ano
     public function getTimesheets(int $year, int $id)
     {
@@ -180,6 +206,8 @@ class AttendanceService
         return $formatTimesSheets;
     }
 
+
+    //Upload de atestados
     public function uploadAttachment(int $id, $dados)
     {
 
@@ -218,6 +246,30 @@ class AttendanceService
                     $dados['descricao_motivo'],
                     $caminhoFormatado
                 );
+
+
+                //Coleta horario padrão do cargo
+                $roleSchedule = CargoModel::getDefaultScheduleByRole("Servidor Publico");
+                //Limpa dados que possão vim nulos
+                $roleSchedule = array_filter($roleSchedule, fn($valor) => $valor !== null);
+
+                //Realiza registros em todas datas correspondentes ao atestado
+                $dataInicio = new DateTime($dados['dateStart']);
+                $dataFim = new DateTime($dados['dateEnd']);
+
+                $dataFim->modify('+1 day');
+
+                //Cria periodo de datas
+                $periodo = new DatePeriod(
+                    $dataInicio,
+                    new DateInterval('P1D'),
+                    $dataFim
+                );
+
+                foreach ($periodo as $data) {
+                    //Cria registro na folha de ponto
+                    $this->attendanceModel->create($id, $data->format('Y-m-d'), "Atestado", $roleSchedule);
+                }
 
                 return true;
 

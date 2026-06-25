@@ -24,17 +24,17 @@ export async function request(url, options = {}) {
         }
 
         //Espera resposta da PROMISE acima
-        /*  const data = await response.json();
+        const data = await response.json();
  
-         return data; */
+         return data;
 
-        const text = await response.text();
+        /* const text = await response.text();
 
         console.log(text);
 
-        const data = JSON.parse(text);
+        const data = JSON.parse(text); 
 
-        return data;
+        return data; */
 
     } catch (error) {
 

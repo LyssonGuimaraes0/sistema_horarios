@@ -1,19 +1,27 @@
 import { request } from "../service/ajax.js";
+
 import {
     apresentarModal,
     showModalCertificate,
     showModalToast
 } from "../utils/modal.js";
+
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
+
 import {
     createCardList,
     createButtonsCalendar,
     alterButtonsCalendar,
-    buttonSubmitCalendar
+    setReadonly,
+    RemoveReadonly,
+    buttonSubmitCalendar,
+    certificateButtonCalendar
 } from "../utils/card.js";
-import { verificarInputs } from "../utils/verifyInput.js";
+
+import { verificarInputs, } from "../utils/verifyInput.js";
+import { gerarPeriodo } from "../utils/date.js";
 
 //Carrega Meses e ano validos
 let years;
@@ -103,8 +111,10 @@ btnMes.addEventListener('click', async function () {
                 weekName: item[0].weekName,
                 weekend: item[0].weekend,
                 holiday: item.feriado,
-                attendance: item.attendance
+                attendance: item.attendance,
+                certificate: item.certificate
             }
+
 
             const card = createCardList(templateIpunt, dadosData)
 
@@ -209,7 +219,7 @@ containerForm.addEventListener('click', async (e) => {
                 //Aplica estilos de cards com editados
 
                 inputs.forEach(input => {
-                    input.setAttribute("readonly", "true")
+                    setReadonly(input)
                 });
 
                 //Altera botões do container btn
@@ -240,7 +250,7 @@ containerForm.addEventListener('click', async (e) => {
             //Remove bloqueio e armazena valores originais
             inputs.forEach(input => {
                 state.dadosOriginais[input.name] = input.value;
-                input.removeAttribute("readonly", "true")
+                RemoveReadonly(input)
             });
 
             break;
@@ -254,7 +264,7 @@ containerForm.addEventListener('click', async (e) => {
             //Remove bloqueio e armazena valores originais
             inputs.forEach(input => {
                 input.value = state.dadosOriginais[input.name];
-                input.setAttribute("readonly", "true")
+                setReadonly(input)
             });
 
             //Reabilita botão de edição
@@ -299,7 +309,7 @@ containerForm.addEventListener('click', async (e) => {
                 //Aplica estilos de cards com editados
 
                 inputs.forEach(input => {
-                    input.setAttribute("readonly", "true")
+                    setReadonly(input)
                 });
 
                 //Altera botões do container btn
@@ -324,6 +334,7 @@ containerForm.addEventListener('click', async (e) => {
         //Adicionar atestado por periodo
         case 'certificate':
 
+
             let resultadoCertificate = await showModalCertificate(card.dataset.date);
 
             //Chama rota de envio para atestado
@@ -339,6 +350,13 @@ containerForm.addEventListener('click', async (e) => {
                 formData.append('descricao_motivo', resultadoCertificate.descricao_motivo);
                 formData.append('file', resultadoCertificate.file);
 
+                //Bloquear todos inputs dos dias selecionados
+                const periodo = gerarPeriodo(
+                    resultadoCertificate.dateStart
+                    , resultadoCertificate.dateEnd
+                );
+
+
                 try {
                     response = await request(`${urlBase}/api/user/createAttachment`, {
                         method: "POST",
@@ -353,6 +371,21 @@ containerForm.addEventListener('click', async (e) => {
                             "Erro interno do servidor"
                         );
                     }
+
+                    //Bloqueia inputs selecionados como atestado
+                    periodo.forEach(data => {
+                        let containerData = document.querySelector(`[data-date="${data}"]`)
+                        let inputContainer = containerData.querySelectorAll('.horario-input');
+                        let containerBts = containerData.querySelector('.items-botoes');
+
+                        certificateButtonCalendar(containerBts);
+
+                        inputContainer.forEach(input => {
+                            setReadonly(input)
+
+                        })
+
+                    })
 
                     //Apresenta modal
                     showModalToast(response.data);
@@ -404,7 +437,7 @@ containerForm.addEventListener('click', async (e) => {
 
                     //Remove estilos e dados
                     inputs.forEach(input => {
-                        input.removeAttribute("readonly", "true")
+                        RemoveReadonly(input)
                         input.value = ""
                     });
 

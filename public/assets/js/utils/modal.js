@@ -37,7 +37,8 @@ export async function showModalCertificate(data) {
     }
 
     //Manipulando datas
-    const dateAtual = new Date(data);
+    const dateAtual = new Date(data + 'T00:00');
+
 
     //Aplicação de valores nos elementos 
 
@@ -50,7 +51,7 @@ export async function showModalCertificate(data) {
 
     //Por padrão define 1
     let dataFimValue = new Date(dateAtual);
-    dataFimValue.setDate(dataFimValue.getDate() + 1);
+    dataFimValue.setDate(dataFimValue.getDate());
 
     dataFim.value = formatDateBr(dataFimValue)
     let dataFormatada = dataFimValue.toISOString().split('T')[0];
@@ -60,6 +61,7 @@ export async function showModalCertificate(data) {
         const dias = Math.round(
             Number(modalCertificate.querySelector('#input-dias-atestados').value)
         );
+
 
         dataFimValue = new Date(dateAtual)
 

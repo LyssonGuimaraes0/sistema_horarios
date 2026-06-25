@@ -109,7 +109,7 @@ class AttendanceController extends ApiController
     public function getCalendar(int $year, int $month)
     {
         //Buscar dados de usuario
-        $user = $this->authMiddleware->handle();
+        $user = $this->authMiddleware->handle(); 
 
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 

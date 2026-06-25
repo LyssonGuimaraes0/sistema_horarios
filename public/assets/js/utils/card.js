@@ -66,12 +66,34 @@ export function createCardList(template, dadosData) {
                 if (input) {
                     input.value = valor;
                     input.value = new Date(`1970-01-01 ${valor}`).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                    input.setAttribute("readonly", "true");
+                    setReadonly(input)
 
                     //Limpa botões autal
                     containerbtn.replaceChildren();
-                    //Cria botões
-                    createButtonsCalendar(containerbtn);
+
+                    //Verifica se é a o card atual tem atestado
+                    if (dadosData.certificate != null) {
+                        let dataInicio = dadosData.certificate.data_inicio;
+
+                        //Verifica se o dia bate com dia atual
+                        if (dataInicio == dadosData.date) {
+                            //Caso seja o primeiro dia somente coloca o botão de deletar
+                            //Limpa container
+                            containerbtn.innerHTML = ""
+
+                            containerbtn.innerHTML = `
+                            <span>Atestado</span>
+
+                            <i class="fa-solid fa-trash-can botao-calendario"data-action="delete"></i>
+                            `;
+                        } else {
+                            certificateButtonCalendar(containerbtn)
+                        }
+
+                    } else {
+                        //Cria botões
+                        createButtonsCalendar(containerbtn);
+                    }
 
                 }
             });
@@ -84,11 +106,6 @@ export function createCardList(template, dadosData) {
 }
 
 
-
-
-
-
-
 export function buttonSubmitCalendar(container) {
     //Limpa container
     container.innerHTML = ""
@@ -99,6 +116,30 @@ export function buttonSubmitCalendar(container) {
         <i class='fa-solid fa-file-alt botao-calendario' data-action="certificate"></i>
     `;
 
+    return container;
+}
+
+//Função de alteração de botão de edição para confirmar e cancelar
+
+export function deleteButtonCalendar(container) {
+    //Limpa container
+    container.innerHTML = ""
+
+    container.innerHTML = `
+        <i class="fa-solid fa-trash-can botao-calendario"
+                data-action="delete">
+        </i>
+    `;
+    return container;
+}
+
+export function certificateButtonCalendar(container) {
+    //Limpa container
+    container.innerHTML = ""
+
+    container.innerHTML = `
+        <span>Atestado</span>
+    `;
     return container;
 }
 
@@ -141,4 +182,16 @@ export function alterButtonsCalendar(container) {
     `;
 
     return container;
+}
+
+//Setar Readonly
+
+export function setReadonly(input) {
+    return input.setAttribute("readonly", "true");
+}
+
+//Remove Readonly
+
+export function RemoveReadonly(input) {
+    return input.removeAttribute("readonly", "true");
 }
