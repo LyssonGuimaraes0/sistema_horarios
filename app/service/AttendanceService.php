@@ -2,6 +2,7 @@
 
 namespace App\service;
 
+use App\helpers\DirectoryHelper;
 use App\models\user\UserModal;
 use App\models\AttendanceModel;
 use App\service\DateService;
@@ -182,24 +183,15 @@ class AttendanceService
     public function uploadAttachment(int $id, $dados)
     {
 
-        /* suposto array
-            '{
-                dateStart: "2026-06-05",
-                dateEnd: "2026-06-06",
-                descricao_motivo: "exames_medicos",
-                file: File(Obj da imagem) 
-            }'
-        */
-
-        try{
+        try {
 
             //Valida dados
             if (!isset($dados['dateStart']) || !isset($dados['dateEnd']) || !isset($dados['descricao_motivo']) || !isset($_FILES['file'])) {
-                throw new \Exception("Dados incompletos - ". $dados['descricao_motivo']);
-            }else{
+                throw new \Exception("Dados incompletos - " . $dados['descricao_motivo']);
+            } else {
 
                 //caminho 
-                $caminho = __DIR__."/../../uploads/atestados/";
+                $caminho = STORAGE_PATH . "/atestados/";
 
                 //nome arquivo
                 $nomeArquivo = uniqid() . "_" . basename($_FILES['file']['name']);
@@ -207,10 +199,16 @@ class AttendanceService
                 // patch
                 $path = $caminho . $nomeArquivo;
 
+                //Verificar caso diretorio existe
+                DirectoryHelper::verifyDirectory($caminho);
+
                 //Mover arquivo para pasta de uploads
                 if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
                     throw new \Exception("Erro ao mover arquivo");
                 }
+
+                //Remove base padrão
+                $caminhoFormatado = str_replace(BASE_PATH, "", $path);
 
                 //Salvar dados no banco de dados
                 $this->attachmentModel->create(
@@ -218,15 +216,14 @@ class AttendanceService
                     $dados['dateStart'],
                     $dados['dateEnd'],
                     $dados['descricao_motivo'],
-                    '/uploads/' . $nomeArquivo
+                    $caminhoFormatado
                 );
 
                 return true;
 
             }
 
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new \Exception("Erro de validação: " . $e->getMessage(), 400);
         }
 

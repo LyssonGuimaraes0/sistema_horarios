@@ -27,6 +27,7 @@ define('MODEL_PATH', APP_PATH . '/models');
 define('VIEW_PATH', APP_PATH . '/view');
 define('COMPONENTS_PATH', VIEW_PATH . '/components');
 define('HELPER_PATH', APP_PATH . '/helpers');
+define('STORAGE_PATH', BASE_PATH . '/storage/uploads');
 
 //Caminho URL
 define('BASE_URL', $_ENV['RAIZ_URL']);

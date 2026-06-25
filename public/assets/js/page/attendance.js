@@ -1,8 +1,9 @@
 import { request } from "../service/ajax.js";
-import { apresentarModal,
-         showModalCertificate,
-         showModalToast   
-        } from "../utils/modal.js";
+import {
+    apresentarModal,
+    showModalCertificate,
+    showModalToast
+} from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
 import { delay } from "../utils/delay.js";
@@ -325,7 +326,43 @@ containerForm.addEventListener('click', async (e) => {
 
             let resultadoCertificate = await showModalCertificate(card.dataset.date);
 
-            console.log(resultadoCertificate);
+            //Chama rota de envio para atestado
+            if (resultadoCertificate) {
+
+                console.log(resultadoCertificate)
+
+                //Converte dados para form
+
+                const formData = new FormData();
+                formData.append('dateStart', resultadoCertificate.dateStart);
+                formData.append('dateEnd', resultadoCertificate.dateEnd);
+                formData.append('descricao_motivo', resultadoCertificate.descricao_motivo);
+                formData.append('file', resultadoCertificate.file);
+
+                try {
+                    response = await request(`${urlBase}/api/user/createAttachment`, {
+                        method: "POST",
+                        credentials: 'include',
+                        body: formData
+                    })
+
+                    if (!response?.success) {
+                        throw new Error(
+                            response.error ??
+                            response.message ??
+                            "Erro interno do servidor"
+                        );
+                    }
+
+                    //Apresenta modal
+                    showModalToast(response.data);
+
+                } catch (error) {
+                    showModalToast(error, "error");
+                }
+
+
+            }
             break;
 
         //==========================================================================

@@ -150,14 +150,14 @@ class AttendanceController extends ApiController
     // matheus function
     public function createAttachment(){
 
-        try {
+         try {
             //Valida Token de acesso
-            //$user = $this->authMiddleware->handle();
+            $user = $this->authMiddleware->handle();
 
             $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
 
             // upload anexo
-            $return = $this->attendanceService->uploadAttachment($user->id ?? 3, $dados);
+            $return = $this->attendanceService->uploadAttachment($user->id, $dados);
 
             if($return === true){
                 return $this->success("Registro Realizado com sucesso!", 201);
@@ -174,7 +174,7 @@ class AttendanceController extends ApiController
             }
 
             return $this->error($e->getMessage(), 400);
-        }
+        } 
 
     }
 
