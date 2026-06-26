@@ -24,12 +24,13 @@
     <div class="modal-background">
         <div class="section-container">
             <div class="modal-container">
+                <div class="loading-overlay hidden"></div>
                 <form>
                     <div class="container-home container-down">
                         <div class="container-anexar-frequencia">
                             <div class="calendario-header">
                                 <div class="calendario-titulo">
-                                    <span>Adionar Anexo</span>
+                                    <span>Adicionar Anexo</span>
                                 </div>
                             </div>
                             <div class="container-upload">

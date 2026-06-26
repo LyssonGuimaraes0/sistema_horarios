@@ -26,13 +26,45 @@ export function showModalToast(mensagem, type = "sucess") {
 
 
 //Função modal Anexa frequencia
-export function showModalTimeSheet() {
+export async function showModalTimeSheet() {
     const template = document.querySelector('#modal-anexo')
     const clone = template.content.cloneNode(true);
 
     const modalTimeSheet = clone.querySelector('.modal-background');
 
+    //Botão de input de arquivo
+    const inputArquivo = modalTimeSheet.querySelector('.btn-upload');
+
+    //Manipulação de botões
+    const btnConfirmar = modalTimeSheet.querySelector('.btn-confirmar');
+    const BtnCancelar = modalTimeSheet.querySelector('.btn-cancelar');
+
     document.body.appendChild(clone);
+
+    BtnCancelar.addEventListener('click', () => {
+        fecharModal();
+        modalTimeSheet.remove();
+    })
+
+    return new Promise((resolve) => {
+        btnConfirmar.addEventListener('click', () => {
+            const arquivo = inputArquivo.files[0];
+
+            //Verifica arquivo 
+            if (!arquivo) {
+                showModalToast("Selecione um arquivo", "error")
+                return;
+            }
+
+            fecharModal();
+            modalTimeSheet.remove();
+
+            resolve({
+                file: arquivo,
+            }
+            );
+        })
+    })
 
 }
 

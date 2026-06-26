@@ -4,7 +4,8 @@ import {
     apresentarModal,
     showModalCertificate,
     showModalToast,
-    showModalTimeSheet
+    showModalTimeSheet,
+    fecharModal
 } from "../utils/modal.js";
 
 import { createOptions } from "../utils/createoptions.js";
@@ -63,8 +64,14 @@ const btnGerarFrequencia = document.querySelector('#btn-gerar-frequencia')
 const btnAnexarFrequencia = document.querySelector('#btn-anexar-frequencia');
 
 //Verificar clique em botão de anexar frequencia.
-btnAnexarFrequencia.addEventListener('click', function () {
-    showModalTimeSheet();
+btnAnexarFrequencia.addEventListener('click', async function () {
+    let resposta = await showModalTimeSheet();
+
+    if (resposta) {
+        console.log(resposta);
+        /* showLoading(); */
+    }
+
 })
 
 //Gerar PDF em botão de Gerar frequencia.
@@ -78,7 +85,7 @@ btnGerarFrequencia.addEventListener('click', function () {
             `${urlBase}/api/attendance/report?year=${valorAno}&month=${valorMes}`, '_blank'
         );
     } catch (error) {
-       showModalToast(error, "error"); 
+        showModalToast(error, "error");
     }
 
 })
