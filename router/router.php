@@ -81,6 +81,9 @@ $router = [
         //Rota para página de gerenciamento de usuarios
         '/user/management' => web('UserController', 'management'),
 
+        //Rota para página de gerenciamento de Feriados
+        '/attendance/holiday' => web('HolidayController', 'index'),
+
         //Rotas Para Buscar dados de usuario
         '/api/user' => api('UserApiController', 'show'),
 
@@ -104,6 +107,9 @@ $router = [
 
         //Rota gerar folha de ponto
         '/api/attendance/report' => api('AttendanceController', 'attendancePdf'),
+
+         //Rota de busca de feriados
+        '/api/holiday' => api('HolidayController', 'getHolidays'),
 
 
     ],

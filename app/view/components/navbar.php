@@ -67,7 +67,7 @@ use App\helpers\PermissionHelper;
         <?php if (PermissionHelper::isAdmin($user)): ?>
 
             <li class="nav-link">
-                <a href="./feriado.php">
+                <a href=<?= BASE_URL  . "/attendance/holiday"?>>
                     <i class="fa-regular fa-calendar-check"></i>
                     <span class="menu-text">Gerenciar Feriado</span>
                 </a>

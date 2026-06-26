@@ -4,6 +4,13 @@
     padding: 10px;
 }
 
+#container-feriado{
+    display: none;
+}
+
+#container-ponto-facultativo{
+    display: none;
+}
 
 .container-upload>label,
 .container-upload>.item-horario {
