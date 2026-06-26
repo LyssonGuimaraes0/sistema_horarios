@@ -5,6 +5,7 @@ namespace App\controller\api;
 use App\middleware\AuthMiddleware;
 use App\service\AttendanceService;
 use App\helpers\PermissionHelper;
+use App\service\PdfService;
 use Exception;
 
 
@@ -13,12 +14,13 @@ class AttendanceController extends ApiController
 
     private $authMiddleware;
     private $attendanceService;
-
+    private $pdfService;
 
     public function __construct()
     {
         $this->authMiddleware = new AuthMiddleware;
         $this->attendanceService = new AttendanceService;
+        $this->pdfService = new PdfService;
     }
 
     public function create()
@@ -85,7 +87,7 @@ class AttendanceController extends ApiController
             $dados = json_decode(file_get_contents('php://input'), true);
 
             //Delete Horarios do usuario
-            $this->attendanceService->updateAttendance( $user->id, $dados);
+            $this->attendanceService->updateAttendance($user->id, $dados);
 
             return $this->success("Registro alterado com sucesso!", 200);
         } catch (Exception $e) {
@@ -109,7 +111,7 @@ class AttendanceController extends ApiController
     public function getCalendar(int $year, int $month)
     {
         //Buscar dados de usuario
-        $user = $this->authMiddleware->handle(); 
+        $user = $this->authMiddleware->handle();
 
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
@@ -147,10 +149,11 @@ class AttendanceController extends ApiController
         }
     }
 
-    // matheus function
-    public function createAttachment(){
+    // Registro de atestado
+    public function createAttachment()
+    {
 
-         try {
+        try {
             //Valida Token de acesso
             $user = $this->authMiddleware->handle();
 
@@ -159,9 +162,9 @@ class AttendanceController extends ApiController
             // upload anexo
             $return = $this->attendanceService->uploadAttachment($user->id, $dados);
 
-            if($return === true){
+            if ($return === true) {
                 return $this->success("Registro Realizado com sucesso!", 201);
-            }else{
+            } else {
                 return $this->error("Erro ao realizar upload", 400);
             }
 
@@ -174,7 +177,41 @@ class AttendanceController extends ApiController
             }
 
             return $this->error($e->getMessage(), 400);
-        } 
+        }
+
+    }
+    // Criação de PDF de folha de ponto
+    public function attendancePdf()
+    {
+
+        try {
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle();
+
+            $year = filter_var($_GET['year'], FILTER_VALIDATE_INT) ?: null;
+            $month = filter_var($_GET['month'], FILTER_VALIDATE_INT) ?: null;
+
+            //validação de dados
+            if (!isset($year) || !isset($month)) {
+                throw new Exception("Parametros de requisição invalido");
+            }
+
+            $dados = $this->attendanceService->generateAttendancePdf($user->id, $year, $month);
+
+            //Remove de array e transforma chave em variavel
+            extract($dados);
+
+            $this->pdfService->render(
+                'components/attendance-pdf.php',
+                $dados
+            );
+
+        } catch (Exception $e) {
+
+            return $this->error($e->getMessage(), 500);
+        }
+
+
 
     }
 

@@ -58,6 +58,33 @@ const templateIpunt = document.querySelector('#input-Horarios')
 //Container de cards de calendairo
 const containerForm = document.querySelector('#attendance-form')
 
+//Botões do header
+const btnGerarFrequencia = document.querySelector('#btn-gerar-frequencia')
+const btnAnexarFrequencia = document.querySelector('#btn-anexar-frequencia');
+
+//Verificar clique em botão de anexar frequencia.
+btnAnexarFrequencia.addEventListener('click', function () {
+    showModalTimeSheet();
+})
+
+//Gerar PDF em botão de Gerar frequencia.
+btnGerarFrequencia.addEventListener('click', function () {
+    //Coleta dados de Selecionados pelo usuario
+    let valorMes = parseInt(selectMes.value, 10);
+    let valorAno = parseInt(selectAno.value, 10);
+    try {
+        //Abrir PDF do mes correspondente
+        window.open(
+            `${urlBase}/api/attendance/report?year=${valorAno}&month=${valorMes}`, '_blank'
+        );
+    } catch (error) {
+       showModalToast(error, "error"); 
+    }
+
+})
+
+
+
 let response;
 
 let carregando = false;
@@ -140,18 +167,6 @@ btnMes.addEventListener('click', async function () {
 
 
 })
-
-//Verificar clique em botão de anexar frequencia.
-
-const btnAnexarFrequencia = document.querySelector('#btn-anexar-frequencia');
-
-btnAnexarFrequencia.addEventListener('click', function() {
-    showModalTimeSheet();
-})
-
-
-
-
 
 //Valida inputs de calendario
 

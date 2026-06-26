@@ -206,6 +206,35 @@ class AttendanceService
         return $formatTimesSheets;
     }
 
+    //Gera folha de ponto Mensal
+    public function generateAttendancePdf(int $id, int $year, int $month)
+    {
+
+        $lastDay = DateService::getAllDaysOfMonth($year, $month);
+
+        $listMonths = $this->dateService->getListNameMonth();
+
+        $dateCurrent = $this->dateService->getDateComplete();
+
+        //Formata data
+        $dataStart = "$year-$month-01";
+        $dataEnd = "$year-$month-$lastDay";
+
+        //Prepara array de datas com horarios
+
+        return [
+            'nameMonth' => $listMonths[$month],
+            'year' => $year,
+            'dateCurrent' => date('d/m/Y', strtotime($dateCurrent)),
+            'arrayDate' => $this->getAttendace($year, $month,$id),
+            'user' => $this->userModal->findUserById($id),
+            'dataStart' => date('d/m/Y', strtotime($dataStart)),
+            'dataEnd' => date('d/m/Y', strtotime($dataEnd)),
+        ];
+
+
+    }
+
 
     //Upload de atestados
     public function uploadAttachment(int $id, $dados)

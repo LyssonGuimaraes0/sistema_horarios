@@ -155,7 +155,8 @@ class AttendanceModel
         entrada,
         saida_almoco,
         volta_almoco,
-        saida
+        saida,
+        status_dia
         FROM ponto_diario 
         WHERE usuario_id = :usuario_id
             AND data_completo >= :dateStart

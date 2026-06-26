@@ -24,7 +24,7 @@ class DateService
 
     //Coleta Total de dias de mes e ano
 
-    public function getAllDaysOfMonth(int $year, int $month): int
+    public static function getAllDaysOfMonth(int $year, int $month): int
     {
         return cal_days_in_month(CAL_GREGORIAN, $month, $year);
     }
@@ -37,7 +37,7 @@ class DateService
         $month = $this->getCurrentMonth();
         $year = $this->getCurrentYear();
 
-        return sprintf('%04d-%02d-%02d', $day, $month, $year);
+        return sprintf('%04d-%02d-%02d', $year, $month, $day);
     }
 
 
@@ -74,15 +74,39 @@ class DateService
         ];
     }
 
+    //Calcular periodo de entre datas
+
+    public static function getPeriod($dataStart, $dataEnd)
+    {
+
+        $inicio = new DateTime($dataStart);
+        $fim = new DateTime($dataEnd);
+
+        $intervalo = new \DateInterval('P1D');
+
+        $fim->modify('+1 day');
+
+        // Cria o gerador de período
+        $periodo = new \DatePeriod($inicio, $intervalo, $fim);
+
+        // Transforma o período em um array de strings com as datas
+       $dateList = [];
+        foreach ($periodo as $data) {
+            $dateList[] = $data->format('Y-m-d');
+        }
+
+        return $dateList;
+
+    }
+
     //Coleta todas datas do mes
 
     public function getAllDateOfMonth(int $year, int $month): array
     {
         //Coleta Total de dias
-        $allDays = $this->getAllDaysOfMonth($year, $month);
+        $allDays = DateService::getAllDaysOfMonth($year, $month);
 
         $allDateMonth = [];
-
 
         //Loop para buscar datas
         for ($day = 1; $day <= $allDays; $day++) {

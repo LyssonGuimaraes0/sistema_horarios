@@ -102,6 +102,9 @@ $router = [
         //Rota busca de horarios registrados
         '/api/attendance/calendar/{year}/{month}' => api('AttendanceController', 'getCalendar'),
 
+        //Rota gerar folha de ponto
+        '/api/attendance/report' => api('AttendanceController', 'attendancePdf'),
+
 
     ],
     'POST' => [
