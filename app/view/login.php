@@ -6,6 +6,7 @@
     <section class="login-section">
         <div class="section-container">
             <div class="container-login">
+                <div class="loading-overlay hidden"></div>
                 <form method="post" class="login-form" id="form-login">
                     <div class="head-login">
                         <h1>Sistema de Frequencia</h1>
@@ -20,13 +21,7 @@
                             <label>Senha:</label>
                             <input type="password" placeholder="Senha" name="password" class="input-login" required>
                         </div>
-                        <button type="submit" class="btn-login" >
-                            <!--Animação de Login ao tentar logar-->
-                            <div class="loading">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
+                        <button type="submit" class="btn-login">
                             Login
                         </button>
                         <a class="btn-esqueceu-senha" href="./forgotpassword">Esqueceu a senha?</a>

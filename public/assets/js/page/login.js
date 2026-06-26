@@ -1,13 +1,13 @@
 import { request } from "../service/ajax.js";
 import { getFormData } from "../utils/form.js";
 import { delay } from "../utils/delay.js";
+import { showLoading, hideLoading } from "../utils/loading.js";
 
 //Coleta de formulario
 const formLogin = document.querySelector('#form-login')
 
 //Configuração do botão do formulario
 const btnLogin = document.querySelector('.btn-login');
-const animationLoading = btnLogin.querySelector('.loading');
 const mngsError = document.querySelector('.error-mensagem')
 
 formLogin.addEventListener('submit', async (event) => {
@@ -17,13 +17,8 @@ formLogin.addEventListener('submit', async (event) => {
 
     mngsError.style.visibility = 'hidden';
 
-    if (btnLogin.lastChild && btnLogin.lastChild.nodeType === Node.TEXT_NODE) {
-        btnLogin.lastChild.textContent = "";
-    }
-
-    animationLoading.style.display = 'block';
-
-    await delay(900);
+    //Toca animação
+    showLoading();
 
     //Coleta dados do formulario
     const dados = getFormData(event.target);
@@ -47,20 +42,18 @@ formLogin.addEventListener('submit', async (event) => {
             throw new Error(response?.error);
         }
 
-
         //Login conseguiu ser cadastrado
         window.location.href = "./user/dashboard";
+
+        hideLoading();
 
     } catch (error) {
         mngsError.textContent = "Email ou Senha incorreta! Tente Novamente"
         mngsError.style.visibility = 'visible'
-        console.error(error);
-    } finally {
-        animationLoading.style.display = 'none';
-        if (btnLogin.lastChild && btnLogin.lastChild.nodeType === Node.TEXT_NODE) {
-            btnLogin.lastChild.textContent = "Login";
-        }
 
+        setTimeout(() => {
+            hideLoading();
+        }, 800);
     }
 
 })
