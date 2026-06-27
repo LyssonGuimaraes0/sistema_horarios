@@ -133,6 +133,9 @@ $router = [
     'DELETE' => [
         //Rota para deleta registro de horarios
         '/api/user/attendance/delete' => api('AttendanceController', 'deleteAttendance'),
+
+        // rota de delete
+        '/api/user/deleteAttachment' => api('AttendanceController', 'deleteAttachment'),
     ]
 
 ];
