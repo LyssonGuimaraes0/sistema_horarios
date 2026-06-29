@@ -1,6 +1,8 @@
 import { request } from "../service/ajax.js";
-import {showModalToast} from "../utils/modal.js";
+import { showModalToast } from "../utils/modal.js";
 import { createOptions } from "../utils/createoptions.js";
+import { formatDate } from "../utils/date.js";
+import { getFormData } from "../utils/form.js";
 
 //Libera containers de feriado e ponto facultativo
 
@@ -11,7 +13,7 @@ const select = document.querySelector('.dropdown')
 //sessões dados
 const selectFeriado = document.querySelector('#nome-feriado')
 
-let listFeriado
+let listHoliday
 
 //Solicita dados de feriados
 try {
@@ -22,15 +24,35 @@ try {
         throw new Error(response?.error);
     }
 
-    listFeriado = response.data;
-    console.log(listFeriado)
+    listHoliday = response.data;
 
 } catch (error) {
     showModalToast(error, "error");
 }
 
+//Organizar em array para
+const arrayHoliday = Object.entries(listHoliday).map(([data, nome]) => {
+    return `${nome} - ${formatDate(data)}`
+})
+
 //Montar select de Feriados
-createOptions(selectFeriado, listFeriado)
+createOptions(selectFeriado, arrayHoliday)
+
+//Montar estrutura accordin
+const ulHolidays = document.querySelector('.lista-feriados')
+
+arrayHoliday.forEach(holiday => {
+    const item = document.createElement('li')
+    item.textContent = holiday
+
+    ulHolidays.appendChild(item);
+})
+
+//Analizar Clique do accordin
+const accordin = document.querySelector('.accordion-header')
+accordin.addEventListener('click', function () {
+    document.querySelector('.accordion-item').classList.toggle('active')
+})
 
 
 function switchContainer(containerAtive, containerDisable) {
@@ -41,7 +63,6 @@ function switchContainer(containerAtive, containerDisable) {
 //Muda container pelo selector
 select.addEventListener('change', async () => {
     const valor = Number(select.value);
-    console.log(valor)
 
     switch (valor) {
         case 1:
@@ -54,3 +75,26 @@ select.addEventListener('change', async () => {
 
     }
 });
+
+
+//Página de Gereciar Feriado
+const formCreateHoliday = document.querySelector('#form-create-holiday')
+const mngsError = document.querySelector('.error-mensagem')
+
+formCreateHoliday.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    mngsError.style.visibility = 'hidden';
+
+    let dados = getFormData(formCreateHoliday);
+
+    if (listHoliday[dados["data-feriado"]]) {
+        mngsError.textContent = "Data do feriado já esta cadastrado"
+        mngsError.style.visibility = 'visible'
+        return;
+    }
+
+    
+})
+
+

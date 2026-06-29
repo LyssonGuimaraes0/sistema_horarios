@@ -12,3 +12,11 @@ export function gerarPeriodo(dataInicio, dataFim) {
     
     return datas;
 }
+
+//Formata data brasileiro
+export function formatDate(date) {
+
+    const arrayDate = date.split("-");
+    
+    return `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+}

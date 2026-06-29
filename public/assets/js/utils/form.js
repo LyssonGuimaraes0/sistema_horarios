@@ -5,3 +5,4 @@ export function getFormData(form) {
     // Object.fromEntries transforma as linhas do FormData em um objeto { nome: "João", email: "..." }
     return Object.fromEntries(formData.entries());
 }
+

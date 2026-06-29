@@ -57,11 +57,12 @@
                             </div>
                         </div>
                         <!--Formulario Feriado-->
-                        <form action="./settings/conf_feriado.php" method="post" enctype="multipart/form-data">
+                        <form id="form-create-holiday">
                             <div class="container-upload">
                                 <label class="label-feriado">Adicione nome e data para adicionar um Feriado</label>
                                 <div class="item-horario item-ponto-facultativo">
                                     <div class="item-upload">
+                                        <span class="error-mensagem"></span>
                                         <span>Nome do Feriado</span>
                                         <input class="texto-input" name="adicionar-nome-feriado" type="text" required>
                                         <span>Data do Feridado</span>
@@ -70,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="items-botoes botoes-feriado">
-                                    <button class="btn-calendario btn-feriado" type="submit">Adicionar</button>
+                                    <button class="btn-calendario btn-feriado" type="submit">Adicionar Feriado</button>
                                 </div>
                             </div>
                         </form>
