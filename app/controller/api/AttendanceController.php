@@ -215,4 +215,34 @@ class AttendanceController extends ApiController
 
     }
 
+    public function deleteAttachment(){
+
+        try {
+            //Valida Token de acesso
+            //$user = $this->authMiddleware->handle();
+
+            $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
+
+            // upload anexo
+            $return = $this->attendanceService->deleteAttachment($user->id ?? 3, $dados);
+
+            if($return === true){
+                return $this->success("Registro apagado com sucesso!", 201);
+            }else{
+                return $this->error("Erro ao apagar o arquivo", 400);
+            }
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 400);
+        }
+
+    }
+
 }

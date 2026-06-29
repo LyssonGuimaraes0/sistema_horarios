@@ -310,4 +310,45 @@ class AttendanceService
 
     }
 
+    public function deleteAttachment(int $id_user, $dados){
+
+        try{
+
+            //Valida dados
+            if (!isset($dados['id_documento'])) {
+                throw new \Exception("Dados incompletos - ". $dados['id_documento']);
+            }else{
+
+                //nome arquivo
+                $nomeArquivo = basename(urldecode($dados["caminho"]));
+
+                // caminho lixeira 
+                $caminhoLixeira = __DIR__."/../../uploads/lixeira/" . $nomeArquivo;
+                
+                // caminho atual, quando for por isso no seu projeto me fala se tiver com problemas, vai ser esse caminho atual se pah.
+                $caminhoAtual = __DIR__ . "/../../uploads/atestados/" . $nomeArquivo;
+
+                // mudar caminho
+                if (!rename($caminhoAtual, $caminhoLixeira)) {
+                    throw new \Exception("Erro ao mover o arquivo para a lixeira.");
+                }
+
+                //Salvar dados no banco de dados
+                $this->attachmentModel->delete(
+                    $id_user,
+                    $dados['id_documento'],
+                    '/lixeira/' . $nomeArquivo
+                );
+
+                return true;
+
+            }
+
+        }
+        catch(\Exception $e){
+            throw new \Exception("Erro de validação: " . $e->getMessage(), 400);
+        }
+
+    }
+
 }
