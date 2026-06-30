@@ -9,6 +9,7 @@ use App\service\DateService;
 use App\service\HolidayService;
 use App\models\attachmentModel;
 use App\models\CargoModel;
+use App\models\MonthlyAttendanceModel;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -21,6 +22,9 @@ class AttendanceService
     private $dateService;
     private $holidayService;
     private $attachmentModel;
+    private $monthlyAttendanceModel;
+
+
     public function __construct()
     {
         $this->userModal = new UserModal;
@@ -28,6 +32,7 @@ class AttendanceService
         $this->attachmentModel = new attachmentModel;
         $this->dateService = new DateService;
         $this->holidayService = new HolidayService;
+        $this->monthlyAttendanceModel = new MonthlyAttendanceModel;
     }
 
     //Registra novo horario ao banco de dados
@@ -226,12 +231,79 @@ class AttendanceService
             'nameMonth' => $listMonths[$month],
             'year' => $year,
             'dateCurrent' => date('d/m/Y', strtotime($dateCurrent)),
-            'arrayDate' => $this->getAttendace($year, $month,$id),
+            'arrayDate' => $this->getAttendace($year, $month, $id),
             'user' => $this->userModal->findUserById($id),
             'dataStart' => date('d/m/Y', strtotime($dataStart)),
             'dataEnd' => date('d/m/Y', strtotime($dataEnd)),
         ];
 
+
+    }
+
+
+    //Upload de folha de ponto
+    public function uploadMonthlyAttendance($id, $date, $file)
+    {
+
+        //Valida dados
+        if (!isset($date['year']) || !isset($date['month']) || !isset($file)) {
+            throw new \Exception("Dados enviados estão incompletos");
+        }
+
+        //Buscar dados do usuario
+        $user = $this->userModal->findUserById($id);
+        $name = preg_replace(
+            '/[^a-z0-9_]/',
+            '',
+            str_replace(
+                ' ',
+                '_',
+                strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $user['nome']))
+            )
+        );
+
+        $setor = strtolower($user['setor']);
+
+        //Verifica pasta de setor
+        $caminho = STORAGE_PATH . "/folha_mensal/" . "$setor/";
+        DirectoryHelper::verifyDirectory($caminho);
+
+        //Formata pasta de user
+
+        //Verifica pasta de usuario
+        $caminho = $caminho . $name . "/";
+        DirectoryHelper::verifyDirectory($caminho);
+
+        $extensao = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+
+        //nome arquivo
+        $nomeArquivo = "folha_mensal_" . uniqid() . "_" . $date['year'] . "_" . $date['month'] . ".$extensao" ;
+
+        // patch
+        $path = $caminho . $nomeArquivo;
+
+        //Verificar caso diretorio existe
+        DirectoryHelper::verifyDirectory($caminho);
+
+        //Verifica se já existe um documento existente
+        if ($this->monthlyAttendanceModel->monthlyAttendanceExists($id, $date['year'], $date['month'])) {
+            throw new \Exception("Já existe folha de ponto para este mês", 409);
+        }
+
+        //Mover arquivo para pasta de uploads
+        if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
+            throw new \Exception("Erro ao mover arquivo", 500);
+        }
+
+        //Remove base padrão
+        $newpath = str_replace(BASE_PATH, "", $path);
+
+        //Armazena dados no banco
+        if ($this->monthlyAttendanceModel->create($id, $date['year'], $date['month'], $newpath)) {
+            throw new \Exception("Erro ao tenta cadastrar arquivo", 500);
+        }
+
+        return;
 
     }
 
@@ -310,21 +382,22 @@ class AttendanceService
 
     }
 
-    public function deleteAttachment(int $id_user, $dados){
+    public function deleteAttachment(int $id_user, $dados)
+    {
 
-        try{
+        try {
 
             //Valida dados
             if (!isset($dados['id_documento'])) {
-                throw new \Exception("Dados incompletos - ". $dados['id_documento']);
-            }else{
+                throw new \Exception("Dados incompletos - " . $dados['id_documento']);
+            } else {
 
                 //nome arquivo
                 $nomeArquivo = basename(urldecode($dados["caminho"]));
 
                 // caminho lixeira 
-                $caminhoLixeira = __DIR__."/../../uploads/lixeira/" . $nomeArquivo;
-                
+                $caminhoLixeira = __DIR__ . "/../../uploads/lixeira/" . $nomeArquivo;
+
                 // caminho atual, quando for por isso no seu projeto me fala se tiver com problemas, vai ser esse caminho atual se pah.
                 $caminhoAtual = __DIR__ . "/../../uploads/atestados/" . $nomeArquivo;
 
@@ -344,8 +417,7 @@ class AttendanceService
 
             }
 
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new \Exception("Erro de validação: " . $e->getMessage(), 400);
         }
 

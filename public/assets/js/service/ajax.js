@@ -19,14 +19,17 @@ export async function request(url, options = {}) {
                 : null
         });
 
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
 
         //Espera resposta da PROMISE acima
         const data = await response.json();
- 
-         return data;
+
+        if (!response.ok) {
+            const error = new Error(data.message || "Erro desconhecido");
+            error.status = response.status;
+            throw error;
+        }
+
+        return data;
 
         /* const text = await response.text();
 
@@ -40,7 +43,8 @@ export async function request(url, options = {}) {
 
         return {
             success: false,
-            error: error.message
+            status: error.status,
+            message: error.message
         };
     }
 

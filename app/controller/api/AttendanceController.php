@@ -95,9 +95,6 @@ class AttendanceController extends ApiController
         }
 
 
-
-
-
     }
 
     //Coleta mês validos baseado no mes atual
@@ -180,6 +177,7 @@ class AttendanceController extends ApiController
         }
 
     }
+
     // Criação de PDF de folha de ponto
     public function attendancePdf()
     {
@@ -211,11 +209,44 @@ class AttendanceController extends ApiController
             return $this->error($e->getMessage(), 500);
         }
 
+    }
 
+    // Armazena folha de ponto mensal
+    public function storeMonthlyAttendance()
+    {
+
+        try {
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle();
+
+            $date = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
+            $file = $_FILES['file'];
+
+            $this->attendanceService->uploadMonthlyAttendance($user->id, $date, $file);
+
+            return $this->success("Registro Realizado com sucesso!", 201);
+
+        } catch (Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 409) {
+                return $this->error($e->getMessage(), 409);
+            }
+
+            if ($statusCode === 500) {
+                return $this->error($e->getMessage(), 500);
+            }
+
+            return $this->error($e->getMessage(), 401);
+        }
 
     }
 
-    public function deleteAttachment(){
+
+
+    public function deleteAttachment()
+    {
 
         try {
             //Valida Token de acesso
@@ -226,9 +257,9 @@ class AttendanceController extends ApiController
             // upload anexo
             $return = $this->attendanceService->deleteAttachment($user->id ?? 3, $dados);
 
-            if($return === true){
+            if ($return === true) {
                 return $this->success("Registro apagado com sucesso!", 201);
-            }else{
+            } else {
                 return $this->error("Erro ao apagar o arquivo", 400);
             }
 

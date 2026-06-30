@@ -19,7 +19,8 @@ import {
     setReadonly,
     RemoveReadonly,
     buttonSubmitCalendar,
-    certificateButtonCalendar
+    certificateButtonCalendar,
+    verifyBtnAnexarFrequencia
 } from "../utils/card.js";
 
 import { verificarInputs, } from "../utils/verifyInput.js";
@@ -28,8 +29,12 @@ import { gerarPeriodo } from "../utils/date.js";
 //Carrega Meses e ano validos
 let years;
 let months
+let valorMes;
+let valorAno;
+let response;
+const formData = new FormData();
+
 try {
-    let response
     response = await request(`${urlBase}/api/attendance/available-periods`)
 
     if (!response || response.success != true) {
@@ -64,12 +69,56 @@ const btnGerarFrequencia = document.querySelector('#btn-gerar-frequencia')
 const btnAnexarFrequencia = document.querySelector('#btn-anexar-frequencia');
 
 //Verificar clique em botão de anexar frequencia.
+let data = {}
+
 btnAnexarFrequencia.addEventListener('click', async function () {
     let resposta = await showModalTimeSheet();
 
     if (resposta) {
-        console.log(resposta);
-        /* showLoading(); */
+
+        //Inicia animação
+        showLoading();
+
+        //Coleta dados de Selecionados pelo usuario
+        valorMes = parseInt(selectMes.value, 10);
+        valorAno = parseInt(selectAno.value, 10);
+
+        //Monta resposta
+
+        data = {
+            "year": valorAno,
+            "month": valorMes,
+        }
+
+        formData.append('year', parseInt(selectAno.value, 10));
+        formData.append('month', parseInt(selectMes.value, 10));
+        formData.append('file', resposta.file);
+
+        try {
+            response = await request(`${urlBase}/api/attendance/monthly`, {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            })
+
+            if (!response?.success) {
+                throw new Error(
+                    response.message ??
+                    response.error ??
+                    "Erro interno do servidor"
+                );
+            }
+
+            await delay(800);
+            hideLoading();
+            showModalToast(response.data);
+            verifyBtnAnexarFrequencia(btnAnexarFrequencia);
+
+        } catch (error) {
+            hideLoading();
+            showModalToast(error, "error");
+        }
+
     }
 
 })
@@ -77,8 +126,8 @@ btnAnexarFrequencia.addEventListener('click', async function () {
 //Gerar PDF em botão de Gerar frequencia.
 btnGerarFrequencia.addEventListener('click', function () {
     //Coleta dados de Selecionados pelo usuario
-    let valorMes = parseInt(selectMes.value, 10);
-    let valorAno = parseInt(selectAno.value, 10);
+    valorMes = parseInt(selectMes.value, 10);
+    valorAno = parseInt(selectAno.value, 10);
     try {
         //Abrir PDF do mes correspondente
         window.open(
@@ -90,9 +139,6 @@ btnGerarFrequencia.addEventListener('click', function () {
 
 })
 
-
-
-let response;
 
 let carregando = false;
 
@@ -127,8 +173,12 @@ btnMes.addEventListener('click', async function () {
 
         response = await request(`${urlBase}/api/attendance/calendar/${valorAno}/${valorMes}`)
 
-        if (!response || response.success != true) {
-            throw new Error(response?.error);
+        if (!response?.success) {
+            throw new Error(
+                response.message ??
+                response.error ??
+                "Erro interno do servidor"
+            );
         }
 
 
@@ -378,8 +428,6 @@ containerForm.addEventListener('click', async (e) => {
                 console.log(resultadoCertificate)
 
                 //Converte dados para form
-
-                const formData = new FormData();
                 formData.append('dateStart', resultadoCertificate.dateStart);
                 formData.append('dateEnd', resultadoCertificate.dateEnd);
                 formData.append('descricao_motivo', resultadoCertificate.descricao_motivo);

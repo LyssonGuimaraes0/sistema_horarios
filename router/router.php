@@ -127,6 +127,9 @@ $router = [
         // Rota de cadastro de atestado
         '/api/user/createAttachment' => api('AttendanceController', 'createAttachment'),
 
+        //Rota de armazenamento de folha de ponto
+        '/api/attendance/monthly' => api('AttendanceController', 'storeMonthlyAttendance')
+
     ],
 
     'PATCH' => [

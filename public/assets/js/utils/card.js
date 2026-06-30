@@ -184,6 +184,28 @@ export function alterButtonsCalendar(container) {
     return container;
 }
 
+//Função de alteração de botão de anexar frequencia
+
+export function verifyBtnAnexarFrequencia(btn) {
+    //Limpa container
+    btn.disabled = true
+
+    btn.innerHTML = "<i class='fa-solid fa-file-circle-question'></i><span>Folha em Ánalise</span>"
+
+    return btn;
+}
+
+
+export function successBtnAnexarFrequencia(btn) {
+    //Limpa container
+    btn.innerHTML = "<i class='fa-solid fa-file-circle-check'></i></i><span>Folha Anexada!</span>"
+
+    return btn;
+}
+
+// =================================================================
+
+
 //Setar Readonly
 
 export function setReadonly(input) {
