@@ -20,7 +20,7 @@ import {
     RemoveReadonly,
     buttonSubmitCalendar,
     certificateButtonCalendar,
-    verifyBtnAnexarFrequencia
+    alterarBtnAnexarFrequencia
 } from "../utils/card.js";
 
 import { verificarInputs, } from "../utils/verifyInput.js";
@@ -112,7 +112,7 @@ btnAnexarFrequencia.addEventListener('click', async function () {
             await delay(800);
             hideLoading();
             showModalToast(response.data);
-            verifyBtnAnexarFrequencia(btnAnexarFrequencia);
+            alterarBtnAnexarFrequencia(btnAnexarFrequencia);
 
         } catch (error) {
             hideLoading();
@@ -181,12 +181,16 @@ btnMes.addEventListener('click', async function () {
             );
         }
 
+        let record = response.data.record;
+        let monthlyAttendance = response.data.monthlyAttendance;
+
+        /* console.log(response.data); */
 
         //Cria card para cada elemento
 
         await delay(850)
 
-        response.data.forEach(item => {
+        record.forEach(item => {
             //Organização de variavel
             const dadosData =
             {
@@ -200,8 +204,10 @@ btnMes.addEventListener('click', async function () {
                 certificate: item.certificate
             }
 
-
             const card = createCardList(templateIpunt, dadosData)
+
+            //Altera o o botão de anexar caso já tenha registro
+            alterarBtnAnexarFrequencia(btnAnexarFrequencia,monthlyAttendance);
 
             containerForm.appendChild(card)
 

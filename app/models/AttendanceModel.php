@@ -173,26 +173,4 @@ class AttendanceModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Buscar Folha de ponto Mensal
-    public function getTimesheetsbyYear($id, $year)
-    {
-        $pdo = Database::connect();
-
-        $sql = "SELECT 
-        mes,
-        caminho_folha_de_ponto
-        FROM folha_ponto_mensal 
-        WHERE usuario_id = :usuario_id
-        AND ano = :ano";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':usuario_id', $id, PDO::PARAM_INT);
-        $stmt->bindValue(':ano', $year, PDO::PARAM_INT);
-
-        $stmt->execute();
-
-        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return array_column($resultados, 'caminho_folha_de_ponto', 'mes');
-    }
 }

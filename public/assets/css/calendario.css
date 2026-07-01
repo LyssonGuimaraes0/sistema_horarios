@@ -54,6 +54,9 @@
 }
 
 .btn-formulario-header {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     background: var(--segundaria-color);
     color: var(--primary-color);
     width: 175px;
@@ -68,9 +71,25 @@
 
 .btn-formulario-header:hover {
     background-color: color-mix(in srgb, var(--segundaria-color), black 10%);
-    /* Em vez de bold, um leve zoom que é 100% fluido */
     transform: scale(1.05);
 }
+
+/*Botão header cabeçalho desativado*/
+.btn-formulario-header.analysis,
+.btn-formulario-header.valid {
+    cursor: default;
+    pointer-events: none;
+    color: var(--segundaria-color);
+}
+
+.btn-formulario-header.analysis {
+    background-color: var(--orange-color);
+}
+
+.btn-formulario-header.valid {
+    background-color: var(--green-color);
+}
+
 
 .calendario-titulo span {
     color: aliceblue;

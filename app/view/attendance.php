@@ -57,11 +57,11 @@
                         <div class="calendario-header-btns">
                             <button class="btn-formulario-header" id="btn-anexar-frequencia">
                                 <i class="fa-solid fa-upload card-icon"></i>
-                                <span>Anexar Frequência</span>
+                                <p>Anexar Frequência</p>
                             </button>
                             <button class="btn-formulario-header" id="btn-gerar-frequencia">
                                 <i class="fa-solid fa-print card-icon"></i>
-                                <span>Gerar Frequencia</span>
+                                <p>Gerar Frequencia</p>
                             </button>
                         </div>
                     </div>

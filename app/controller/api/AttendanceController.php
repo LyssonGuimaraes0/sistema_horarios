@@ -108,12 +108,22 @@ class AttendanceController extends ApiController
     public function getCalendar(int $year, int $month)
     {
         //Buscar dados de usuario
-        $user = $this->authMiddleware->handle();
+        $user = $this->authMiddleware->handle(); 
 
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
-        return $this->success($allDate);
+        $monthlyAttendance = $this->attendanceService->getMonthlyAttendance($year, $month, $user->id);
+
+        $monthlyRecord = [
+            "monthlyAttendance" => $monthlyAttendance['observacao_fechamento'] ?? false,
+            "record" => $allDate
+        ];
+
+        return $this->success($monthlyRecord);
     }
+
+
+
 
     //Busca folha de Ponto Mesal por Ano
     public function getUserTimesheet(int $id)

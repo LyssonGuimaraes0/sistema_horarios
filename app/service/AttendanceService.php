@@ -183,7 +183,7 @@ class AttendanceService
     {
 
         //Busca Registros de folha de ponto
-        $allTimesSheets = $this->attendanceModel->getTimesheetsbyYear($id, $year);
+        $allTimesSheets = $this->monthlyAttendanceModel->getTimesheetsbyYear($id, $year);
 
         //array de nomes de meses
         $nameMonth = $this->dateService->getListNameMonth();
@@ -209,6 +209,13 @@ class AttendanceService
         }
 
         return $formatTimesSheets;
+    }
+
+    //Obter folha mensal por ano
+    public function getMonthlyAttendance($year, $month, $id)
+    {
+        //Busca Registros de folha de ponto mensal
+        return $this->monthlyAttendanceModel->getMonthlyAttendanceByYearAndMonth($id, $year,$month);
     }
 
     //Gera folha de ponto Mensal

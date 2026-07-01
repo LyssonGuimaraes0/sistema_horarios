@@ -15,6 +15,7 @@
     --primary-color-hover:  color-mix(in srgb, var(--primary-color), black 50%);
     --segundaria-color:#eeeeee;
     --green-color:green;
+    --orange-color:rgb(241, 144, 33);
     --modal-font-titulo: 15px;
     --dark-text: #333;
     --light-text: #666;
