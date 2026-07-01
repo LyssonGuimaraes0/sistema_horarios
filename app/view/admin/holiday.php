@@ -64,10 +64,10 @@
                                     <div class="item-upload">
                                         <span class="error-mensagem"></span>
                                         <span>Nome do Feriado</span>
-                                        <input class="texto-input" name="adicionar-nome-feriado" type="text" required>
+                                        <input class="texto-input" name="name" type="text" required>
                                         <span>Data do Feridado</span>
                                         <input type="date" class="horario-input" id="adicionar-dataferiado"
-                                            name="data-feriado" required>
+                                            name="date" required>
                                     </div>
                                 </div>
                                 <div class="items-botoes botoes-feriado">

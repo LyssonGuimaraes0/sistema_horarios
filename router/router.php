@@ -128,7 +128,10 @@ $router = [
         '/api/user/createAttachment' => api('AttendanceController', 'createAttachment'),
 
         //Rota de armazenamento de folha de ponto
-        '/api/attendance/monthly' => api('AttendanceController', 'storeMonthlyAttendance')
+        '/api/attendance/monthly' => api('AttendanceController', 'storeMonthlyAttendance'),
+
+        //Rota de criação de feriado
+        '/api/holiday/create' => api('HolidayController', 'create')
 
     ],
 

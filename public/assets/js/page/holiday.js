@@ -1,5 +1,10 @@
 import { request } from "../service/ajax.js";
-import { showModalToast } from "../utils/modal.js";
+
+import {
+    showModalToast,
+    apresentarModal
+} from "../utils/modal.js";
+
 import { createOptions } from "../utils/createoptions.js";
 import { formatDate } from "../utils/date.js";
 import { getFormData } from "../utils/form.js";
@@ -14,10 +19,11 @@ const select = document.querySelector('.dropdown')
 const selectFeriado = document.querySelector('#nome-feriado')
 
 let listHoliday
+let response
 
 //Solicita dados de feriados
 try {
-    let response
+
     response = await request(`${urlBase}/api/holiday`)
 
     if (!response || response.success != true) {
@@ -76,7 +82,6 @@ select.addEventListener('change', async () => {
     }
 });
 
-
 //Página de Gereciar Feriado
 const formCreateHoliday = document.querySelector('#form-create-holiday')
 const mngsError = document.querySelector('.error-mensagem')
@@ -88,13 +93,49 @@ formCreateHoliday.addEventListener('submit', async (e) => {
 
     let dados = getFormData(formCreateHoliday);
 
+    console.log(dados);
+
     if (listHoliday[dados["data-feriado"]]) {
         mngsError.textContent = "Data do feriado já esta cadastrado"
         mngsError.style.visibility = 'visible'
         return;
     }
+    try {
+        response = await request(`${urlBase}/api/holiday/create`, {
+            method: 'POST',
+            credentials: 'include',
+            body: dados
+        })
 
-    
+        if (!response?.success) {
+            throw new Error(
+                response.error ??
+                response.message ??
+                "Erro interno do servidor"
+            );
+        }
+
+        //Apresenta modal de confirmação
+        await apresentarModal(
+            'modal-default',
+            'sucesso',
+            `O Feriado foi registrado!`
+        );
+
+        formCreateHoliday.reset()
+        window.location.reload();
+        
+
+    } catch (error) {
+        //Apresenta modal de confirmação
+        apresentarModal(
+            'modal-default',
+            'falha',
+            error
+        );
+    }
+
+
 })
 
 

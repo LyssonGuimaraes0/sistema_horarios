@@ -31,6 +31,7 @@ class HolidayService
         }
     }
 
+    //Coleta de feriados vai API
     private function fetchApi(int $year): array
     {
         $token = $_ENV['TOKEN_FERIADOS'];
@@ -54,6 +55,17 @@ class HolidayService
 
         return $feriados;
 
+    }
+
+    //Criação de novo feriado
+    public function createHoliday($dados)
+    {
+        //Verifica caso já exista registro
+        if ($this->holidayModel->existsDate($dados['date']) === true) {
+            throw new \Exception("Data já registrada como Feriado!");  
+        }
+
+        $this->holidayModel->create($dados);
     }
 
     public function getListHolidays(int $year): array

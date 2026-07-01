@@ -38,5 +38,23 @@ class HolidayController extends ApiController
 
     }
 
+    public function create()
+    {
+
+        try {
+            //Coleta ano atual
+            $dados = json_decode(file_get_contents('php://input'), true);
+
+            $this->holidayService->createHoliday($dados);
+
+            return $this->success("Feriado Criado com Sucesso", 201);
+
+        } catch (\Exception $e) {
+
+            return $this->error($e->getMessage(), 500);
+        }
+
+    }
+
 
 }
