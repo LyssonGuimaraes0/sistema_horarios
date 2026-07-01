@@ -82,7 +82,7 @@ $router = [
         '/user/management' => web('UserController', 'management'),
 
         //Rota para página de gerenciamento de Feriados
-        '/attendance/holiday' => web('HolidayController', 'index'),
+        '/admin/attendance/holiday' => web('HolidayController', 'index'),
 
         //Rotas Para Buscar dados de usuario
         '/api/user' => api('UserApiController', 'show'),

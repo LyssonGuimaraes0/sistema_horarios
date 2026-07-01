@@ -186,31 +186,20 @@ export function alterButtonsCalendar(container) {
 
 //Função de alteração de botão de anexar frequencia
 
-export function alterarBtnAnexarFrequencia(btn, status = "analise") {
+export function alterarBtnAnexarFrequencia(btn, status = false) {
     //Limpa container
-    btn.disabled = true
+    btn.disabled = false
     btn.innerHTML = ""
-    btn.classList.remove('valid', 'analysis');
+    btn.classList.remove('valid');
 
-    switch (status) {
-
-        case "analise":
-            btn.classList.add('analysis');
-            btn.innerHTML = "<i class='fa-solid fa-file-circle-question'></i><p>Folha em Ánalise</p>"
-
-            break;
-
-        case "validado":
-            btn.classList.add('valid');
-            btn.innerHTML = "<i class='fa-solid fa-file-circle-check'></i></i><p>Folha Anexada!</p>"
-
-            break;
-
-        default:
-            btn.innerHTML = "<i class='fa-solid fa-upload card-icon'></i><p>Anexar Frequência</p>"
-            break;
-
+    if (status != false) {
+        btn.classList.add('valid');
+        btn.innerHTML = "<i class='fa-solid fa-file-circle-check'></i></i><p>Folha Anexada!</p>"
+        btn.disabled = true
+    } else {
+        btn.innerHTML = "<i class='fa-solid fa-upload card-icon'></i><p>Anexar Frequência</p>"
     }
+
 
     return btn;
 }

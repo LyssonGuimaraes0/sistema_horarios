@@ -181,7 +181,7 @@ btnSearchFolhaMensal.addEventListener('click', async () => {
             if (item.file) {
                 const link = document.createElement('a');
                 link.textContent = "Acessar Anexo"; // Corrigido o digito de "Axexo" :)
-                link.href = item.file;
+                link.href = urlBase + item.file;
                 link.target = "_blank"; // Opcional: abre o PDF em uma nova aba do navegador
 
                 tdFile.appendChild(link);

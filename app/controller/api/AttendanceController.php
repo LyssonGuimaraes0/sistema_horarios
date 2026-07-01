@@ -115,7 +115,7 @@ class AttendanceController extends ApiController
         $monthlyAttendance = $this->attendanceService->getMonthlyAttendance($year, $month, $user->id);
 
         $monthlyRecord = [
-            "monthlyAttendance" => $monthlyAttendance['observacao_fechamento'] ?? false,
+            "monthlyAttendance" => ($monthlyAttendance != false) ? true : false,
             "record" => $allDate
         ];
 

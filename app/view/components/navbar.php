@@ -19,13 +19,6 @@ use App\helpers\PermissionHelper;
                 <span class="menu-text">HomePage</span>
             </a>
         </li>
-        <!--Verifica se os usuarios são Coordenadores ou PPE Para Registrar Horarios-->
-
-        <?php if (
-            !PermissionHelper::isPPE($user)
-            &&
-            !PermissionHelper::isCoordenador($user)
-        ): ?>
 
             <li class="nav-link">
                 <a href=<?= BASE_URL  . "/user/attendance"?>>
@@ -33,25 +26,21 @@ use App\helpers\PermissionHelper;
                     <span class="menu-text">Registrar Ponto</span>
                 </a>
             </li>
-        <?php endif; ?>
         <!--------------------------------->
 
-        <!--Verifica se os usuarios é Coordenador para Gerenciar Frequencias-->
 
-        <?php if (PermissionHelper::isCoordenador($user)): ?>
-            <li class="nav-link">
-                <a href="./buscar_usuario.php">
+<!--             <li class="nav-link">
+                <a href= /* BASE_URL  . "/coordinator/attendance-validations" */>
                     <i class="fa-solid fa-address-book"></i>
                     <span class="menu-text">Gerenciar Frequencias</span>
                 </a>
-            </li>
-        <?php endif; ?>
+            </li> -->
 
         <!--------------------------------->
 
         <!--Verifica se os usuarios é Coordenadores ou Administrador para Buscar Usuario-->
 
-        <?php if (PermissionHelper::isAdmin($user) || PermissionHelper::isCoordenador($user)): ?>
+        <?php if (PermissionHelper::isAdmin($user)): ?>
             <li class="nav-link">
                 <a href=<?= BASE_URL  . "/user/management"?>>
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -67,7 +56,7 @@ use App\helpers\PermissionHelper;
         <?php if (PermissionHelper::isAdmin($user)): ?>
 
             <li class="nav-link">
-                <a href=<?= BASE_URL  . "/attendance/holiday"?>>
+                <a href=<?= BASE_URL  . "/admin/attendance/holiday"?>>
                     <i class="fa-regular fa-calendar-check"></i>
                     <span class="menu-text">Gerenciar Feriado</span>
                 </a>

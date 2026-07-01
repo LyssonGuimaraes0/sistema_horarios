@@ -73,6 +73,7 @@ let data = {}
 
 btnAnexarFrequencia.addEventListener('click', async function () {
     let resposta = await showModalTimeSheet();
+    console.log("clicou");
 
     if (resposta) {
 
