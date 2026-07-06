@@ -30,6 +30,26 @@ class CargoModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
+    //Seleciona
+    public static function getIdbyRole($role)
+    {
+        $pdo = Database::connect();
+
+        $sql = "SELECT
+        id
+        FROM cargo
+        WHERE cargo = :cargo
+        ";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindValue(':cargo', $role);
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+
+    }
 
 }
 

@@ -131,7 +131,10 @@ $router = [
         '/api/attendance/monthly' => api('AttendanceController', 'storeMonthlyAttendance'),
 
         //Rota de criação de feriado
-        '/api/holiday/create' => api('HolidayController', 'create')
+        '/api/holiday/create' => api('HolidayController', 'create'),
+
+        //Rota para criação de ponto facultativo
+        '/api/optional-holidays/create' => api('HolidayController', 'store')
 
     ],
 

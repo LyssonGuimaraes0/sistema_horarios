@@ -284,10 +284,8 @@ input[readonly]:focus {
     flex-direction: column;
 }
 
-.container-servidor-publico {
-    display: none;
+.container-servidores{
+    display: flex;
+    gap: 10px;
 }
 
-.container-estagiario {
-    display: none;
-}

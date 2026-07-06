@@ -5,18 +5,16 @@ import {
     apresentarModal
 } from "../utils/modal.js";
 
-import { createOptions } from "../utils/createoptions.js";
 import { formatDate } from "../utils/date.js";
 import { getFormData } from "../utils/form.js";
+
+import { verificarInputs, } from "../utils/verifyInput.js";
 
 //Libera containers de feriado e ponto facultativo
 
 const containerFeriado = document.querySelector('#container-feriado')
 const containerPontoFacultativo = document.querySelector('#container-ponto-facultativo')
 const select = document.querySelector('.dropdown')
-
-//sessões dados
-const selectFeriado = document.querySelector('#nome-feriado')
 
 let listHoliday
 let response
@@ -41,17 +39,15 @@ const arrayHoliday = Object.entries(listHoliday).map(([data, nome]) => {
     return `${nome} - ${formatDate(data)}`
 })
 
-//Montar select de Feriados
-createOptions(selectFeriado, arrayHoliday)
-
 //Montar estrutura accordin
 const ulHolidays = document.querySelector('.lista-feriados')
+const template = document.querySelector('#item-feriado')
 
 arrayHoliday.forEach(holiday => {
-    const item = document.createElement('li')
-    item.textContent = holiday
-
-    ulHolidays.appendChild(item);
+    const clone = template.content.cloneNode(true);
+    const nameHoliday = clone.querySelector('span');
+    nameHoliday.textContent = holiday
+    ulHolidays.appendChild(clone);
 })
 
 //Analizar Clique do accordin
@@ -82,10 +78,84 @@ select.addEventListener('change', async () => {
     }
 });
 
-//Página de Gereciar Feriado
+const formCreatePontoFacultativo = document.querySelector('#form-create-ponto-facultativo')
 const formCreateHoliday = document.querySelector('#form-create-holiday')
 const mngsError = document.querySelector('.error-mensagem')
 
+//Coleta containers de horarios e verifica valores digitados
+const containersPontoFacultativo = formCreatePontoFacultativo.querySelectorAll('.container-holiday')
+
+document.addEventListener('input', function (e) {
+    //Retorna caso não seja inputs de horario
+    if (!e.target.classList.contains('horario-input') || e.target.name === "date") return;
+
+    let container
+
+    const input = e.target;
+    //Verifica caso seja input de data ou horarios
+    if (input.type === 'date') {
+        container = input.closest('#container-date');
+        let facultativo = document.querySelector('[name="date"]')
+
+        //Verifica se o valor é menor que data ponto facultativo
+        if (input.value <= facultativo.value) {
+            input.value = "";
+            return;
+        }
+
+    } else {
+        //Verifica caso seja estagiario
+        if (container?.dataset.tipo === 'estagiario') {
+            container = input.closest('.item-ponto-facultativo');
+        } else {
+            container = input.closest('.container-holiday');
+        }
+    }
+    let inputs;
+    inputs = [...container.querySelectorAll('.horario-input')];
+
+    const index = inputs.indexOf(input);
+
+    verificarInputs(input, index, inputs)
+
+});
+
+//Gerar Ponto Facultativo
+formCreatePontoFacultativo.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    let dados = {
+        time: {}
+    };
+
+    //Armazenar Datas
+    const inputsData = formCreatePontoFacultativo.querySelectorAll('input[type="date"]')
+
+    inputsData.forEach(input => {
+        dados[input.name] = input.value;
+    });
+
+    //Armazenar horarios
+    containersPontoFacultativo.forEach(container => {
+        const tipo = container.dataset.tipo
+
+        dados.time[tipo] = {}
+
+        container.querySelectorAll('input').forEach(input => {
+            dados.time[tipo][input.name] = input.value;
+        });
+    });
+
+    console.log(dados);
+
+
+
+
+
+})
+
+
+//Página de Gereciar Feriado
 formCreateHoliday.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -93,7 +163,6 @@ formCreateHoliday.addEventListener('submit', async (e) => {
 
     let dados = getFormData(formCreateHoliday);
 
-    console.log(dados);
 
     if (listHoliday[dados["data-feriado"]]) {
         mngsError.textContent = "Data do feriado já esta cadastrado"
@@ -124,7 +193,7 @@ formCreateHoliday.addEventListener('submit', async (e) => {
 
         formCreateHoliday.reset()
         window.location.reload();
-        
+
 
     } catch (error) {
         //Apresenta modal de confirmação

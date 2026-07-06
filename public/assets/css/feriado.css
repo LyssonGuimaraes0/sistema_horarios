@@ -4,11 +4,11 @@
     padding: 10px;
 }
 
-#container-feriado{
+#container-feriado {
     display: none;
 }
 
-#container-ponto-facultativo{
+#container-ponto-facultativo {
     display: none;
 }
 
@@ -17,11 +17,11 @@
     display: block;
 }
 
-.label-feriado{
+.label-feriado {
     padding: 20px 20px 0 20px;
     border-radius: 12px 12px 0 0;
     font-weight: bold;
-}   
+}
 
 .container-upload>.item-horario {
     background: #fff;
@@ -31,7 +31,7 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
 }
 
-.row-servidor{
+.row-servidor {
     width: 100%;
     display: flex;
 }
@@ -45,21 +45,39 @@
     box-shadow: var(--shadow);
 }
 
-
-.container-servidor-publico {
+.container-holiday {
     margin-top: 20px;
     padding: 20px;
     border-radius: 12px;
     background: #f9fafb;
+    width: 100%;
+}
+
+.lista-feriados{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 10px;
+    list-style: none;
+}
+
+.item-feriado{
+    display: flex;
+    gap: 15px;
+    width: 500px;
+    justify-content: space-between;
+}
+
+.item-feriado i{
+    cursor: pointer;
+}
+
+.container-servidor-publico {
     border-left: 4px solid #3b82f6;
 }
 
 
 .container-estagiario {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 12px;
-    background: #f9fafb;
     border-left: 4px solid #22c55e;
 }
 
@@ -72,7 +90,7 @@
     margin-bottom: 10px;
 }
 
-.input-feriado{
+.input-feriado {
     width: 170px !important;
 }
 

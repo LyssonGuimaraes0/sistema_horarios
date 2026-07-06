@@ -2,12 +2,15 @@
 
 namespace App\service;
 
+use App\models\CargoModel;
 use App\models\HolidayModel;
+
 
 class HolidayService
 {
 
     private $holidayModel;
+
 
     public function __construct()
     {
@@ -62,10 +65,43 @@ class HolidayService
     {
         //Verifica caso já exista registro
         if ($this->holidayModel->existsDate($dados['date']) === true) {
-            throw new \Exception("Data já registrada como Feriado!");  
+            throw new \Exception("Data já registrada como Feriado!");
         }
 
         $this->holidayModel->create($dados);
+    }
+
+    //Criação de novo feriado
+    public function createOptionalHolidays($dados)
+    {
+        $horario = $dados['time'];
+        /* //Verifica caso já exista registro
+         if ($this->holidayModel->existsDate($dados['date']) === true) {
+            throw new \Exception("Data já registrada como Feriado!");
+        } */
+
+        //Registro na tabela de feriados
+        $holiday = [
+            'name' => 'Ponto Facultativo',
+            'date' => $dados['date']
+        ];
+
+        $idHoliday = $this->holidayModel->create($holiday, true);
+
+        $roles = array_keys($horario);
+
+        //Coleta ID de cada role
+        foreach ($roles as $role) {
+
+            if ($role === "Estagiario") {
+                return;
+            }
+            $idRole = CargoModel::getIdbyRole($role);
+            //Registro na tabela de ponto facultativo
+            $this->holidayModel->createOptionalHolidays($idHoliday, $idRole, $dados, $horario[$role]);
+
+        }
+
     }
 
     public function getListHolidays(int $year): array
