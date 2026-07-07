@@ -152,8 +152,11 @@ $router = [
         //Rota para deleta registro de horarios
         '/api/user/attendance/delete' => api('AttendanceController', 'deleteAttendance'),
 
-        // rota de delete
+        // rota de delete folha de ponto mensal
         '/api/user/deleteAttachment' => api('AttendanceController', 'deleteAttachment'),
+
+        // rota de delete para feriado
+        '/api/holiday/delete' => api('HolidayController', 'delete'),
     ]
 
 ];

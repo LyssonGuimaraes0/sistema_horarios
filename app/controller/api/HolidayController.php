@@ -79,6 +79,14 @@ class HolidayController extends ApiController
     {
 
         try {
+
+            $user = $this->authMiddleware->handle();
+
+            //Verificar se tem permissão de admin
+            if (!PermissionHelper::isAdmin($user)) {
+                throw new \Exception("Usuario não tem permissão", 401);
+            }
+
             //Coleta ano atual
             $dados = json_decode(file_get_contents('php://input'), true);
 
@@ -88,8 +96,50 @@ class HolidayController extends ApiController
 
         } catch (\Exception $e) {
 
+            $statusCode = $e->getCode();
+
+            if ($statusCode == 409) {
+                return $this->error($e->getMessage(), 409);
+            }
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
             return $this->error($e->getMessage(), 500);
         }
+
+    }
+    
+    //Delete de Ponto facultativo e feriado
+    public function delete()
+    {
+        try { 
+
+           $user = $this->authMiddleware->handle();
+
+            //Verificar se tem permissão de admin
+            if (!PermissionHelper::isAdmin($user)) {
+                throw new \Exception("Usuario não tem permissão", 401);
+            } 
+
+            //Coleta ano atual
+            $date = json_decode(file_get_contents('php://input'), true);
+
+            $this->holidayService->deleteHoliday($date);
+
+            return $this->success("Registro removido com Sucesso", 201);
+
+         } catch (\Exception $e) {
+
+            $statusCode = $e->getCode();
+
+            if ($statusCode === 401) {
+                return $this->error($e->getMessage(), 401);
+            }
+
+            return $this->error($e->getMessage(), 500);
+        } 
 
     }
 

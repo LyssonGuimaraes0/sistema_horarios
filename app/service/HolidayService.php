@@ -75,10 +75,10 @@ class HolidayService
     public function createOptionalHolidays($dados)
     {
         $horario = $dados['time'];
-        /* //Verifica caso já exista registro
-         if ($this->holidayModel->existsDate($dados['date']) === true) {
-            throw new \Exception("Data já registrada como Feriado!");
-        } */
+        //Verifica caso já exista registro
+        if ($this->holidayModel->existsDate($dados['date']) === true) {
+            throw new \Exception("Data já registrada como Feriado!", 409);
+        }
 
         //Registro na tabela de feriados
         $holiday = [
@@ -86,24 +86,56 @@ class HolidayService
             'date' => $dados['date']
         ];
 
-        $idHoliday = $this->holidayModel->create($holiday, true);
+        $horariosValidados = [];
+        foreach ($horario as $role => $horarios) {
 
-        $roles = array_keys($horario);
-
-        //Coleta ID de cada role
-        foreach ($roles as $role) {
-
-            if ($role === "Estagiario") {
-                return;
+            // Se todos os horários estiverem vazios, ignora esse cargo
+            if (count(array_filter($horarios, fn($v) => $v !== null && $v !== '')) === 0) {
+                continue;
             }
-            $idRole = CargoModel::getIdbyRole($role);
-            //Registro na tabela de ponto facultativo
-            $this->holidayModel->createOptionalHolidays($idHoliday, $idRole, $dados, $horario[$role]);
 
+            // Se algum horário estiver vazio, lança exceção
+            foreach ($horarios as $campo => $valor) {
+                if ($valor === null || $valor === '') {
+                    throw new \Exception("O cargo '{$role}' possui horários incompletos.");
+                }
+            }
+
+            // Monta o array final
+            if ($role === "Estagiario") {
+
+                $horariosValidados["Estagiario-Manha"] = [
+                    "entrada" => $horarios["manha_entrada"],
+                    "saida" => $horarios["manha_saida"],
+                ];
+
+                $horariosValidados["Estagiario-Tarde"] = [
+                    "entrada" => $horarios["tarde_entrada"],
+                    "saida" => $horarios["tarde_saida"],
+                ];
+
+            } else {
+
+                $horariosValidados[$role] = $horarios;
+
+            }
+        }
+
+        foreach ($horariosValidados as $role => $horarios) {
+
+            $idRole = CargoModel::getIdbyRole($role);
+
+            $this->holidayModel->createOptionalHolidays(
+                $holiday,
+                $idRole,
+                $dados,
+                $horarios
+            );
         }
 
     }
 
+    //Obter Lista de Feriados
     public function getListHolidays(int $year): array
     {
         $holidays = $this->holidayModel->getHolidays($year);
@@ -113,6 +145,12 @@ class HolidayService
             'feriado',
             'data_completa'
         );
+    }
+
+    //Delete de feriado ou ponto facultativo
+    public function deleteHoliday(string $date)
+    {    
+        $this->holidayModel->delete($date);
     }
 
     //Verifica se a data é feriado

@@ -5,6 +5,10 @@ import {
     apresentarModal
 } from "../utils/modal.js";
 
+import { delay } from "../utils/delay.js";
+
+import { showLoading, hideLoading } from "../utils/loading.js";
+
 import { formatDate } from "../utils/date.js";
 import { getFormData } from "../utils/form.js";
 
@@ -34,26 +38,68 @@ try {
     showModalToast(error, "error");
 }
 
+let arrayFeriado = []
+let arrayPontoFacultativo = []
+
 //Organizar em array para
-const arrayHoliday = Object.entries(listHoliday).map(([data, nome]) => {
-    return `${nome} - ${formatDate(data)}`
+Object.entries(listHoliday).map(([data, nome]) => {
+    //Separa dados de Feriados e Ponto facultativo
+
+    const infoFeriado = {
+        data: data,
+        nome: nome
+    };
+
+    if (nome == "Ponto Facultativo") {
+        arrayPontoFacultativo.push(infoFeriado)
+    } else {
+        arrayFeriado.push(infoFeriado)
+    }
 })
 
-//Montar estrutura accordin
-const ulHolidays = document.querySelector('.lista-feriados')
+//Função para setar listas
+function criarItemLista(template, itemFeriado) {
+    const clone = template.content.cloneNode(true);
+    const spanName = clone.querySelector('span');
+    const icon = clone.querySelector('i');
+
+    spanName.textContent = `${itemFeriado.nome} - ${formatDate(itemFeriado.data)}`;
+
+    if (icon) {
+        icon.dataset.date = itemFeriado.data;
+    }
+
+    return clone; // Retorna o elemento pronto para ser inserido na UL
+}
+
+
+//Montar estrutura accordins
+const ulHolidays = containerFeriado.querySelector('.lista-feriados')
+const ulPontoFacultativo = containerPontoFacultativo.querySelector('.lista-feriados')
 const template = document.querySelector('#item-feriado')
 
-arrayHoliday.forEach(holiday => {
-    const clone = template.content.cloneNode(true);
-    const nameHoliday = clone.querySelector('span');
-    nameHoliday.textContent = holiday
-    ulHolidays.appendChild(clone);
-})
+// Renderiza os Feriados
+arrayFeriado.forEach(item => {
+    const itemPronto = criarItemLista(template, item);
+    ulHolidays.appendChild(itemPronto);
+});
+
+// Renderiza os Pontos Facultativos
+arrayPontoFacultativo.forEach(item => {
+    const itemPronto = criarItemLista(template, item);
+    ulPontoFacultativo.appendChild(itemPronto);
+});
 
 //Analizar Clique do accordin
-const accordin = document.querySelector('.accordion-header')
-accordin.addEventListener('click', function () {
-    document.querySelector('.accordion-item').classList.toggle('active')
+const accordinHoliday = containerFeriado.querySelector('.accordion-header')
+const accordinPontoFacultativo = containerPontoFacultativo.querySelector('.accordion-header')
+
+accordinHoliday.addEventListener('click', function () {
+    containerFeriado.querySelector('.accordion-item').classList.toggle('active')
+})
+
+accordinPontoFacultativo.addEventListener('click', function () {
+    containerPontoFacultativo.querySelector('.accordion-item').classList.toggle('active')
 })
 
 
@@ -120,9 +166,80 @@ document.addEventListener('input', function (e) {
 
 });
 
+// Verifica cliques de icons remover feriados (captura em elementos do template)
+document.addEventListener('click', async (e) => {
+    const icone = e.target.closest('.icon-deletar');
+
+    if (!icone) return;
+
+    const data = icone.dataset.date;
+    const paiElemento = icone.closest('li');
+    const texto = paiElemento.querySelector('span').textContent;
+
+    const resultado = await apresentarModal(
+        'modal-default',
+        'alerta',
+        `Deseja Excluir o registro de ${texto}`
+    );
+
+    if (resultado) {
+
+        try {
+            response = await request(`${urlBase}/api/holiday/delete`, {
+                method: "DELETE",
+                credentials: 'include',
+                body: data
+            })
+
+            if (!response?.success) {
+                throw new Error(
+                    response.error ??
+                    response.message ??
+                    "Erro interno do servidor"
+                );
+            }
+
+            //Apaga elemento
+            if (paiElemento) {
+                paiElemento.remove();
+            }
+
+            //Apresenta modal de confirmação
+            await apresentarModal(
+                'modal-default',
+                'sucesso',
+                response.data
+            );
+
+        } catch (error) {
+
+            //Apresenta modal de falha
+
+            apresentarModal(
+                'modal-default',
+                'falha',
+                error
+            );
+        }
+
+
+    }
+
+
+});
+
+
+
+
+
 //Gerar Ponto Facultativo
 formCreatePontoFacultativo.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    let loading = formCreatePontoFacultativo.querySelector('.loading-overlay')
+
+    //Inicia animação
+    showLoading(loading);
 
     let dados = {
         time: {}
@@ -146,14 +263,46 @@ formCreatePontoFacultativo.addEventListener('submit', async (e) => {
         });
     });
 
-    console.log(dados);
+    try {
+        response = await request(`${urlBase}/api/optional-holidays/create`, {
+            method: "POST",
+            credentials: 'include',
+            body: dados
+        });
 
+        if (!response?.success) {
+            throw new Error(
+                response.error ??
+                response.message ??
+                "Erro interno do servidor"
+            );
+        }
 
+        await delay(800);
+        hideLoading();
 
+        //Apresenta modal de confirmação
+        await apresentarModal(
+            'modal-default',
+            'sucesso',
+            response.data
+        );
 
+        formCreatePontoFacultativo.reset()
+
+    } catch (error) {
+        await delay(300);
+        await hideLoading(loading);
+        //Apresenta modal de falha
+
+        apresentarModal(
+            'modal-default',
+            'falha',
+            error
+        );
+    }
 
 })
-
 
 //Página de Gereciar Feriado
 formCreateHoliday.addEventListener('submit', async (e) => {
@@ -162,7 +311,6 @@ formCreateHoliday.addEventListener('submit', async (e) => {
     mngsError.style.visibility = 'hidden';
 
     let dados = getFormData(formCreateHoliday);
-
 
     if (listHoliday[dados["data-feriado"]]) {
         mngsError.textContent = "Data do feriado já esta cadastrado"
@@ -188,12 +336,11 @@ formCreateHoliday.addEventListener('submit', async (e) => {
         await apresentarModal(
             'modal-default',
             'sucesso',
-            `O Feriado foi registrado!`
+            response.data
         );
 
         formCreateHoliday.reset()
         window.location.reload();
-
 
     } catch (error) {
         //Apresenta modal de confirmação

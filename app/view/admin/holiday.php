@@ -46,7 +46,7 @@
                         </div>
                         <!--Accordion Feriados-->
                         <div class="container-upload">
-                            <div class="accordion">
+                            <div class="accordion" style="width: 40%;">
                                 <div class="accordion-item">
                                     <div class="accordion-header">Verificar Feriados do Ano</div>
                                     <div class="accordion-content">
@@ -55,7 +55,7 @@
                                                 <li>
                                                     <div class="item-feriado">
                                                         <span></span>
-                                                        <i class="fa-solid fa-x"></i>
+                                                        <i class="fa-solid fa-x icon-deletar"></i>
                                                     </div>
                                                 </li>
                                             </template>
@@ -68,6 +68,7 @@
                         <!--Formulario Feriado-->
                         <form id="form-create-holiday">
                             <div class="container-upload" style="width: 600px;">
+                                <div class="loading-overlay hidden"></div>
                                 <label class="label-feriado">Adicione nome e data para adicionar um Feriado</label>
                                 <div class="item-horario item-ponto-facultativo">
                                     <div class="item-upload">
@@ -98,6 +99,24 @@
                         </div>
                         <form id="form-create-ponto-facultativo">
                             <div class="container-upload">
+                                <div class="accordion" style="width: 40%;">
+                                    <div class="accordion-item">
+                                        <div class="accordion-header">Verificar Ponto Facultativo do Ano</div>
+                                        <div class="accordion-content">
+                                            <ul class="lista-feriados" id="lista-feriados">
+                                                <template id="item-feriado">
+                                                    <li>
+                                                        <div class="item-feriado">
+                                                            <span></span>
+                                                            <i class="fa-solid fa-x icon-deletar"></i>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="loading-overlay hidden"></div>
                                 <div class="container-input">
                                     <div class="item-horario item-ponto-facultativo">
                                         <div class="item-upload">
@@ -138,8 +157,8 @@
                                                     <div class="items-horarios input-feriado">
                                                         <div class="items-horarios um-input input-feriado">
                                                             <span>Intervalo inicio</span>
-                                                            <input class="horario_input" maxlength="5" type="time"
-                                                                name="saida-almoco">
+                                                            <input class="horario-input" maxlength="5" type="time"
+                                                                name="saida_almoco">
                                                         </div>
                                                     </div>
                                                 </div>

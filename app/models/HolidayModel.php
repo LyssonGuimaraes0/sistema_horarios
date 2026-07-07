@@ -54,52 +54,100 @@ class HolidayModel
 
     }
 
+    //Delete de
+
+    public function delete(string $date)
+    {
+        try {
+
+            $pdo = Database::connect();
+            $pdo->beginTransaction();
+
+            $id = $this->getIdHoliday($date);
+
+            $sql = "DELETE FROM ponto_facultativo WHERE id_feriado = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+
+            $sql = "DELETE FROM feriados WHERE id = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+
+            $pdo->commit();
+        } catch (\Exception $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+
+
+    }
+
     //Cria registro de Ponto Facultativo
 
-    public function createOptionalHolidays(int $idHoliday, int $idRole, array $data, array $horarios)
+    public function createOptionalHolidays(array $holiday, int $idRole, array $data, array $horarios)
     {
-        $pdo = Database::connect();
 
-        $sql = "INSERT INTO ponto_facultativo (";
+        try {
+            $pdo = Database::connect();
 
-        //Formata colunas e valores
-        foreach ($horarios as $horario => $valor) {
-            if ($horario == array_key_first($horarios)) {
-                $sql .= "id_feriado, 
+            $pdo->beginTransaction();
+
+            //Registra o feriado
+            if ($this->existsDate($holiday['date']) != true) {
+                $idHoliday = $this->create($holiday, true);
+            } else {
+                $idHoliday = $this->getIdHoliday($holiday['date']);
+            }
+
+            $sql = "INSERT INTO ponto_facultativo (";
+
+            //Formata colunas e valores
+            foreach ($horarios as $horario => $valor) {
+                if ($horario == array_key_first($horarios)) {
+                    $sql .= "id_feriado, 
                         id_cargo, 
                         data_inicio, 
                         data_fim, ";
 
-                $ValueSQL = ") VALUES( 
+                    $ValueSQL = ") VALUES( 
                         :id_feriado, 
                         :id_cargo, 
                         :data_inicio, 
                         :data_fim,";
+                }
+
+                if ($horario == array_key_last($horarios)) {
+                    $ValueSQL .= ":$horario)";
+                    $sql .= "$horario ";
+                } else {
+                    $sql .= "$horario, ";
+                    $ValueSQL .= ":$horario, ";
+                }
             }
 
-            if ($horario == array_key_last($horarios)) {
-                $ValueSQL .= ":$horario)";
-                $sql .= "$horario ";
-            } else {
-                $sql .= "$horario, ";
-                $ValueSQL .= ":$horario, ";
+            $sql = $sql . $ValueSQL;
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindValue(':id_feriado', $idHoliday);
+            $stmt->bindValue(':id_cargo', $idRole);
+            $stmt->bindValue(':data_inicio', $data['dataStart']); // Corrigido de :dateStart para :data_inicio
+            $stmt->bindValue(':data_fim', $data['dataEnd']);
+
+            foreach ($horarios as $horario => $valor) {
+                $stmt->bindValue(":$horario", $valor);
             }
+
+            $stmt->execute();
+
+            $pdo->commit();
+        } catch (\Exception $e) {
+            $pdo->rollBack();
+            throw $e;
         }
 
-        $sql = $sql . $ValueSQL;
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->bindValue(':id_feriado', $idHoliday);
-        $stmt->bindValue(':id_cargo', $idRole);
-        $stmt->bindValue(':data_inicio', $data['dataStart']); // Corrigido de :dateStart para :data_inicio
-        $stmt->bindValue(':data_fim', $data['dataEnd']);
-
-        foreach ($horarios as $horario => $valor) {
-            $stmt->bindValue(":$horario", $valor);
-        }
-
-        $stmt->execute();
     }
 
     //Busca registros de feriados do ano
@@ -139,6 +187,25 @@ class HolidayModel
 
         return (bool) $stmt->fetchColumn();
     }
+
+    //obtem ID de feriado
+    public function getIdHoliday(string $date): int
+    {
+        $pdo = Database::connect();
+
+        $sql = "SELECT id
+            FROM feriados
+            WHERE data_completa = :date
+        ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':date', $date);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+
 
 }
 

@@ -29,7 +29,7 @@ export async function request(url, options = {}) {
             throw error;
         }
 
-        return data;
+        return data; 
 
         /* const text = await response.text();
 
