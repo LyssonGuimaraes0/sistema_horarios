@@ -110,13 +110,12 @@ btnAnexarFrequencia.addEventListener('click', async function () {
                 );
             }
 
-            await delay(800);
-            hideLoading();
+            await hideLoading();
             showModalToast(response.data);
             alterarBtnAnexarFrequencia(btnAnexarFrequencia);
 
         } catch (error) {
-            hideLoading();
+            await hideLoading();
             showModalToast(error, "error");
         }
 
@@ -189,8 +188,6 @@ btnMes.addEventListener('click', async function () {
 
         //Cria card para cada elemento
 
-        await delay(850)
-
         record.forEach(item => {
             //Organização de variavel
             const dadosData =
@@ -208,16 +205,18 @@ btnMes.addEventListener('click', async function () {
             const card = createCardList(templateIpunt, dadosData)
 
             //Altera o o botão de anexar caso já tenha registro
-            alterarBtnAnexarFrequencia(btnAnexarFrequencia,monthlyAttendance);
+            alterarBtnAnexarFrequencia(btnAnexarFrequencia, monthlyAttendance);
 
             containerForm.appendChild(card)
 
         });
 
-        await delay(1500);
-        hideLoading();
         //Libera rolagem depois de toca a animação
         containerCalendario.style.overflow = "auto";
+
+        await delay(800);
+
+        await hideLoading();
 
     } catch (error) {
         console.log("Erro de comunicação")

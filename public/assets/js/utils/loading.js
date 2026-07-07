@@ -15,9 +15,9 @@ export function createLoading() {
     return loading;
 }
 
-export function showLoading() {
+export function showLoading(containerLoading = document.querySelector('.loading-overlay')) {
     //Libera container de overlay
-    let containerLoading = document.querySelector('.loading-overlay')
+
     containerLoading.classList.remove('hidden');
 
     let loading = containerLoading.querySelector('.loading');
@@ -30,13 +30,16 @@ export function showLoading() {
     loading.style.display = 'block';
 }
 
-export function hideLoading() {
+export async function hideLoading(containerLoading = document.querySelector('.loading-overlay')) {
     //Esconde container de overlay
-    let containerLoading = document.querySelector('.loading-overlay')
-    containerLoading.classList.add('hidden');
-    const loading = containerLoading.querySelector('.loading');
+    containerLoading.classList.add('esconder-overlay')
+    setTimeout(() => {
+        containerLoading.classList.add('hidden');
+        const loading = containerLoading.querySelector('.loading');
 
-    if (loading) {
-        loading.style.display = 'none';
-    }
+        if (loading) {
+            loading.style.display = 'none';
+        }
+    }, 800);
+
 }

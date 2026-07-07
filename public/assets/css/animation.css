@@ -15,6 +15,13 @@
     display: none;
 }
 
+/*Animação de faded*/
+
+.esconder-overlay {
+    animation: faded 1s ease forwards;
+    pointer-events: none; 
+}
+
 
 /*Animação de Carregamento*/
 
@@ -72,6 +79,17 @@
     animation-delay: 0.3s;
 }
 
+/*Fadded*/
+
+@keyframes faded {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
 
 @keyframes bounce {
     from {
