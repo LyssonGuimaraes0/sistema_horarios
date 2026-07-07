@@ -108,7 +108,7 @@ class AttendanceController extends ApiController
     public function getCalendar(int $year, int $month)
     {
         //Buscar dados de usuario
-        $user = $this->authMiddleware->handle(); 
+        $user = $this->authMiddleware->handle();
 
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
@@ -258,22 +258,24 @@ class AttendanceController extends ApiController
     public function deleteAttachment()
     {
 
-        try {
-            //Valida Token de acesso
-            //$user = $this->authMiddleware->handle();
+        /* try { */
+        //Valida Token de acesso
+        //$user = $this->authMiddleware->handle();
 
-            $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
+        $dados = json_decode(file_get_contents('php://input'), true);
 
-            // upload anexo
-            $return = $this->attendanceService->deleteAttachment($user->id ?? 3, $dados);
+        $idCertificate = $dados['id'];
 
-            if ($return === true) {
-                return $this->success("Registro apagado com sucesso!", 201);
-            } else {
-                return $this->error("Erro ao apagar o arquivo", 400);
-            }
+        // upload anexo
+        $this->attendanceService->deleteAttachment(/* $user->id ?? */ 1, $idCertificate);
 
-        } catch (Exception $e) {
+        /* if ($return === true) {
+            return $this->success("Registro apagado com sucesso!", 201);
+        } else {
+            return $this->error("Erro ao apagar o arquivo", 400);
+        }
+*/
+        /* } catch (Exception $e) {
 
             $statusCode = $e->getCode();
 
@@ -282,7 +284,7 @@ class AttendanceController extends ApiController
             }
 
             return $this->error($e->getMessage(), 400);
-        }
+        } */
 
     }
 

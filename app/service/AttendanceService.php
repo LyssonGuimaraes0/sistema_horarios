@@ -131,6 +131,7 @@ class AttendanceService
             foreach ($certificates as $certificate) {
                 if ($date >= $certificate['data_inicio'] && $date <= $certificate['data_fim']) {
                     return [
+                        "id" => $certificate['id'],
                         "data_inicio" => $certificate['data_inicio'],
                         "data_fim" => $certificate['data_fim'],
                     ];
@@ -215,7 +216,7 @@ class AttendanceService
     public function getMonthlyAttendance($year, $month, $id)
     {
         //Busca Registros de folha de ponto mensal
-        return $this->monthlyAttendanceModel->getMonthlyAttendanceByYearAndMonth($id, $year,$month);
+        return $this->monthlyAttendanceModel->getMonthlyAttendanceByYearAndMonth($id, $year, $month);
     }
 
     //Gera folha de ponto Mensal
@@ -284,7 +285,7 @@ class AttendanceService
         $extensao = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
 
         //nome arquivo
-        $nomeArquivo = "folha_mensal_" . uniqid() . "_" . $date['year'] . "_" . $date['month'] . ".$extensao" ;
+        $nomeArquivo = "folha_mensal_" . uniqid() . "_" . $date['year'] . "_" . $date['month'] . ".$extensao";
 
         // patch
         $path = $caminho . $nomeArquivo;
@@ -389,45 +390,49 @@ class AttendanceService
 
     }
 
-    public function deleteAttachment(int $id_user, $dados)
+    //Deleta atestado
+    public function deleteAttachment(int $idUser, int $idCertificate)
     {
 
-        try {
-
-            //Valida dados
-            if (!isset($dados['id_documento'])) {
-                throw new \Exception("Dados incompletos - " . $dados['id_documento']);
-            } else {
-
-                //nome arquivo
-                $nomeArquivo = basename(urldecode($dados["caminho"]));
-
-                // caminho lixeira 
-                $caminhoLixeira = __DIR__ . "/../../uploads/lixeira/" . $nomeArquivo;
-
-                // caminho atual, quando for por isso no seu projeto me fala se tiver com problemas, vai ser esse caminho atual se pah.
-                $caminhoAtual = __DIR__ . "/../../uploads/atestados/" . $nomeArquivo;
-
-                // mudar caminho
-                if (!rename($caminhoAtual, $caminhoLixeira)) {
-                    throw new \Exception("Erro ao mover o arquivo para a lixeira.");
-                }
-
-                //Salvar dados no banco de dados
-                $this->attachmentModel->delete(
-                    $id_user,
-                    $dados['id_documento'],
-                    '/lixeira/' . $nomeArquivo
-                );
-
-                return true;
-
-            }
-
-        } catch (\Exception $e) {
-            throw new \Exception("Erro de validação: " . $e->getMessage(), 400);
+        //Valida dados
+        if (!isset($idCertificate)) {
+            throw new \Exception("Registro do atestado em falta");
         }
 
-    }
+        //Buscar dados do Atestado
+        $certicate = $this->attachmentModel->getAttachmentById($idCertificate, $idUser);
 
+        // Caso não possua registro do atestado
+        if ($certicate === false) {
+            throw new \Exception("Atestado não foi encontrado", 404);
+        }
+
+        //nome arquivo
+        $nomeArquivo = basename(urldecode($certicate["caminho_justificativa"]));
+
+        // caminho lixeira 
+        $caminhoLixeira = STORAGE_PATH . "/lixeira/";
+        $caminhoAtual = BASE_PATH . $certicate["caminho_justificativa"];
+
+        DirectoryHelper::verifyDirectory($caminhoLixeira);
+
+        $pathLixeira = $caminhoLixeira . $nomeArquivo;
+        $pathAtual = $caminhoAtual;
+
+        if (!rename($pathAtual, $pathLixeira)) {
+            throw new \Exception("Erro ao processar arquivo no servidor.");
+        }
+
+        //Formata nome do caminho do arquivo
+        $pathFormatado = str_replace(BASE_PATH, "", $pathLixeira);
+
+        //Salvar dados no banco de dados
+        $this->attachmentModel->delete(
+            $idUser,
+            $idCertificate,
+            $pathFormatado
+        );
+
+
+    }
 }

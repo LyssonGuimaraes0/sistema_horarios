@@ -260,6 +260,7 @@ const state = {
 //Valida Cliques de botões gerados no formulario
 containerForm.addEventListener('click', async (e) => {
     e.preventDefault()
+    let resultado
     const btn = e.target.closest('.botao-calendario, .btn-calendario');
     if (!btn) return;
 
@@ -494,7 +495,7 @@ containerForm.addEventListener('click', async (e) => {
         case 'delete':
 
             //Apresenta modal Para remover horario
-            const resultado = await apresentarModal(
+            resultado = await apresentarModal(
                 'modal-default',
                 'alerta',
                 `Deseja Excluir o registro de ${card.dataset.date}`
@@ -541,6 +542,66 @@ containerForm.addEventListener('click', async (e) => {
                 }
             }
 
+            break;
+
+        //==========================================================================
+
+        case 'delete-certificate':
+
+        const mensagem = `
+        <span>Deseja Excluir o Atestado da data ${card.dataset.date}</span>
+        <br>
+        <small style="color:red">Essa ação afetarar outras datas vinculada</small>
+        `
+
+            //Apresenta modal Para remover horario
+            resultado = await apresentarModal(
+                'modal-default',
+                'alerta',
+                mensagem
+            );
+
+            //Caso clique no botão execulta
+            /* if (resultado) {
+
+                //Seleciona rota de exclusão
+                try {
+                    response = await request(`${urlBase}/api/user/attendance/delete`, {
+                        method: "DELETE",
+                        credentials: 'include',
+                        body: {
+                            date: card.dataset.date
+                        }
+                    })
+
+                    if (!response?.success) {
+                        throw new Error(
+                            response.error ??
+                            response.message ??
+                            "Erro interno do servidor"
+                        );
+                    }
+
+                    //Apresenta modal
+                    showModalToast(response.data);
+
+                    //Remove estilos e dados
+                    inputs.forEach(input => {
+                        RemoveReadonly(input)
+                        input.value = ""
+                    });
+
+                    //Reabilita botão de submit
+                    const oldBtns = buttonSubmitCalendar(card.querySelector('.items-botoes'));
+
+                    card.appendChild(oldBtns)
+
+
+                } catch (error) {
+                    showModalToast(error, "error");
+                }
+            }
+ */
             break;
 
         //==========================================================================

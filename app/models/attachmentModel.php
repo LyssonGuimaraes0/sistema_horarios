@@ -30,6 +30,7 @@ class AttachmentModel
             $pdo = Database::connect();
 
             $sql = "SELECT
+            id,
             caminho_justificativa,
             descricao_motivo,
             data_inicio,
@@ -53,6 +54,38 @@ class AttachmentModel
             throw new \Exception("Erro ao salvar no banco de dados: " . $e->getMessage(), 500);
         }
     }
+
+    //Busca de atestados por ID
+    public function getAttachmentById($idCertificate, $idUser)
+    {
+        try {
+
+            $pdo = Database::connect();
+
+            $sql = "SELECT
+            id,
+            caminho_justificativa,
+            descricao_motivo,
+            data_inicio,
+            data_fim
+            FROM documento_justificativa
+            WHERE id = :idCerticate
+            AND usuario_id = :idUser";
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindValue(":idCerticate", $idCertificate, PDO::PARAM_INT);
+            $stmt->bindValue(":idUser", $idUser, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        } catch (\PDOException $e) {
+            throw new \Exception("Erro ao buscar registro: " . $e->getMessage(), 500);
+        }
+    }
+
     public function delete(int $usuario_id, int $documento_id, string $caminho_justificativa)
     {
         try {

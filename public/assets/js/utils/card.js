@@ -84,7 +84,7 @@ export function createCardList(template, dadosData) {
                             containerbtn.innerHTML = `
                             <span>Atestado</span>
 
-                            <i class="fa-solid fa-trash-can botao-calendario"data-action="delete"></i>
+                            <i class="fa-solid fa-trash-can botao-calendario"data-action="delete-certificate" data-certificate="${dadosData.certificate.id}"></i>
                             `;
                         } else {
                             certificateButtonCalendar(containerbtn)
