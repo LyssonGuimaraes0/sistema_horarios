@@ -21,71 +21,49 @@
             <div class="section-container">
                 <div class="container-home">
                     <div class="container-welcome">
-                        <h2 class="title-container" id="home-nameUser">Bem vindo! </h2>
+                        <h2 class="title-container" id="home-nameUser">Bem vindo! <?= $dataUser['nome'] ?></h2>
                     </div>
                 </div>
                 <div class="container-home">
                     <div class="container-welcome welcome-horario">
                         <div class="titulo-container">
-                            <h2 class="title-container">Data Atual: <?= date('d/m/Y') ?></h2>
+                            <h2 class="title-container">Data Atual: <?= (new DateTime($record['currentday']))->format('d/m/Y') ?></h2>
                         </div>
                         <div class="inputs-container">
-                            <form action="./settings/conf_data.php" method="post">
-                                <div class="container-horarios intem-home">
+                            <form id="form-record-dashboard">
+                                <div class="container-horarios intem-home" data-date=<?= $record['currentday'] ?>>
                                     <!--Envia a data atual para o formulario-->
-                                    <input type="hidden" name="dias" value="<?= date('t') ?>">
-                                    <input type="hidden" name="mes" value="<?= date('m') ?>">
-                                    <input type="hidden" name="ano" value="<?= date('Y') ?>">
                                     <div class="items-horarios">
                                         <!--Apresentação de inputs Baseados em cargos-->
 
+                                        <div class='input-colunm'>
+                                            <span>Entrada</span>
+                                            <input class='horario-input' step="60" type='time' name='entrada'
+                                                value="<?= $record['entrada']?>">
+                                        </div>
                                         <?php if (PermissionHelper::isServidorPublico($user)): ?>
-
-                                            <div class='input-colunm'>
-                                                <span>Entrada</span>
-                                                <input class='horario-input' maxlength='5' type='time' name='entrada[$dia]'
-                                                    value="">
-                                            </div>
-
                                             <div class='input-colunm'>
                                                 <span>Intervalo inicio</span>
-                                                <input class='horario-input' maxlength='5' type='time' name='saida_pf[$dia]'
-                                                    value="">
+                                                <input class='horario-input' step="60" type='time' name='saida_almoco'
+                                                    value="<?= $record['saida_almoco']?>">
                                             </div>
 
                                             <div class='input-colunm'>
                                                 <span>Intervalo volta</span>
-                                                <input class='horario-input' maxlength='5' type='time'
-                                                    name='entrada_pf[$dia]' value="">
-                                            </div>
-                                            <div class='input-colunm'>
-                                                <span>Saida</span>
-                                                <input class='horario-input' maxlength='5' type='time' name='saida[$dia]'>
+                                                <input class='horario-input' step="60" type='time'
+                                                    name='volta_almoco' value="<?= $record['volta_almoco']?>">
                                             </div>
 
                                         <?php endif; ?>
 
-
-                                        <?php if (PermissionHelper::isEstagiarioManha($user) || PermissionHelper::isEstagiarioTarde($user)): ?>
-
-                                            <div class='input-colunm'>
-                                                <span>Entrada</span>
-                                                <input class='horario-input' maxlength='5' type='time'
-                                                    name='"entrada[$dia]"'>
-                                            </div>
-
-                                            <div class='input-colunm'>
-                                                <span>Saida</span>
-                                                <input class='horario-input' maxlength='5' type='time' name='saida[$dia]'>
-                                            </div>
-
-                                        <?php endif; ?>
+                                        <div class='input-colunm'>
+                                            <span>Saida</span>
+                                            <input class='horario-input' step="60" type='time' name='saida' value="<?= $record['saida']?>">
+                                        </div>
 
                                         <div class="items-botoes">
-                                            <button type='submit' class='btn-calendario' name='dia'
-                                                value='$dia'>Confirmar</button>
-                                            <i class='fa-solid fa-file-alt botao-calendario'
-                                                onclick=\"adicionar_justificativa('$data_str')\"></i>
+                                            <button type='submit' class='btn-calendario'>Confirmar</button>
+                                            <i class='fa-solid fa-file-alt botao-calendario' data-action="certificate"></i>
                                         </div>
 
                                     </div>
@@ -94,28 +72,25 @@
                         </div>
                     </div>
                     <div class="container-card">
-                        <!--Apresentação de inputs Baseados em cargos-->
-                        <?php if (!PermissionHelper::isCoordenador($user) || !PermissionHelper::isPPE($user)): ?>
-                            <div class="card-info"> <span class="title-container">Registro Realizados no Mês</span>
-                                <span></span>
-                                <div class="linha blue"></div>
-                            </div>
-                            <div class="card-info">
-                                <span class="title-container">Registros Completos</span>
-                                <span></span>
-                                <div class="linha green"></div>
-                            </div>
-                            <div class="card-info">
-                                <span class="title-container">Registros em Aberto </span>
-                                <span> </span>
-                                <div class="linha red"></div>
-                            </div>
-                        <?php endif; ?>
+                        <div class="card-info"> <span class="title-container">Registro Realizados no Mês</span>
+                            <span><?= $record['registereddays'] ?></span>
+                            <div class="linha blue"></div>
+                        </div>
+                        <div class="card-info">
+                            <span class="title-container">Registros em Aberto</span>
+                            <span><?= $record['pendingdays'] ?></span>
+                            <div class="linha green"></div>
+                        </div>
+                        <div class="card-info">
+                            <span class="title-container">Feriados/Pontos Facultativos</span>
+                            <span><?= $record['holidays'] ?></span>
+                            <div class="linha red"></div>
+                        </div>
 
                     </div>
 
                     <!-----Cards Inferiores-------->
-                    <div class="container-card">
+                    <!-- <div class="container-card">
                         <div class="card-inferior">
                             <i class="fa-solid fa-clock card-icon"></i>
                             <span class="title-container">Registrar Ponto</span>
@@ -141,11 +116,11 @@
                                         Frequencia</button></a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
         </section>
     </div>
 
-    <script type="module" src=<?= SCRIPT_URL . "/page/dashboard.js"?>></script>
+    <script type="module" src=<?= SCRIPT_URL . "/page/dashboard.js" ?>></script>
 
 </body>
 

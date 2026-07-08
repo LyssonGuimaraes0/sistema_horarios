@@ -35,6 +35,88 @@ class AttendanceService
         $this->monthlyAttendanceModel = new MonthlyAttendanceModel;
     }
 
+    //Coleta dados para página de dashboard
+    public function getDataForDashboard(int $id)
+    {
+
+        //Datas, mes e ano
+        $month = $this->dateService->getCurrentMonth();
+        $year = $this->dateService->getCurrentYear();
+        $lastDay = $this->dateService->getAllDaysOfMonth($year, $month);
+
+        //Dia Atual
+        $currentDay = $this->dateService->getDateComplete();
+
+        //Montar datas
+        $monthStart = "$year-$month-01";
+        $monthEnd = "$year-$month-$lastDay";
+
+        //Buscar registro de horarios
+        $Allattendance = $this->attendanceModel->getAttendance($id, $monthStart, $monthEnd);
+
+        $registeredDays = 0;
+        $holiday = 0;
+        $pendingDays = 0;
+        $entrada = 0;
+        $saida_almoco = 0;
+        $volta_almoco = 0;
+        $saida = 0;
+
+
+        //Separa dados de data
+        $datas = DateService::getPeriod($monthStart, $monthEnd);
+
+        foreach ($datas as $date) {
+
+            // Verifica se é fim de semana
+            $weekDay = date('N', strtotime($date));
+            if ($weekDay > 5) {
+                continue;
+            }
+
+            // Verifica se é feriado
+            if ($this->holidayService->isHoliday($date)) {
+                $holiday++;
+                continue;
+            }
+
+            $pendingDays++;
+
+            // Verifica se existe registro nessa data
+            foreach ($Allattendance as $attendance) {
+
+                //Verifica se horario armazenado é data Atual
+                if ($currentDay === $attendance['data_completo']) {
+
+                    $entrada = $attendance['entrada'] ?? "";
+                    $saida_almoco = $attendance['saida_almoco'] ?? "";
+                    $volta_almoco = $attendance['volta_almoco'] ?? "";
+                    $saida = $attendance['saida'] ?? "";
+                }
+
+                if ($date === $attendance['data_completo']) {
+                    $registeredDays++;
+                    break; // evita contar duas vezes o mesmo dia
+                }
+            }
+        }
+
+        $pendingDays -= $registeredDays;
+
+        return [
+            'currentday' => $currentDay,
+            'pendingdays' => $pendingDays,
+            'registereddays' => $registeredDays,
+            'holidays' => $holiday,
+            'entrada' => substr($entrada, 0, 5),
+            'saida_almoco' => substr($saida_almoco, 0, 5),
+            'volta_almoco' => substr($volta_almoco, 0, 5),
+            'saida' => substr($saida, 0, 5) 
+        ];
+
+    }
+
+
     //Registra novo horario ao banco de dados
     public function createAttendance($id, $dados)
     {
