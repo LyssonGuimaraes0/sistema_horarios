@@ -73,18 +73,23 @@ export function createCardList(template, dadosData) {
 
                     //Verifica se é a o card atual tem atestado
                     if (dadosData.certificate != null) {
+
+                        //Aplica id do certificado no container relacionado
+                        card.dataset.certificate = dadosData.certificate.id;
+
                         let dataInicio = dadosData.certificate.data_inicio;
 
                         //Verifica se o dia bate com dia atual
                         if (dataInicio == dadosData.date) {
+
                             //Caso seja o primeiro dia somente coloca o botão de deletar
                             //Limpa container
                             containerbtn.innerHTML = ""
 
                             containerbtn.innerHTML = `
                             <span>Atestado</span>
-
-                            <i class="fa-solid fa-trash-can botao-calendario"data-action="delete-certificate" data-certificate="${dadosData.certificate.id}"></i>
+                            <i class="fa-solid fa-file-medical botao-calendario" data-certificate="${urlBase + dadosData.certificate.path}" data-action="open-certificate"></i>
+                            <i class="fa-solid fa-trash-can botao-calendario"data-action="delete-certificate"></i>
                             `;
                         } else {
                             certificateButtonCalendar(containerbtn)
@@ -107,6 +112,9 @@ export function createCardList(template, dadosData) {
 
 
 export function buttonSubmitCalendar(container) {
+
+    if (!container) return;
+    
     //Limpa container
     container.innerHTML = ""
 
@@ -122,6 +130,9 @@ export function buttonSubmitCalendar(container) {
 //Função de alteração de botão de edição para confirmar e cancelar
 
 export function deleteButtonCalendar(container) {
+
+    if (!container) return;
+
     //Limpa container
     container.innerHTML = ""
 
@@ -134,6 +145,9 @@ export function deleteButtonCalendar(container) {
 }
 
 export function certificateButtonCalendar(container) {
+
+    if (!container) return;
+
     //Limpa container
     container.innerHTML = ""
 
@@ -145,6 +159,8 @@ export function certificateButtonCalendar(container) {
 
 //Função de criação de botões de edição e delete
 export function createButtonsCalendar(container) {
+    if (!container) return;
+
     //Limpa container
     container.innerHTML = ""
 
@@ -165,6 +181,8 @@ export function createButtonsCalendar(container) {
 
 export function alterButtonsCalendar(container) {
     //Limpa container
+    if (!container) return;
+
     container.innerHTML = ""
 
     container.innerHTML = `

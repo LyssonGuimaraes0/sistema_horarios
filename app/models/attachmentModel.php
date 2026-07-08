@@ -34,7 +34,8 @@ class AttachmentModel
             caminho_justificativa,
             descricao_motivo,
             data_inicio,
-            data_fim
+            data_fim,
+            deletado
             FROM documento_justificativa
             WHERE data_inicio <= :data_fim
             AND data_fim >= :data_inicio
@@ -67,7 +68,8 @@ class AttachmentModel
             caminho_justificativa,
             descricao_motivo,
             data_inicio,
-            data_fim
+            data_fim,
+            deletado
             FROM documento_justificativa
             WHERE id = :idCerticate
             AND usuario_id = :idUser";
@@ -89,11 +91,22 @@ class AttachmentModel
     public function delete(int $usuario_id, int $documento_id, string $caminho_justificativa)
     {
         try {
+
             $pdo = Database::connect();
 
-            $sql = "UPDATE documento_justificativa set usuario_id = ? , caminho_justificativa = ?, deletado = 1 WHERE id = ?";
+            $sql = "UPDATE documento_justificativa 
+            set usuario_id = :usuario_id ,
+            caminho_justificativa = :path ,
+            deletado = 1 
+            WHERE id = :idCertificate";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$usuario_id, $caminho_justificativa, $documento_id]);
+
+            $stmt->bindValue(":idCertificate", $documento_id, PDO::PARAM_INT);
+            $stmt->bindValue(":usuario_id", $usuario_id, PDO::PARAM_INT);
+            $stmt->bindValue(":path", $caminho_justificativa, PDO::PARAM_STR);
+
+            $stmt->execute();
+
         } catch (\PDOException $e) {
             throw new \Exception("Erro ao salvar no banco de dados: " . $e->getMessage(), 500);
         }

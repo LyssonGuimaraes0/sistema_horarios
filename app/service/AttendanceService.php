@@ -130,10 +130,17 @@ class AttendanceService
         {
             foreach ($certificates as $certificate) {
                 if ($date >= $certificate['data_inicio'] && $date <= $certificate['data_fim']) {
+
+                    //Caso seja do tipo deletado ignora
+                    if ($certificate['deletado'] === 1) {
+                        continue;
+                    }
+
                     return [
                         "id" => $certificate['id'],
                         "data_inicio" => $certificate['data_inicio'],
                         "data_fim" => $certificate['data_fim'],
+                        "path" => $certificate['caminho_justificativa']
                     ];
                 }
             }
@@ -317,7 +324,7 @@ class AttendanceService
 
 
     //Upload de atestados
-    public function uploadAttachment(int $id, $dados)
+    public function uploadAttachment(int $id, $dados, $role)
     {
 
         try {
@@ -358,7 +365,7 @@ class AttendanceService
 
 
                 //Coleta horario padrão do cargo
-                $roleSchedule = CargoModel::getDefaultScheduleByRole("Servidor Publico");
+                $roleSchedule = CargoModel::getDefaultScheduleByRole($role);
                 //Limpa dados que possão vim nulos
                 $roleSchedule = array_filter($roleSchedule, fn($valor) => $valor !== null);
 
@@ -402,8 +409,8 @@ class AttendanceService
         //Buscar dados do Atestado
         $certicate = $this->attachmentModel->getAttachmentById($idCertificate, $idUser);
 
-        // Caso não possua registro do atestado
-        if ($certicate === false) {
+        // Caso não possua registro do atestado ou já tenha sido deletado
+        if ($certicate === false || $certicate['deletado'] === 1) {
             throw new \Exception("Atestado não foi encontrado", 404);
         }
 
@@ -419,12 +426,12 @@ class AttendanceService
         $pathLixeira = $caminhoLixeira . $nomeArquivo;
         $pathAtual = $caminhoAtual;
 
+        //Formata nome do caminho do arquivo
+        $pathFormatado = str_replace(BASE_PATH, "", $pathLixeira);
+
         if (!rename($pathAtual, $pathLixeira)) {
             throw new \Exception("Erro ao processar arquivo no servidor.");
         }
-
-        //Formata nome do caminho do arquivo
-        $pathFormatado = str_replace(BASE_PATH, "", $pathLixeira);
 
         //Salvar dados no banco de dados
         $this->attachmentModel->delete(
@@ -432,6 +439,19 @@ class AttendanceService
             $idCertificate,
             $pathFormatado
         );
+
+        //Remove registros de folha de ponto diaria
+        $start = new DateTime($certicate['data_inicio']);
+        $end = new DateTime($certicate['data_fim']);
+        $end->modify('+1 day');
+
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($start, $interval, $end);
+
+        foreach ($period as $date) {
+            $onlyDate = $date->format('Y-m-d');
+            $this->attendanceModel->delete($idUser, $onlyDate);
+        }
 
 
     }

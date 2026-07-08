@@ -184,8 +184,6 @@ btnMes.addEventListener('click', async function () {
         let record = response.data.record;
         let monthlyAttendance = response.data.monthlyAttendance;
 
-        /* console.log(response.data); */
-
         //Cria card para cada elemento
 
         record.forEach(item => {
@@ -432,8 +430,6 @@ containerForm.addEventListener('click', async (e) => {
             //Chama rota de envio para atestado
             if (resultadoCertificate) {
 
-                console.log(resultadoCertificate)
-
                 //Converte dados para form
                 formData.append('dateStart', resultadoCertificate.dateStart);
                 formData.append('dateEnd', resultadoCertificate.dateEnd);
@@ -544,16 +540,24 @@ containerForm.addEventListener('click', async (e) => {
 
             break;
 
+        //==================== Caso de abrir Atestado ==========================  
+
+        case 'open-certificate':
+            const link = btn.dataset.certificate;
+
+            window.open(link, "_blank");
+            break
+
         //==========================================================================
+
+        //==================== Caso de deleta de Atestado ==========================  
 
         case 'delete-certificate':
 
-        const mensagem = `
-        <span>Deseja Excluir o Atestado da data ${card.dataset.date}</span>
-        <br>
-        <small style="color:red">Essa ação afetarar outras datas vinculada</small>
-        `
-
+            const mensagem = `<span>Deseja Excluir o Atestado da data ${card.dataset.date}</span>
+                            <br>
+                            <small style="color:red">Essa ação afetarar outras datas vinculada</small>
+                            `
             //Apresenta modal Para remover horario
             resultado = await apresentarModal(
                 'modal-default',
@@ -562,16 +566,16 @@ containerForm.addEventListener('click', async (e) => {
             );
 
             //Caso clique no botão execulta
-            /* if (resultado) {
+            if (resultado) {
+
+                const idCertificate = card.dataset.certificate;
 
                 //Seleciona rota de exclusão
                 try {
-                    response = await request(`${urlBase}/api/user/attendance/delete`, {
+                    response = await request(`${urlBase}/api/user/deleteAttachment`, {
                         method: "DELETE",
                         credentials: 'include',
-                        body: {
-                            date: card.dataset.date
-                        }
+                        body: idCertificate
                     })
 
                     if (!response?.success) {
@@ -582,26 +586,31 @@ containerForm.addEventListener('click', async (e) => {
                         );
                     }
 
+                    //Coleta todos os cards que possui o id do certificado
+                    const cardsWithId = document.querySelectorAll(`[data-certificate='${idCertificate}']`)
+
+                    cardsWithId.forEach(card => {
+                        const containerBtns = card.querySelector('.items-botoes');
+
+                        if (containerBtns) {
+                            buttonSubmitCalendar(containerBtns);
+                        }
+
+                        const allInputsCard = card.querySelectorAll('.horario-input');
+                        //Remove estilos e dados
+                        allInputsCard.forEach(input => {
+                            RemoveReadonly(input)
+                            input.value = ""
+                        });
+                    })
+
                     //Apresenta modal
                     showModalToast(response.data);
-
-                    //Remove estilos e dados
-                    inputs.forEach(input => {
-                        RemoveReadonly(input)
-                        input.value = ""
-                    });
-
-                    //Reabilita botão de submit
-                    const oldBtns = buttonSubmitCalendar(card.querySelector('.items-botoes'));
-
-                    card.appendChild(oldBtns)
-
 
                 } catch (error) {
                     showModalToast(error, "error");
                 }
             }
- */
             break;
 
         //==========================================================================

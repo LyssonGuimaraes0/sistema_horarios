@@ -167,7 +167,7 @@ class AttendanceController extends ApiController
             $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
 
             // upload anexo
-            $return = $this->attendanceService->uploadAttachment($user->id, $dados);
+            $return = $this->attendanceService->uploadAttachment($user->id, $dados,$user->cargo);
 
             if ($return === true) {
                 return $this->success("Registro Realizado com sucesso!", 201);
@@ -258,24 +258,20 @@ class AttendanceController extends ApiController
     public function deleteAttachment()
     {
 
-        /* try { */
+        try { 
         //Valida Token de acesso
-        //$user = $this->authMiddleware->handle();
+        $user = $this->authMiddleware->handle();
 
         $dados = json_decode(file_get_contents('php://input'), true);
 
-        $idCertificate = $dados['id'];
+        $idCertificate = $dados;
 
         // upload anexo
-        $this->attendanceService->deleteAttachment(/* $user->id ?? */ 1, $idCertificate);
+        $this->attendanceService->deleteAttachment($user->id, $idCertificate);
 
-        /* if ($return === true) {
-            return $this->success("Registro apagado com sucesso!", 201);
-        } else {
-            return $this->error("Erro ao apagar o arquivo", 400);
-        }
-*/
-        /* } catch (Exception $e) {
+        return $this->success("Registro apagado com sucesso!", 201);
+
+        } catch (Exception $e) {
 
             $statusCode = $e->getCode();
 
@@ -283,8 +279,12 @@ class AttendanceController extends ApiController
                 return $this->error($e->getMessage(), 401);
             }
 
-            return $this->error($e->getMessage(), 400);
-        } */
+            if ($statusCode === 404) {
+                return $this->error($e->getMessage(), 404);
+            }
+
+            return $this->error($e->getMessage(), 500);
+        } 
 
     }
 
