@@ -55,6 +55,103 @@
     </div>
 </template>
 
+<!--Modal de informações de usuarios-->
+
+<template id="modal-info-user">
+    <div class="modal-background">
+        <div class="section-container">
+            <div class="modal-container container-user-info">
+                <div class="loading-overlay hidden"></div>
+                <div class="modal">
+                    <div class="modal-cabecalho modal-justifi">
+                        <div class="container-welcome header-modal-user">
+                            <h2 class="title-container">
+                                Ficha do Usuario
+                            </h2>
+                            <button class="btn-formulario-header" id="btn-anexar-frequencia">
+                                <i class="fa-solid fa-upload card-icon"></i>
+                                <p>Anexar Atestado</p>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="container-modal-user">
+                        <div class="row-modal-user">
+                            <div class="items-horarios item-modal-user">
+                                <span>Nome completo</span>
+                                <input class="horario-input input-modal-user" type="text" name="nome" readonly disabled>
+                            </div>
+                            <div class="items-horarios item-modal-user">
+                                <span>Email</span>
+                                <input class="horario-input input-modal-user" type="text" name="email" readonly
+                                    disabled>
+                            </div>
+                        </div>
+                        <div class="row-modal-user">
+                            <div class="items-horarios item-modal-user">
+                                <span>CPF</span>
+                                <input class="horario-input input-modal-user" type="text" name="cpf" readonly disabled>
+                            </div>
+                            <div class="items-horarios item-modal-user">
+                                <span>username</span>
+                                <input class="horario-input input-modal-user" type="text" name="username" readonly
+                                    disabled>
+                            </div>
+                        </div>
+                        <div class="row-modal-user">
+                            <div class="items-horarios item-modal-user">
+                                <span>Permissões</span>
+                                <input class="horario-input input-modal-user" type="text" name="permissoes" readonly
+                                    disabled>
+                            </div>
+                            <div class="items-horarios item-modal-user">
+                                <span>Cargo</span>
+                                <input class="horario-input input-modal-user" type="text" name="cargo" readonly
+                                    disabled>
+                            </div>
+                        </div>
+                        <!-- Accordion -->
+                        <div class="accordion">
+                            <div class="accordion-item">
+                                <button class="accordion-header">Folha de Ponto mensal</button>
+                                <div class="accordion-content">
+                                    <div class="row-dropdown">
+                                        <span>Selecione o Ano:</span>
+                                        <select class="dropdown" name="ano-seletor" id="select-folha-ponto">
+                                        </select>
+                                        <button class="btn-formulario btn-registrar"
+                                            id="search-folha-mensal">Buscar</button>
+                                    </div>
+                                    <table id="tabela-folha-mensal">
+                                        <thead>
+                                            <th>Mes/Ano:</th>
+                                            <th>Verificar Arquivo</th>
+                                        </thead>
+                                        <!-- Template td -->
+                                        <template id="template-tr-folha-mensal">
+                                            <tr>
+                                                <td data-folha="month"></td>
+                                                <td data-folha="file"></td>
+                                            </tr>
+                                        </template>
+                                        <tbody id="container-td">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-modal ">
+                        <button type="button" class="btn-editar btn-padrao">
+                            <p>Editar</p>
+                        </button>
+                        <button type="button" class="btn-padrao btn-close">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
 
 
 <!-- Modal para anexar de justificativa -->

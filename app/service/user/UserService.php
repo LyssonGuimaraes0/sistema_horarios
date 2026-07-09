@@ -59,7 +59,8 @@ class UserService
         foreach ($dados as $dado) {
             $result[] = [
                 "id" => $dado['id'],
-                "name" => $dado['nome']
+                "name" => $dado['nome'],
+                "role" => $dado['cargo']
             ];
         }
         return $result;

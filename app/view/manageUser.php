@@ -34,24 +34,75 @@
                         </div>
                     </div>
 
-                    <div class="container-dropdown " id="container-pessoas">
+                    <!--                     <div class="container-dropdown" id="container-pessoas">
                         <div class="row-dropdown">
                             <span>Selecione uma pessoa:</span>
                             <select class="dropdown" name="pessoa-seletor" id="dropdown-pessoas"></select>
                             <option value="" selected hidden>Selecione o usuario</option>
                             <button class="btn-formulario btn-registrar" id="btn-search-user">Buscar</button>
                         </div>
+                    </div> -->
+                </div>
+
+                <!-- Container de Selecionar Usuario -->
+
+                <div class="container-home" id="container-pessoas">
+                    <div class="container-calendario calendario-container">
+                        <div class="loading-overlay hidden"></div>
+
+                        <table class="tabela-usuarios">
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Cargo</th>
+                                    <th>Status</th>
+                                    <th>ID</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="list-user-calendario">
+                                <template id="card-manager-user">
+                                    <tr class="card-item">
+                                        <td>
+                                            <div class="user-cell">
+                                                <div class="avatar"></div>
+                                                <div>
+                                                    <div class="user-name"><span></span></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td id="user-cargo"><span></span></td>
+                                        <td>Ativo</td>
+                                        <td id="user-id"><span></span></td>
+                                        <td>
+                                            <i class="fa-solid fa-pen-to-square botao-calendario"></i>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 <!-- Container de dados do usuario -->
 
-                <div class="container-home" id="container-user-dados">
+                <!-- <div class="container-home" id="container-user-dados">
                     <div class="container-calendario calendario-container">
                         <div class="loading-overlay hidden"></div>
                         <div class="calendario-header">
                             <div class="calendario-titulo">
                                 <span></span>
+                            </div>
+                            <div class="calendario-header-btns">
+                                <button class="btn-formulario-header" id="btn-anexar-frequencia">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <p>Editar Usuario</p>
+                                </button>
+                                <button class="btn-formulario-header" id="btn-gerar-frequencia">
+                                    <i class="fa-solid fa-file-alt"></i>
+                                    <p>Anexar Atestado</p>
+                                </button>
                             </div>
                         </div>
                         <div class="calendario-body">
@@ -75,42 +126,9 @@
                                 </tbody>
                             </table>
 
-                            <!--Accordion-->
-                            <div class="accordion">
-                                <div class="accordion-item">
-                                    <button class="accordion-header">Folha de Ponto mensal</button>
-                                    <div class="accordion-content">
-                                        <div class="row-dropdown">
-                                            <span>Selecione o Ano:</span>
-                                            <select class="dropdown" name="ano-seletor" id="select-folha-ponto">
-                                            </select>
-                                            <button class="btn-formulario btn-registrar"
-                                                id="search-folha-mensal">Buscar</button>
-                                        </div>
-
-                                        <!--Tabela de Folha Mensal-->
-                                        <table id="tabela-folha-mensal">
-                                            <thead>
-                                                <th>Mes/Ano:</th>
-                                                <th>Verificar Arquivo</th>
-                                            </thead>
-                                            <!--Template td-->
-                                            <template id="template-tr-folha-mensal">
-                                                <tr>
-                                                    <td data-folha="month"></td>
-                                                    <td data-folha="file"></td>
-                                                </tr>
-                                            </template>
-                                            <tbody id="container-td">
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
 
             </div>

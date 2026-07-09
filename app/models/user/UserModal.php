@@ -114,12 +114,15 @@ class UserModal
         try {
             $pdo = Database::connect();
 
-            $sql = "SELECT
-        id,
-        nome
-        FROM usuario
-        WHERE setor = :setor 
-        ORDER BY nome ASC";
+           $sql = "SELECT
+        u.id,
+        u.nome,
+        c.cargo
+        FROM usuario AS u
+        INNER JOIN cargo AS c ON u.cargo = c.id
+        WHERE u.setor = :setor 
+        ORDER BY u.nome ASC";
+
 
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(':setor', $setor, PDO::PARAM_STR);

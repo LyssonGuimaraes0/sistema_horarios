@@ -17,7 +17,7 @@ export function createLoading() {
 
 export function showLoading(containerLoading = document.querySelector('.loading-overlay')) {
     //Libera container de overlay
-
+    
     containerLoading.classList.remove('hidden');
 
     let loading = containerLoading.querySelector('.loading');

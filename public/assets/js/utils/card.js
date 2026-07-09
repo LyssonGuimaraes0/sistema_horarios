@@ -111,10 +111,29 @@ export function createCardList(template, dadosData) {
 }
 
 
+//Função para gera cards de usuarios
+export function createCardUser(template, dados) {
+    const cloneCard = template.content.cloneNode(true);
+
+    const card = cloneCard.querySelector('.card-item');
+
+    const name = cloneCard.querySelector('.user-name span');
+    const cargo = cloneCard.querySelector('#user-cargo span');
+    const id = cloneCard.querySelector('#user-id span');
+    name.textContent = dados.name;
+    cargo.textContent = dados.role;
+    id.textContent = dados.id;
+    card.dataset.id = dados.id;
+
+    return cloneCard;
+}
+
+
+
 export function buttonSubmitCalendar(container) {
 
     if (!container) return;
-    
+
     //Limpa container
     container.innerHTML = ""
 

@@ -36,6 +36,16 @@
     align-items: center;
 }
 
+.calendario-header span {
+    color: aliceblue;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+
+}
+
 .item-horario {
     display: flex;
     gap: 10px;
@@ -284,8 +294,55 @@ input[readonly]:focus {
     flex-direction: column;
 }
 
-.container-servidores{
+.container-servidores {
     display: flex;
     gap: 10px;
 }
 
+/*==============Página de Gereciar usuario===================*/
+
+.tabela-usuarios {
+    width: 100%;
+
+}
+
+.tabela-usuarios thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.tabela-usuarios th {
+    background: var(--primary-color);
+    color: var(--white-text);
+    padding: 18px;
+    text-align: left;
+}
+
+.tabela-usuarios td {
+    padding: 16px 18px;
+    border: none;
+    text-align: left;
+}
+
+.tabela-usuarios tbody tr:hover {
+    background: #f5f5f5;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-item {
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: black;
+}

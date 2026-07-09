@@ -1,3 +1,4 @@
+import { showLoading, hideLoading } from "./loading.js";
 
 //Função modal Toast
 export function showModalToast(mensagem, type = "sucess") {
@@ -21,6 +22,41 @@ export function showModalToast(mensagem, type = "sucess") {
             modalToast.remove();
         }, 300)
     }, 1500);
+
+}
+
+//Montar modal de usuario
+
+export function showModalUser(dataUser) {
+
+    const templateModal = document.querySelector('#modal-info-user')
+    const clone = templateModal.content.cloneNode(true);
+    const modal = clone.querySelector('.modal-background');
+    const loading = clone.querySelector('.loading-overlay')
+
+    showLoading(loading);
+
+    //Coleta todos inputs
+
+    const AllInputs = clone.querySelectorAll(".input-modal-user")
+
+    AllInputs.forEach(input => {
+        const name = input.name;
+        if (name in dataUser) {
+            input.value = dataUser[name]
+        }
+    })
+
+    //Alteração de elementos do modal
+    let name = clone.querySelector('[name="nome"]');
+
+    name.value = dataUser.nome;
+
+    document.body.appendChild(clone)
+
+    hideLoading(loading);
+
+    return modal;
 
 }
 

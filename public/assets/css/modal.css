@@ -20,7 +20,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 450px;
-    height: 300px;
+    height: auto;
+    min-height: 300px;
     background: white;
     z-index: 10;
     /* acima do fundo */
@@ -78,16 +79,29 @@
     justify-content: center;
 }
 
-.container-justificativa {
-    width: 500px;
-    height: 400px;
+.modal {
+    position: relative;
+}
+
+.header-modal-user {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 /*Modal de justificativa*/
 .container-justificativa {
     width: 600px;
-    height: 570px;
+    min-height: 600px;
     padding: 10px 20px;
+}
+
+/*Modal user*/
+
+.container-user-info {
+  width: 900px;
+  min-height: 770px;
+  padding: 10px 20px;
 }
 
 .modal-justifi {
@@ -146,6 +160,33 @@
     color: red !important;
 }
 
+/*Modal User*/
+
+.container-modal-user {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.item-modal-user {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-modal-user {
+    width: 100% !important;
+    ;
+    padding: 10px !important;
+    ;
+}
+
+.row-modal-user {
+    display: flex;
+    gap: 15px;
+}
 
 /*Modal Toast*/
 
