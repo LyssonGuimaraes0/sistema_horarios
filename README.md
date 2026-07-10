@@ -176,4 +176,3 @@ O roteador em `router/router.php` faz correspondência entre URI e controlador, 
 
 ---
 
-Esse documento pode ser editado diretamente neste arquivo Markdown. Para começar, abra `DOCUMENTATION.md` no seu editor e ajuste os títulos, descrições e exemplos conforme precisar.
