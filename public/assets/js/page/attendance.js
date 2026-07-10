@@ -182,7 +182,9 @@ btnMes.addEventListener('click', async function () {
         }
 
         let record = response.data.record;
+        let currentDate = response.data.currentDate
         let monthlyAttendance = response.data.monthlyAttendance;
+
 
         //Cria card para cada elemento
 
@@ -200,7 +202,7 @@ btnMes.addEventListener('click', async function () {
                 certificate: item.certificate
             }
 
-            const card = createCardList(templateIpunt, dadosData)
+            const card = createCardList(templateIpunt, dadosData, currentDate)
 
             //Altera o o botão de anexar caso já tenha registro
             alterarBtnAnexarFrequencia(btnAnexarFrequencia, monthlyAttendance);

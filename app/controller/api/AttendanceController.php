@@ -6,6 +6,7 @@ use App\middleware\AuthMiddleware;
 use App\service\AttendanceService;
 use App\helpers\PermissionHelper;
 use App\service\PdfService;
+use App\service\DateService;
 use Exception;
 
 
@@ -15,12 +16,14 @@ class AttendanceController extends ApiController
     private $authMiddleware;
     private $attendanceService;
     private $pdfService;
+    private $dateService;
 
     public function __construct()
     {
         $this->authMiddleware = new AuthMiddleware;
         $this->attendanceService = new AttendanceService;
         $this->pdfService = new PdfService;
+        $this->dateService = new DateService;
     }
 
     public function create()
@@ -109,12 +112,13 @@ class AttendanceController extends ApiController
     {
         //Buscar dados de usuario
         $user = $this->authMiddleware->handle();
-
+        
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
         $monthlyAttendance = $this->attendanceService->getMonthlyAttendance($year, $month, $user->id);
 
         $monthlyRecord = [
+            "currentDate" => $this->dateService->getDateComplete(),
             "monthlyAttendance" => ($monthlyAttendance != false) ? true : false,
             "record" => $allDate
         ];

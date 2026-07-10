@@ -1,21 +1,34 @@
 //Gera cards de lista de horarios
 
-export function createCardList(template, dadosData) {
+export function createCardList(template, dadosData, currentDate) {
     const cloneCard = template.content.cloneNode(true);
 
     const card = cloneCard.querySelector('.container-horarios');
-    card.dataset.date = dadosData.date;
+    const data = dadosData.date
+    card.dataset.date = data;
 
+    const linhaCard = cloneCard.querySelector('.linha-dia')
+    const circule = cloneCard.querySelector('.circule-data')
     const dataHeader = cloneCard.querySelector('#date-circule');
     const weekHeader = cloneCard.querySelector('#header-week-name');
     const monthHeader = cloneCard.querySelector('#header-month');
+
+    //verifica se é maior que a data atual, para aplica estilo proximo dia
+    if (data === currentDate) {
+        circule.classList.add('circule-dia')
+    } else if (data > currentDate) {
+        linhaCard.classList.add('proximo-dia')
+    }
+
+    //Aplica atributo no elemento da linha
+    
 
     //Container de Inputs e botões
     const containerInputs = cloneCard.querySelectorAll('.items-horarios');
     const containerbtn = cloneCard.querySelector('.items-botoes');
 
     //Coleta de data
-    const dia = dadosData.date.split('-')[2];
+    const dia = data.split('-')[2];
 
     //Adiciona data e dia da semana
     dataHeader.textContent = dia;
@@ -80,7 +93,7 @@ export function createCardList(template, dadosData) {
                         let dataInicio = dadosData.certificate.data_inicio;
 
                         //Verifica se o dia bate com dia atual
-                        if (dataInicio == dadosData.date) {
+                        if (dataInicio == data) {
 
                             //Caso seja o primeiro dia somente coloca o botão de deletar
                             //Limpa container
@@ -237,8 +250,6 @@ export function alterarBtnAnexarFrequencia(btn, status = false) {
         btn.innerHTML = "<i class='fa-solid fa-upload card-icon'></i><p>Anexar Frequência</p>"
     }
 
-
-    return btn;
 }
 
 
