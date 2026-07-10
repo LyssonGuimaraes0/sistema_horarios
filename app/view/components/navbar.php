@@ -9,7 +9,7 @@ use App\helpers\PermissionHelper;
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header" id="sidebar-toggle">
         <i class="fa-solid fa-bars logo-icon"></i>
-        <span class="logo-text">Sistema</span>
+        <span class="logo-text">Menu</span>
     </div>
 
     <ul class="sidebar-menu">

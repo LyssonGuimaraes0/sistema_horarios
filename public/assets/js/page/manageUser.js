@@ -62,6 +62,8 @@ createOptions(selectSetor, optionSetor)
 //Selecionar setor selecionado
 selectSetor.addEventListener('change', async (event) => {
 
+    showLoading() 
+
     tableUser.innerHTML = "";
     //Libera container users
     containerUsers.style.display = "flex";
@@ -81,6 +83,8 @@ selectSetor.addEventListener('change', async (event) => {
             );
         }
 
+        
+
         let dataUser = response.data
 
         dataUser.forEach(item => {
@@ -88,6 +92,7 @@ selectSetor.addEventListener('change', async (event) => {
             tableUser.appendChild(card);
         });
 
+        hideLoading();
 
     } catch (error) {
         showModalToast(error,"erro")

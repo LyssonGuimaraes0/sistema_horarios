@@ -9,7 +9,7 @@
                 <div class="loading-overlay hidden"></div>
                 <form method="post" class="login-form" id="form-login">
                     <div class="head-login">
-                        <h1>Sistema de Frequencia</h1>
+                        <h1>Sistema de Frequência</h1>
                     </div>
                     <div class="body-login">
                         <label class="error-mensagem"></label>
