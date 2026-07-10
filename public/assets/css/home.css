@@ -48,6 +48,10 @@
     width: 110% !important;
 }
 
+.intem-home span{
+   color: var(--white-text) !important;
+}
+
 .home-calendario {
     margin-top: 0 !important;
     height: 36px !important;
