@@ -24,3 +24,8 @@ export function formatTextToCPF(valor) {
 
     return valor;
 }
+
+//Formata para data estilo brasileiro
+export function formatDateBr(data) {
+    return new Date(data).toLocaleDateString('pt-BR');
+}

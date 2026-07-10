@@ -1,4 +1,5 @@
 import { showLoading, hideLoading } from "./loading.js";
+import { formatDateBr } from "./assets/js/utils/format.js";
 
 //Função modal Toast
 export function showModalToast(mensagem, type = "sucess") {
@@ -112,13 +113,8 @@ export async function showModalCertificate(data = null) {
 
     const modalCertificate = clone.querySelector('.modal-background');
 
-    //Caso for null, entrega modal vazio
     if (data === null) {
         return modalCertificate
-    }
-
-    function formatDateBr(data) {
-        return data.toLocaleDateString('pt-BR')
     }
 
     //Manipulando datas
@@ -151,7 +147,7 @@ export async function showModalCertificate(data = null) {
         dataFimValue = new Date(dateAtual)
 
         //Altera baseado na quantidade de dias adicionado
-        dataFimValue.setDate(dataFimValue.getDate() + dias);
+        dataFimValue.setDate(dataFimValue.getDate() + dias - 1);
 
         dataFormatada = dataFimValue.toISOString().split('T')[0];
 

@@ -112,7 +112,7 @@ class AttendanceController extends ApiController
     {
         //Buscar dados de usuario
         $user = $this->authMiddleware->handle();
-        
+
         $allDate = $this->attendanceService->getAttendace($year, $month, $user->id);
 
         $monthlyAttendance = $this->attendanceService->getMonthlyAttendance($year, $month, $user->id);
@@ -170,8 +170,20 @@ class AttendanceController extends ApiController
 
             $dados = json_decode(file_get_contents('php://input'), true) != null ? json_decode(file_get_contents('php://input'), true) : $_POST;
 
+            //Caso seja enviado pelo Administrador
+            if (isset($dados['id']) && $dados['id'] !== '') {
+                if (!PermissionHelper::isAdmin($user)) {
+                    throw new Exception("Usuario não tem permissão", 401);
+                }
+                //ID passado pelo administrador
+                $id = (int) $dados['id'];
+            } else {
+                //ID caso o usuario adicione seu proprio atestado
+                $id = $user->id;
+            }
+
             // upload anexo
-            $return = $this->attendanceService->uploadAttachment($user->id, $dados,$user->cargo);
+            $return = $this->attendanceService->uploadAttachment($id, $dados, $user->cargo);
 
             if ($return === true) {
                 return $this->success("Registro Realizado com sucesso!", 201);
@@ -262,18 +274,18 @@ class AttendanceController extends ApiController
     public function deleteAttachment()
     {
 
-        try { 
-        //Valida Token de acesso
-        $user = $this->authMiddleware->handle();
+        try {
+            //Valida Token de acesso
+            $user = $this->authMiddleware->handle();
 
-        $dados = json_decode(file_get_contents('php://input'), true);
+            $dados = json_decode(file_get_contents('php://input'), true);
 
-        $idCertificate = $dados;
+            $idCertificate = $dados;
 
-        // upload anexo
-        $this->attendanceService->deleteAttachment($user->id, $idCertificate);
+            // upload anexo
+            $this->attendanceService->deleteAttachment($user->id, $idCertificate);
 
-        return $this->success("Registro apagado com sucesso!", 201);
+            return $this->success("Registro apagado com sucesso!", 201);
 
         } catch (Exception $e) {
 
@@ -288,7 +300,7 @@ class AttendanceController extends ApiController
             }
 
             return $this->error($e->getMessage(), 500);
-        } 
+        }
 
     }
 

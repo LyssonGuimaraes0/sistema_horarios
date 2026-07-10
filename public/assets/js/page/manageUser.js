@@ -2,18 +2,21 @@ import { request } from "../service/ajax.js";
 import {
     showModalUser,
     fecharModal,
-    showModalToast
+    showModalToast,
+    showModalCertificate
 } from "../utils/modal.js";
 import { showLoading, hideLoading } from "../utils/loading.js";
-import { debouncePromise, delay } from "../utils/delay.js";
-import { getFormData } from "../utils/form.js";
+import { debouncePromise} from "../utils/delay.js";
 import { createOptions } from "../utils/createoptions.js";
 import { createCardUser } from "../utils/card.js";
+import { setReadonly, RemoveReadonly } from "../utils/card.js";
+import { formatDateBr } from "../utils/format.js";
 
 //Carrega anos validos
 let years;
 let response;
 let dataUser
+const formData = new FormData();
 try {
 
     response = await request(`${urlBase}/api/attendance/available-periods`)
@@ -45,7 +48,7 @@ try {
 
 
 } catch (error) {
-    showModalToast(error,"erro")
+    showModalToast(error, "erro")
 }
 
 
@@ -62,7 +65,7 @@ createOptions(selectSetor, optionSetor)
 //Selecionar setor selecionado
 selectSetor.addEventListener('change', async (event) => {
 
-    showLoading() 
+    showLoading()
 
     tableUser.innerHTML = "";
     //Libera container users
@@ -83,7 +86,7 @@ selectSetor.addEventListener('change', async (event) => {
             );
         }
 
-        
+
 
         let dataUser = response.data
 
@@ -95,7 +98,7 @@ selectSetor.addEventListener('change', async (event) => {
         hideLoading();
 
     } catch (error) {
-        showModalToast(error,"erro")
+        showModalToast(error, "erro")
     }
 
 })
@@ -122,7 +125,7 @@ document.addEventListener('click', async (e) => {
         dataUser = response.data
 
     } catch (error) {
-        showModalToast(error,"erro")
+        showModalToast(error, "erro")
     }
 
 
@@ -131,6 +134,7 @@ document.addEventListener('click', async (e) => {
     //Analizar clique no botão
     const btnEdit = modal.querySelector('.btn-editar');
     const btnFechar = modal.querySelector('.btn-close');
+    const btnFrequencia = modal.querySelector('#btn-anexar-frequencia');
 
     //accordion
     const accordin = modal.querySelector('.accordion-header')
@@ -139,13 +143,109 @@ document.addEventListener('click', async (e) => {
     const containerPontoMensal = modal.querySelector('#tabela-folha-mensal')
     const templateTd = modal.querySelector('#template-tr-folha-mensal')
 
-
     createOptions(selectFolha, years)
 
     accordin.addEventListener('click', function () {
         document.querySelector('.accordion-item').classList.toggle('active')
     })
 
+    //Botão para anexar atestado do usuario
+    btnFrequencia.addEventListener('click', async () => {
+        const modalCertificate = await showModalCertificate();
+
+        //Libera input de origem para time
+        const dataOrigem = modalCertificate.querySelector('#data-origem');
+        const dataInicio = modalCertificate.querySelector('#data-inicio');
+        const dataFim = modalCertificate.querySelector('#data-fim');
+        const inputDias = modalCertificate.querySelector('#input-dias-atestados');
+        const dropdown = modalCertificate.querySelector('.dropdown-justificativa')
+        const inputArquivo = modalCertificate.querySelector('.btn-upload');
+
+        //Manipulação de botões
+        const btnConfirmar = modalCertificate.querySelector('.btn-confirmar');
+        const BtnCancelar = modalCertificate.querySelector('.btn-cancelar');
+
+        BtnCancelar.addEventListener('click', () => {
+            modalCertificate.remove();
+        })
+
+
+        dataOrigem.type = 'date';
+        RemoveReadonly(dataOrigem);
+
+        dataOrigem.addEventListener('change', () => {
+            // Data início recebe a mesma data da origem
+            dataInicio.value = dataOrigem.value;
+            dataInicio.value = formatDateBr(dataInicio.value);
+
+            // Inicialmente data fim também
+            dataFim.value = dataOrigem.value;
+            dataFim.value = formatDateBr(dataOrigem.value);
+        });
+
+        inputDias.addEventListener('change', () => {
+            const dias = Number(inputDias.value);
+
+            if (!dataInicio.value) return;
+
+            const dataFimValue = new Date(dataInicio.value);
+
+            dataFimValue.setDate(dataFimValue.getDate() + (dias - 1));
+
+            dataFim.value = dataFimValue.toISOString().split('T')[0];
+        });
+
+        btnConfirmar.addEventListener('click', async () => {
+
+            const arquivo = inputArquivo.files[0];
+
+            //Verifica select
+            if (dropdown.value == "") {
+                showModalToast("Selecione o motivo do atestado", "error")
+                return;
+            }
+
+            //Verifica arquivo 
+            if (!arquivo) {
+                showModalToast("Selecione um arquivo", "error")
+                return;
+            }
+
+            modalCertificate.remove();
+
+            //Converte dados para form
+            formData.append('id', dataUser.id);
+            formData.append('dateStart', dataInicio.value);
+            formData.append('dateEnd', dataFim.value);
+            formData.append('descricao_motivo', dropdown.value);
+            formData.append('file', arquivo);
+
+            try {
+                response = await request(`${urlBase}/api/user/createAttachment`, {
+                    method: "POST",
+                    credentials: 'include',
+                    body: formData
+                })
+
+                if (!response?.success) {
+                    throw new Error(
+                        response.error ??
+                        response.message ??
+                        "Erro interno do servidor"
+                    );
+                }
+
+                //Apresenta modal
+                showModalToast(response.data);
+
+            } catch (error) {
+                showModalToast(error, "error");
+            }
+
+        })
+        document.body.appendChild(modalCertificate)
+
+    })
 
     //Buscar Dados de folha de ponto
 
@@ -202,7 +302,7 @@ document.addEventListener('click', async (e) => {
             });
 
         } catch (error) {
-            showModalToast(error,"erro")
+            showModalToast(error, "erro")
         }
     })
 
@@ -211,7 +311,6 @@ document.addEventListener('click', async (e) => {
         fecharModal();
         modal.remove();
     })
-
 
 })
 
